@@ -1,9 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SigninPageComponent } from '../signin-page/signin-page.component';
-import { Router } from '@angular/router';
-// import { RouterOutlet } from "../../../../node_modules/@angular/router/index";
 import { RouterOutlet } from '@angular/router';
 interface NavItem {
   icon: string;
@@ -47,22 +44,15 @@ interface Achiever {
 }
 
 @Component({
-  selector: 'app-scoring-management-admin',
+  selector: 'app-admin-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, SigninPageComponent],
-  templateUrl: './scoring-management-system-admin-page.component.html',
-  styleUrls: ['./scoring-management-system-admin-page.component.scss'],
+  imports: [CommonModule, FormsModule, RouterOutlet],
+  templateUrl: './admin-page.component.html',
+  styleUrl: './admin-page.component.scss'
 })
-export class ScoringManagementSystemAdminPageComponent implements OnInit {
-
-  ngOnInit(): void {
-    // this.router.navigate(['/studentManagement']);
-  }
+export class AdminPageComponent {
 
 
-  constructor(private router: Router) {
-
-  }
   // Sidebar state
   sidebarOpen = signal(true);
 
@@ -91,7 +81,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
     {
       title: 'ADMINISTRATION',
       items: [
-        { icon: 'fa-solid fa-user', label: 'Student Management', route: '/studentManagement' },
+        { icon: 'shield', label: 'Admin Section' },
         { icon: 'book-open', label: 'Academics' },
         { icon: 'layers', label: 'Study Material' },
         { icon: 'file-text', label: 'Lesson Plan' },
@@ -207,7 +197,4 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
     return icons[icon] ?? '•';
   }
 
-  onClickRouter(router: string) {
-    this.router.navigate([router]);
-  }
 }
