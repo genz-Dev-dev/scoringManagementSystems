@@ -1,74 +1,127 @@
 <div class="flex h-screen bg-gray-100 font-sans overflow-hidden">
-  <!-- ===================== SIDEBAR ===================== -->
-  <aside class="flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white" [class.w-64]="sidebarOpen()"
-    [class.w-16]="!sidebarOpen()">
-    <!-- Logo -->
-    <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10">
-      <div class="w-9 h-9 flex-shrink-0">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="20" fill="#3b82f6" opacity="0.2" />
-          <path d="M10 28 L10 12 Q20 8 30 12 L30 28 Q20 24 10 28Z" fill="#facc15" opacity="0.8" />
-          <path d="M20 12 L20 28" stroke="#1a2a5e" stroke-width="1.5" />
-        </svg>
+  <!-- Skeleton Loader -->
+  <div *ngIf="isLoading; else dashboardContent" class="flex h-screen w-full bg-gray-100">
+
+    <!-- ===================== SIDEBAR SKELETON ===================== -->
+    <aside class="flex flex-col bg-[#1a2a5e] p-4 w-64 space-y-6">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 mb-4">
+        <div class="h-10 w-10 rounded-full bg-blue-400 animate-pulse"></div>
+        <div class="flex flex-col gap-1">
+          <div class="h-3 w-24 bg-gray-300 rounded animate-pulse"></div>
+          <div class="h-3 w-20 bg-gray-300 rounded animate-pulse"></div>
+        </div>
       </div>
-      @if (sidebarOpen()) {
-      <div class="overflow-hidden">
-        <p class="text-sm font-bold leading-tight">សកល​វិទ្យាល័យសម្តេចសង្ឃរាជ បួរ​ គ្រី</p>
-        <p class="text-sm font-bold leading-tight">Bur Kari University</p>
+
+      <!-- Navigation Sections -->
+      <div class="flex-1 space-y-4 overflow-y-auto">
+        <ng-container *ngFor="let section of [1,2,3]">
+          <div class="h-3 w-3/4 bg-gray-400 rounded animate-pulse mx-2 mb-2"></div>
+          <ng-container *ngFor="let item of [1,2,3,4]">
+            <div class="flex items-center gap-3 px-2 py-2">
+              <div class="h-5 w-5 bg-gray-400 rounded-full animate-pulse"></div>
+              <div class="h-4 w-3/4 bg-gray-400 rounded animate-pulse"></div>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
-      }
+    </aside>
+
+    <!-- ===================== MAIN CONTENT SKELETON ===================== -->
+    <div class="flex-1 flex flex-col p-6 space-y-6">
+
+      <!-- Top Loading Text -->
+      <span class="text-center text-lg font-semibold text-gray-400 animate-pulse">
+        Your dashboard is loading...!!
+      </span>
+
+      <!-- Top Cards -->
+      <div class="grid grid-cols-4 gap-4">
+        <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
+        <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
+        <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
+        <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="flex-1 bg-gray-300 rounded animate-pulse"></div>
+
     </div>
+  </div>
+  <ng-template #dashboardContent>
 
-    <!-- Navigation -->
-    <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
-      @for (section of navSections; track section.title) {
-      <div>
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside class="flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white" [class.w-64]="sidebarOpen()"
+      [class.w-16]="!sidebarOpen()">
+      <!-- Logo -->
+      <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10">
+        <div class="w-9 h-9 flex-shrink-0">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="#3b82f6" opacity="0.2" />
+            <path d="M10 28 L10 12 Q20 8 30 12 L30 28 Q20 24 10 28Z" fill="#facc15" opacity="0.8" />
+            <path d="M20 12 L20 28" stroke="#1a2a5e" stroke-width="1.5" />
+          </svg>
+        </div>
         @if (sidebarOpen()) {
-        <p class="text-[10px] font-semibold text-blue-300/70 tracking-widest px-2 mb-1">
-          {{ section.title }}
-        </p>
-        }
-        @for (item of section.items; track item.label) {
-        <button (click)="onClickRouter(item.route)"
-          class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150"
-          [class.bg-blue-500]="item.active" [class.text-white-200]="item.active" [class.text-blue-200]="!item.active"
-          [class.hover:bg-gray-500]="!item.active">
-          <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-base">
-            {{ getNavIcon(item.icon) }}
-            <!-- <i [class]="item.icon"></i> -->
-          </span>
-          @if (sidebarOpen()) {
-          <span class="truncate">{{ item.label }}</span>
-          }
-        </button>
+        <div class="overflow-hidden">
+          <p class="text-sm font-bold leading-tight">សកល​វិទ្យាល័យសម្តេចសង្ឃរាជ បួរ​ គ្រី</p>
+          <p class="text-sm font-bold leading-tight">Bur Kari University</p>
+        </div>
         }
       </div>
-      }
-    </nav>
-  </aside>
 
-  <!-- ===================== MAIN CONTENT ===================== -->
-  <div class="flex-1 flex flex-col overflow-hidden">
-    <!-- Top Header -->
-    <header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-3 gap-4">
-      <!-- Toggle + Search -->
-      <div class="flex items-center gap-4 flex-1">
-        <button (click)="toggleSidebar()" class="btn btn-ghost btn-sm btn-circle text-gray-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-        <div class="relative max-w-md w-full">
-          <label
-            class="input input-bordered flex items-center gap-2 rounded-full focus:ring-4 focus:ring-blue-500 focus:ring-opacity-70">
-            <input type="text" class="grow bg-white text-black " placeholder="Search" />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4 opacity-70">
-              <path fill-rule="evenodd"
-                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                clip-rule="evenodd" />
+      <!-- Navigation -->
+      <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
+        @for (section of navSections; track section.title) {
+        <div>
+          @if (sidebarOpen()) {
+          <p class="text-[10px] font-semibold text-blue-300/70 tracking-widest px-2 mb-1">
+            {{ section.title }}
+          </p>
+          }
+          @for (item of section.items; track item.label) {
+          <button (click)="onClickRouter(item.route)"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150"
+            [class.bg-blue-500]="item.active" [class.text-white-200]="item.active" [class.text-blue-200]="!item.active"
+            [class.hover:bg-gray-500]="!item.active">
+            <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-base">
+              {{ getNavIcon(item.icon) }}
+              <!-- <i [class]="item.icon"></i> -->
+            </span>
+            @if (sidebarOpen()) {
+            <span class="truncate">{{ item.label }}</span>
+            }
+          </button>
+          }
+        </div>
+        }
+      </nav>
+    </aside>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Header -->
+      <header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-3 gap-4">
+        <!-- Toggle + Search -->
+        <div class="flex items-center gap-4 flex-1">
+          <button (click)="toggleSidebar()" class="btn btn-ghost btn-sm btn-circle text-gray-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-          </label>
-          <!-- <label class="input">
+          </button>
+          <div class="relative max-w-md w-full">
+            <label
+              class="input input-bordered flex items-center gap-2 rounded-full focus:ring-4 focus:ring-blue-500 focus:ring-opacity-70">
+              <input type="text" class="grow bg-white text-black " placeholder="Search" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                class="h-4 w-4 opacity-70">
+                <path fill-rule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </label>
+            <!-- <label class="input">
             <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
                 <circle cx="11" cy="11" r="8"></circle>
@@ -77,71 +130,71 @@
             </svg>
             <input type="search" required placeholder="Search" />
           </label> -->
+          </div>
         </div>
-      </div>
 
-      <!-- Right actions -->
-      <div class="flex items-center gap-3">
-        <button class="btn btn-ghost btn-sm btn-circle indicator">
-          <span class="indicator-item badge badge-primary badge-xs"></span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </button>
-        <button class="btn btn-ghost btn-sm btn-circle indicator">
-          <span class="indicator-item badge badge-error badge-xs"></span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-        <div class="flex items-center gap-2 pl-2 border-l border-gray-200">
-          <!-- <div class="avatar placeholder">
+        <!-- Right actions -->
+        <div class="flex items-center gap-3">
+          <button class="btn btn-ghost btn-sm btn-circle indicator">
+            <span class="indicator-item badge badge-primary badge-xs"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </button>
+          <button class="btn btn-ghost btn-sm btn-circle indicator">
+            <span class="indicator-item badge badge-error badge-xs"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
+          <div class="flex items-center gap-2 pl-2 border-l border-gray-200">
+            <!-- <div class="avatar placeholder">
             <div class="w-8 rounded-full bg-blue-600 text-white text-xs font-bold">
               <span>TN</span>
             </div>
           </div> -->
-          <div class="dropdown dropdown-end">
+            <div class="dropdown dropdown-end">
 
-            <div tabindex="0" role="button" class="flex items-center gap-2 cursor-pointer">
+              <div tabindex="0" role="button" class="flex items-center gap-2 cursor-pointer">
 
-              <!-- Avatar -->
-              <div class="avatar placeholder">
-                <div class="bg-neutral text-neutral-content rounded-full w-10">
-                  <span>{{ User?.fullName?.charAt(0) }}</span>
+                <!-- Avatar -->
+                <div class="avatar placeholder">
+                  <div class="bg-neutral text-neutral-content rounded-full w-10">
+                    <span>{{ User?.fullName?.charAt(0) }}</span>
+                  </div>
                 </div>
+
+                <!-- User Info -->
+                <div class="hidden sm:block text-left">
+                  @if(User){
+                  <p class="text-sm font-semibold text-gray-800 leading-none">
+                    {{ User?.fullName }}
+                  </p>
+                  }
+                  <p class="text-xs text-gray-400">{{ User?.email }}</p>
+                </div>
+
               </div>
 
-              <!-- User Info -->
-              <div class="hidden sm:block text-left">
-                @if(User){
-                <p class="text-sm font-semibold text-gray-800 leading-none">
-                  {{ User?.fullName }}
-                </p>
-                }
-                <p class="text-xs text-gray-400">{{ User?.email }}</p>
-              </div>
+              <!-- Dropdown Menu -->
+              <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-lg mt-3">
+                <li>
+                  <a>Change Profile</a>
+                </li>
+                <li>
+                  <a class="mb-4">Settings</a>
+                </li>
+                <li>
+                  <button class="btn btn-error p-2" (click)="logoutAdminPage()">Logout</button>
+                </li>
+              </ul>
 
             </div>
-
-            <!-- Dropdown Menu -->
-            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-lg mt-3">
-              <li>
-                <a>Profile</a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <button class="btn btn-error" (click)="logoutAdminPage()">Logout</button>
-              </li>
-            </ul>
-
-          </div>
-          <!-- <div class="hidden sm:block">
+            <!-- <div class="hidden sm:block">
             @if(User){
 
             <p class="text-sm font-semibold text-gray-800 leading-none">
@@ -151,13 +204,15 @@
 
             <p class="text-xs text-gray-400">{{User?.email}}</p>
           </div> -->
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <!-- Page Body -->
-    <main class="flex-1 overflow-y-auto p-6 space-y-6">
-      <router-outlet> </router-outlet>
-    </main>
-  </div>
+      <!-- Page Body -->
+      <main class="flex-1 overflow-y-auto p-6 space-y-6">
+        <router-outlet> </router-outlet>
+      </main>
+    </div>
+  </ng-template>
+
 </div>

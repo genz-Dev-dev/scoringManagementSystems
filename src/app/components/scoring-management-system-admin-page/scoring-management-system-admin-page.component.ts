@@ -56,7 +56,7 @@ interface Achiever {
   styleUrls: ['./scoring-management-system-admin-page.component.scss'],
 })
 export class ScoringManagementSystemAdminPageComponent implements OnInit {
-
+  isLoading = true;
   User: User | null = null;
   constructor(private router: Router, private authService: AuthServiceService, private tokenStorage: TokenStoragesService) {
 
@@ -64,6 +64,11 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       this.User = user;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 800); // simulate loading
+
+      // this.isLoading = false
       // console.log('Current user:', this.User);
     });
   }

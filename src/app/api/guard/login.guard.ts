@@ -13,26 +13,31 @@ interface JwtPayload {
 })
 export class LoginGuard implements CanActivate, CanActivateChild {
 
-  constructor(private router: Router, private tokenStorage: TokenStoragesService) { }
-
-  private getToken(): string | null {
-    return this.tokenStorage.getToken();
-  }
+  constructor(
+    private router: Router,
+    private tokenStorage: TokenStoragesService
+  ) { }
 
   private isTokenValid(token: string): boolean {
     try {
       const decoded: JwtPayload = jwtDecode(token);
       const currentTime = Date.now() / 1000;
-      return !!decoded.exp && decoded.exp > currentTime;
+
+      if (!decoded.exp || decoded.exp < currentTime) {
+        return false;
+      }
+
+      return true;
     } catch {
       return false;
     }
   }
 
   canActivate(): boolean {
-    const token = this.getToken();
+    const token = this.tokenStorage.getToken();
 
     if (!token || !this.isTokenValid(token)) {
+      this.tokenStorage.removeToken();
       this.router.navigate(['/signin']);
       return false;
     }

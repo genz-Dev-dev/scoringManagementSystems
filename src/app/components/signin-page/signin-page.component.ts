@@ -44,7 +44,7 @@ export class SigninPageComponent {
           icon: 'success',
           timer: 2500,
           iconColor: '#10b981',
-          html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #10b981;">SignUp</span>បានទេ!</p>`,
+          html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #10b981;">Signin</span>បានទេ!</p>`,
           showCancelButton: false,
           showConfirmButton: false,
         }).then(() => {
