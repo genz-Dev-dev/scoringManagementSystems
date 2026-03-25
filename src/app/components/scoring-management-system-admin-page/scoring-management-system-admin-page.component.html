@@ -49,10 +49,22 @@
     </div>
   </div>
   <ng-template #dashboardContent>
-
     <!-- ===================== SIDEBAR ===================== -->
-    <aside class="flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white" [class.w-64]="sidebarOpen()"
-      [class.w-16]="!sidebarOpen()">
+    <!-- Mobile toggle button (visible only on small screens) -->
+    <button (click)="toggleSidebar()"
+      class="fixed top-4 left-4 z-50 md:hidden text-white p-2 rounded-full shadow-lg hover:bg-white/20 transition-colors duration-200">
+      <i class="fas fa-bars text-lg"></i>
+    </button>
+
+    <!-- Overlay (mobile only, closes sidebar on tap outside) -->
+    <div *ngIf="sidebarOpen()" (click)="closeSidebar()" class="fixed inset-0 z-30 md:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside class="fixed md:relative z-40 flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white h-full"
+      [class.w-64]="sidebarOpen()" [class.w-0]="!sidebarOpen()" [class.md:w-16]="!sidebarOpen()"
+      [class.-translate-x-full]="!sidebarOpen()" [class.md:translate-x-0]="true"
+      [class.overflow-hidden]="!sidebarOpen()">
+
       <!-- Logo -->
       <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10">
         <div class="w-9 h-9 flex-shrink-0">
@@ -62,41 +74,35 @@
             <path d="M20 12 L20 28" stroke="#1a2a5e" stroke-width="1.5" />
           </svg>
         </div>
-        @if (sidebarOpen()) {
-        <div class="overflow-hidden">
-          <p class="text-sm font-bold leading-tight">សកល​វិទ្យាល័យសម្តេចសង្ឃរាជ បួរ​ គ្រី</p>
+
+        <div class="overflow-hidden transition-all duration-300" [class.w-0]="!sidebarOpen()">
+          <p class="text-sm truncate font-bold leading-tight">សកលវិទ្យាល័យសម្តេចសង្ឃរាជ បួរ គ្រី</p>
           <p class="text-sm font-bold leading-tight">Bur Kari University</p>
         </div>
-        }
       </div>
 
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
-        @for (section of navSections; track section.title) {
-        <div>
-          @if (sidebarOpen()) {
+        <div *ngFor="let section of navSections; trackBy: trackByTitle">
+          @if(sidebarOpen()){
           <p class="text-[10px] font-semibold text-blue-300/70 tracking-widest px-2 mb-1">
             {{ section.title }}
           </p>
           }
-          @for (item of section.items; track item.label) {
-          <button (click)="onClickRouter(item.route)"
+
+          <button *ngFor="let item of section.items; trackBy: trackByLabel" (click)="onClickRouter(item.route)"
             class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 hover:cursor-pointer"
-            [class.bg-blue-300]="item.active" [class.text-white-200]="item.active" [class.text-white-200]="!item.active"
-            [class.hover:bg-gray-500]="!item.active">
+            [class.bg-blue-300]="item.active" [class.hover:bg-gray-500]="!item.active">
             <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-base">
               <i [class]="item.icon"></i>
             </span>
-            @if (sidebarOpen()) {
-            <span class="truncate">{{ item.label }}</span>
-            }
+            <span class="truncate transition-all duration-300" [class.hidden]="!sidebarOpen()">
+              {{ item.label }}
+            </span>
           </button>
-          }
         </div>
-        }
       </nav>
     </aside>
-
     <!-- ===================== MAIN CONTENT ===================== -->
     <div class="flex-1 flex flex-col overflow-hidden">
       <!-- Top Header -->
@@ -111,11 +117,7 @@
           </button>
           <div class="relative w-full max-w-sm">
             <label class="input input-bordered flex items-center gap-1 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
+              <i class="fa-solid fa-magnifying-glass me-1"></i>
               <input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
             </label>
           </div>

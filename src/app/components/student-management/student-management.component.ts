@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AuthServiceService } from 'src/app/api/auth/auth.service.service';
@@ -46,14 +46,18 @@ export interface ApiResponse {
 @Component({
   selector: 'app-student-management',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './student-management.component.html',
   styleUrl: './student-management.component.scss'
 })
 export class StudentManagementComponent {
   students: any[] = [];
+  classess: any[] = [];
   showStep: boolean = false;
   currentUserRole: string = '';
+  currentStep = 1;
+  selectedClass: any = '';
+  studentForm!: FormGroup;
   stats: StatCard[] = [
     { icon: 'fa-solid fa-users', label: 'Students', value: 2000, bg: 'bg-blue-50' },
     { icon: 'fa-solid fa-venus', label: 'Female', value: 120, bg: 'bg-pink-50' },
@@ -63,7 +67,28 @@ export class StudentManagementComponent {
 
   constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService) {
     this.getAllStudents();
-
+    this.handleGetAllClassess();
+    this.studentForm = this.fb.group({
+      khFirstName: [''],
+      khLastName: [''],
+      enFirstName: [''],
+      enLastName: [''],
+      studentCode: [''],
+      classId: [''],
+      gender: [''],
+      email: [''],
+      phoneNumber: [''],
+      dateOfBirth: [''],
+      status: [true], // default active
+      address: this.fb.group({
+        houseNumber: [''],
+        street: [''],
+        sangkat: [''],
+        khan: [''],
+        province: [''],
+        country: ['']
+      })
+    });
   }
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -83,7 +108,69 @@ export class StudentManagementComponent {
     })
   }
 
+  // create students
+  handleCreateStudent() {
+    if (this.studentForm.invalid) {
+      this.studentForm.markAllAsTouched();
+      return;
+    }
+
+    // Prepare payload
+    const payload = {
+      ...this.studentForm.value,
+      status: true, // or from form if user can set
+    };
+
+    console.log("layload", payload);
+
+    this.studentsService.createStudent(payload).subscribe({
+      next: (res) => {
+        // this.studentForm.reset();
+        this.showStep = false;
+        this.currentStep = 1;
+        this.getAllStudents();
+        Swal.fire({
+          icon: 'success',
+          timer: 2500,
+          iconColor: '#10b981',
+          html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #10b981;">create student successfully</span>បានទេ!</p>`,
+          showCancelButton: false,
+          showConfirmButton: false,
+        })
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: 'error',
+          timer: 2500,
+          iconColor: '#ef4444',
+          html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #ef4444;">មិនអាចបង្កើតបាន</span>ទេ!</p>`,
+          showCancelButton: false,
+          showConfirmButton: false,
+        })
+        console.error('Create student error', err);
+      }
+    })
+  }
+
+  handleGetAllClassess() {
+    this.studentsService.getAllClass(true).subscribe({
+      next: (res) => {
+        // console.log("res", res);
+        this.classess = res.data;
+      }
+    });
+  }
+
   handleToggleStep() {
     this.showStep = !this.showStep;
+  }
+  nextStep() {
+    if (this.currentStep < 2)
+      this.currentStep++;
+  }
+
+  prevStep() {
+    if (this.currentStep > 1)
+      this.currentStep--;
   }
 }

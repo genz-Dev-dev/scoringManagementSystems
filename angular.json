@@ -65,7 +65,9 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "host": "0.0.0.0",
-            "port": 4200
+            "port": 4200,
+            "open": true,
+            "liveReload": true
           },
           "configurations": {
             "production": {
@@ -90,10 +92,9 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets",
+              "public"
             ],
             "styles": [
               "src/styles.scss"

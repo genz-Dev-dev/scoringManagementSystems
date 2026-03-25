@@ -1,9 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ['InterCustom', 'sans-serif'],
+        jetbrains: ['JetBrainsCustom', 'monospace'],
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 }
 

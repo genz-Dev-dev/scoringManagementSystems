@@ -1,34 +1,21 @@
-// 1. @use rules FIRST
 @use "tailwindcss";
-
-// 2. @import after
-@import '@fontsource/jetbrains-mono/300.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-// 3. @plugin after
 @plugin "daisyui";
 
-// 4. Your styles last
+/* everything else AFTER */
+@font-face {
+    font-family: 'InterCustom';
+    src: url('/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrainsCustom';
+    src: url('/assets/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+
 * {
-    font-family: 'Inter', 'JetBrains Mono', monospace;
-}
-
-/* styles.css */
-.skeleton {
-    background-color: #e2e8f0;
-    /* Tailwind gray-200 */
-    border-radius: 0.5rem;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.4;
-    }
+    font-family: 'InterCustom', 'JetBrains Mono', monospace;
 }

@@ -92,8 +92,8 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
     {
       title: 'ADMINISTRATION',
       items: [
+        { icon: 'fa-solid fa-user-shield', label: ' permissions Roles', route: '/permissions' },
         { icon: 'fa-solid fa-user', label: 'Student Management', route: '/studentManagement' },
-        { icon: 'fas fa-user-shield', label: 'permissions', route: '/permissions' },
         { icon: 'layers', label: 'Study Material' },
         { icon: 'fas fa-user-shield', label: 'Lesson Plan' },
         { icon: 'printer', label: 'Bulk Print' },

@@ -1,1 +1,17 @@
-<p>permission-admin-page works!</p>
+<!-- Tab Buttons -->
+<div class="flex flex-wrap justify-end gap-1 border-b border-gray-100 pb-3">
+    @for (tab of tabs; track tab) {
+    <button class="btn btn-sm px-4 transition-all" [class.btn-primary]="activeTab() === tab"
+        [class.btn-ghost]="activeTab() !== tab" [class.text-gray-500]="activeTab() !== tab" (click)="setActiveTab(tab)">
+        {{ tab }}
+    </button>
+    }
+</div>
+
+@if(activeTab() === 'ROLE'){
+<div class="text-reed-400 p-2 mt-4">welcome to role</div>
+}@else if (activeTab() === 'PERMISSION') {
+<div class="btn btn-primary"><i class="fa-solid fa-circle-plus"></i> Permission</div>
+} @else if (activeTab() === 'CLASS') {
+<div class="btn btn-primary">Class</div>
+}
