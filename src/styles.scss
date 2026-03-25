@@ -3,11 +3,18 @@
 
 /* everything else AFTER */
 @font-face {
-    font-family: 'InterCustom';
+    font-family: 'Inter';
     src: url('/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
     font-weight: 100 900;
     font-style: normal;
 }
+
+// @font-face {
+//     font-family: 'InterCustom';
+//     src: url('/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+//     font-weight: 100 900;
+//     font-style: normal;
+// }
 
 @font-face {
     font-family: 'JetBrainsCustom';

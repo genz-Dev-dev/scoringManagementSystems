@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { User } from 'src/app/models/Users';
 import { AuthServiceService } from 'src/app/api/auth/auth.service.service';
 import Swal from 'sweetalert2';
+import { FooterAdminPageComponent } from 'src/app/shared/components/footer-admin-page/footer-admin-page.component';
 import { TokenStoragesService } from 'src/app/api/tokens/token-storages.service';
 
 interface NavItem {
@@ -45,7 +46,7 @@ interface Achiever {
 @Component({
   selector: 'app-scoring-management-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, FooterAdminPageComponent],
   templateUrl: './scoring-management-system-admin-page.component.html',
   styleUrls: ['./scoring-management-system-admin-page.component.scss'],
 })
@@ -61,7 +62,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
       this.User = user;
       setTimeout(() => {
         this.isLoading = false;
-      }, 800); // simulate loading
+      }, 100);
     });
   }
   // Sidebar state
@@ -93,8 +94,8 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
       title: 'ADMINISTRATION',
       items: [
         { icon: 'fa-solid fa-user-shield', label: ' permissions Roles', route: '/permissions' },
-        { icon: 'fa-solid fa-user', label: 'Student Management', route: '/studentManagement' },
-        { icon: 'layers', label: 'Study Material' },
+        { icon: 'fa-solid fa-user-plus', label: 'Create Account', route: '/signup' },
+        { icon: 'fa-solid fa-user', label: 'Student Management', route: '/student-management' },
         { icon: 'fas fa-user-shield', label: 'Lesson Plan' },
         { icon: 'printer', label: 'Bulk Print' },
       ],
@@ -201,6 +202,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
   // }
 
   logoutAdminPage(): void {
+    this.myModal.nativeElement.close();
     Swal.fire({
       icon: 'question',
       iconColor: '#b91c1c',

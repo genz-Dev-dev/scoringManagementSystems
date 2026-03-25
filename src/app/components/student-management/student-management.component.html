@@ -12,7 +12,7 @@
         </label>
     </div>
     <!-- Button -->
-    <button (click)="handleToggleStep()" class="btn btn-primary rounded-full">
+    <button type="button" aria-label="Add Student" (click)="handleToggleStep()" class="btn btn-primary rounded-full">
         <i class="fa-solid fa-user-plus"></i> Add Student
     </button>
 </div>
@@ -58,14 +58,14 @@
         <input type="email" placeholder="Email" formControlName="email"
             class="input input-bordered w-full rounded-full" />
         <input type="date" formControlName="dateOfBirth" class="input input-bordered w-full rounded-full" />
-        <select class="select select-bordered w-full rounded-full" formControlName="classId">
+        <select class="select select-bordered w-full rounded-full" id="classId" formControlName="classId">
             <option value="" disabled>Select Class</option>
             <option *ngFor="let c of classess" [value]="c.id">
                 {{ c.name }}
             </option>
         </select>
-        <select formControlName="gender" class="select select-bordered w-full rounded-full">
-            <option disabled value="">Select Gender</option>
+        <select id="gender" formControlName="gender" class="select select-bordered w-full rounded-full">
+            <option value="" disabled>Select Gender</option>
             <option value="M">Male</option>
             <option value="F">Female</option>
         </select>
@@ -99,18 +99,19 @@
     </div>
     }
     <div class="flex justify-between mt-6">
-        <button type="button" class="btn btn-soft btn-warning" (click)="prevStep()" [disabled]="currentStep === 1">
+        <button type="button" class="btn btn-soft btn-warning" aria-label="Back" (click)="prevStep()"
+            [disabled]="currentStep === 1">
             <i class="fa-solid fa-circle-chevron-left font"></i> Back
         </button>
 
         <ng-container *ngIf="currentStep < 2">
-            <button type="button" class="btn btn-soft btn-primary" (click)="nextStep()">
+            <button type="button" class="btn btn-soft btn-primary" aria-label="Next" (click)="nextStep()">
                 <i class="fa-solid fa-circle-chevron-right"></i> Next
             </button>
         </ng-container>
 
         <ng-container *ngIf="currentStep === 2">
-            <button type="submit" class="btn btn-primary rounded-full">
+            <button type="submit" class="btn btn-primary rounded-full" aria-label="Submit">
                 <i class="fa-solid fa-cloud-arrow-up"></i> Submit
             </button>
         </ng-container>
@@ -163,17 +164,17 @@
                 <td class="px-4 py-3">
                     <div class="flex justify-start gap-2">
                         <!-- View button: show for everyone except ROLE_ADMIN -->
-                        <button *ngIf="currentUserRole !== 'ROLE_ADMIN'"
+                        <button type="button" *ngIf="currentUserRole !== 'ROLE_ADMIN'" aria-label="View"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-eye"></i>
                         </button>
 
                         <!-- Edit button: show only for ROLE_ADMIN -->
-                        <button *ngIf="currentUserRole === 'ROLE_STAFF'"
+                        <button type="button" *ngIf="currentUserRole === 'ROLE_STAFF'" aria-label="Edit"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button *ngIf="currentUserRole === 'ROLE_STAFF'"
+                        <button type="button" *ngIf="currentUserRole === 'ROLE_STAFF'" aria-label="Delete"
                             class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -186,15 +187,21 @@
 </div>
 
 <!-- Mobile Cards -->
-<div class="sm:hidden p-1">
+<div class="sm:hidden p-1 mt-5">
     <div class="grid grid-cols-2 gap-2">
         <div *ngFor="let students of students; let i = index"
             class="bg-white rounded shadow p-2 border border-gray-200 text-xs">
             <div class="flex flex-col h-full">
                 <div class="space-y-0.5 flex-grow">
-                    <div class="truncate font-medium">{{ students?.khFirstName }}</div>
-                    <div class="text-gray-500">{{ students?.studentCode }}</div>
-                    <div class="text-gray-500">{{ students?.classes?.name }}</div>
+                    <div class="truncate font-medium first-letter:uppercase">{{ students?.khFirstName }}
+                        {{students?.khLastName}}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ students?.enFirstName }}
+                        {{students?.enLastName}}</div>
+                    <div class="text-gray-500">{{students?.phoneNumber}}</div>
+                    <div class="text-gray-500">{{ student?.gender === 'M' ? 'MALE' : 'FEMALE' ||'NA' }}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ students?.className}}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ students?.address.province}}</div>
+                    <div class="text-gray-500">{{ students?.address.country}}</div>
                     <div class="truncate text-gray-500" title="{{ students?.status }}">
                         <span class="px-2 py-1 rounded text-white"
                             [ngClass]="students?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
@@ -202,13 +209,15 @@
                         </span>
                     </div>
                 </div>
-                <div *ngIf="currentUserRole !== 'ROLE_STAFF'" class="flex justify-between mt-1 space-x-1">
-                    <button class="bg-blue-500 text-white px-1 py-0.5 rounded text-[10px] w-full">
-                        View
+                <div class="flex justify-between mt-1 space-x-1">
+                    <button type="button" class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="View">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    @if(this.currentUserRole === 'ROLE_ADMIN'){
-                    <button class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full">
-                        Edit
+                    @if(this.currentUserRole === 'ROLE_STAFF'){
+                    <button type="button" class="bg-red-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Edit">
+                        <i class="fa-solid fa-trash"></i>
                     </button>
                     }
                 </div>

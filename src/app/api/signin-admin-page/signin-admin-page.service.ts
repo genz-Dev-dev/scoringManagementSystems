@@ -30,4 +30,35 @@ export class SigninAdminPageService {
       this.getHttpOption()
     );
   }
+  /**
+   * Send OTP to user email
+   * @param email user email
+   */
+  sendOtp(email: string): Observable<any> {
+    return this.httpClient.post(`${this.API}/send-otp`, { email });
+  }
+
+  /**
+   * Verify OTP
+   * @param email user email
+   * @param otp code sent to email
+   */
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.httpClient.post(`${this.API}/auth/forgot-password/verify-otp`, { email, otp });
+  }
+
+  /**
+   * Change password after OTP verification
+   * @param email user email
+   * @param otp code sent to email
+   * @param newPassword new password
+   */
+  changePassword(email: string, otp: string, newPassword: string): Observable<any> {
+    return this.httpClient.post(`${this.API}/auth/forgot-password/change-password`, {
+      email,
+      otp,
+      newPassword,
+    });
+  }
+
 }

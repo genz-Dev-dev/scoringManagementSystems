@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -50,7 +51,7 @@ export interface ApiResponse {
   templateUrl: './student-management.component.html',
   styleUrl: './student-management.component.scss'
 })
-export class StudentManagementComponent {
+export class StudentManagementComponent implements OnInit {
   students: any[] = [];
   classess: any[] = [];
   showStep: boolean = false;
@@ -65,9 +66,9 @@ export class StudentManagementComponent {
     { icon: 'fa-solid fa-users', label: 'Staff', value: 82, bg: 'bg-teal-50' },
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService) {
+  constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title) {
     this.getAllStudents();
-    this.handleGetAllClassess();
+    // this.handleGetAllClassess();
     this.studentForm = this.fb.group({
       khFirstName: [''],
       khLastName: [''],
@@ -79,7 +80,7 @@ export class StudentManagementComponent {
       email: [''],
       phoneNumber: [''],
       dateOfBirth: [''],
-      status: [true], // default active
+      status: [true],
       address: this.fb.group({
         houseNumber: [''],
         street: [''],
@@ -91,16 +92,17 @@ export class StudentManagementComponent {
     });
   }
   ngOnInit() {
+    this.meta.addTag({ name: 'description', content: 'Student Management' });
+    this.title.setTitle('Student Management');
     const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.currentUserRole = user.role;
     this.getAllStudents();
+    this.handleGetAllClassess();
   }
   getAllStudents() {
-    // console.log(this.currentUser)
     this.studentsService.getAllStudents().subscribe({
       next: (res: ApiResponse) => {
         this.students = res.content;
-        // console.log(this.user)
       },
       error: (err) => {
         console.log(err);
@@ -118,17 +120,19 @@ export class StudentManagementComponent {
     // Prepare payload
     const payload = {
       ...this.studentForm.value,
-      status: true, // or from form if user can set
+      status: true,
     };
 
-    console.log("layload", payload);
+    // console.log("layload", payload);
 
     this.studentsService.createStudent(payload).subscribe({
-      next: (res) => {
-        // this.studentForm.reset();
+      next: (res: any) => {
+        localStorage.removeItem('studentsCache');
+        localStorage.removeItem('studentsCache_expiry');
         this.showStep = false;
         this.currentStep = 1;
         this.getAllStudents();
+
         Swal.fire({
           icon: 'success',
           timer: 2500,
@@ -136,7 +140,7 @@ export class StudentManagementComponent {
           html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #10b981;">create student successfully</span>បានទេ!</p>`,
           showCancelButton: false,
           showConfirmButton: false,
-        })
+        });
       },
       error: (err) => {
         Swal.fire({
@@ -146,18 +150,15 @@ export class StudentManagementComponent {
           html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #ef4444;">មិនអាចបង្កើតបាន</span>ទេ!</p>`,
           showCancelButton: false,
           showConfirmButton: false,
-        })
+        });
         console.error('Create student error', err);
       }
-    })
+    });
   }
 
   handleGetAllClassess() {
-    this.studentsService.getAllClass(true).subscribe({
-      next: (res) => {
-        // console.log("res", res);
-        this.classess = res.data;
-      }
+    this.studentsService.getAllClass(true, true).subscribe(res => {
+      this.classess = res.data;
     });
   }
 

@@ -1,125 +1,134 @@
-<div class="min-h-screen bg-base-200 flex items-center justify-center p-6">
+<div class="p-4">
+    <!-- Create Button -->
+    <button type="button" class="btn btn-primary fixed top-20 right-5 z-50" (click)="toggleView()">
+        <i class="fas fa-plus"></i> Create User
+    </button>
+    <!-- FORM -->
+    @if(showForm){
+    <div class="flex justify-center items-center mt-10">
+        <div class="max-w-md w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
+            <!-- Close -->
+            <button type="button" class="btn btn-sm btn-circle absolute right-4 top-4" (click)="closeForm()">
+                ✕
+            </button>
+            <h2 class="text-3xl font-bold text-center mb-6">
+                Create User
+            </h2>
+            <form [formGroup]="signupForm" (ngSubmit)="handleSignupAdminPage()" class="space-y-5">
+                <!-- Username -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Username</span>
+                    </label>
 
-    <div class="max-w-md w-full bg-base-100 p-8 rounded-2xl shadow-xl border border-base-300">
+                    <input type="text" formControlName="fullName" placeholder="Enter username"
+                        class="input input-bordered w-full rounded-full"
+                        [class.input-error]="fullNameControl?.invalid && fullNameControl?.touched"
+                        [class.input-success]="fullNameControl?.valid && fullNameControl?.touched" />
 
-        <h2 class="text-3xl font-bold text-center mb-6">
-            Welcome to our system
-        </h2>
-
-        <form [formGroup]="signupForm" (ngSubmit)="handleSignupAdminPage()" class="space-y-5">
-            <!-- Username -->
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">Username</span>
-                </label>
-
-                <input type="text" formControlName="fullName" placeholder="Enter username"
-                    class="input input-bordered w-full rounded-full"
-                    [class.input-error]="fullNameControl?.invalid && fullNameControl?.touched"
-                    [class.input-success]="fullNameControl?.valid && fullNameControl?.touched" />
-                @if (fullNameControl?.invalid && fullNameControl?.touched) {
-                <div class="text-error">
-                    Username must be 3-20 characters
+                    @if (fullNameControl?.invalid && fullNameControl?.touched) {
+                    <div class="text-error text-sm mt-1">
+                        Username must be 3-20 characters
+                    </div>
+                    }
                 </div>
-                }
+                <!-- Email -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Email</span>
+                    </label>
+                    <input type="email" formControlName="email" placeholder="you@example.com"
+                        class="input input-bordered w-full rounded-full"
+                        [class.input-error]="emailControl?.invalid && emailControl?.touched"
+                        [class.input-success]="emailControl?.valid && emailControl?.touched" />
 
-            </div>
-
-            <!-- Email -->
-
-            <div class="form-control">
-
-                <label class="label">
-                    <span class="label-text">Email</span>
-                </label>
-
-                <input type="email" formControlName="email" placeholder="you@example.com"
-                    class="input input-bordered w-full rounded-full"
-                    [class.input-error]="emailControl?.invalid && emailControl?.touched"
-                    [class.input-success]="emailControl?.valid && emailControl?.touched" />
-                @if(emailControl?.invalid && emailControl?.touched){
-                <div class="text-error text-sm mt-1"> Invalid Email </div>
-                }
-
-            </div>
-
-            <!-- Password -->
-
-
-            <!-- <div class="form-control"> -->
-
-            <div class="form-control w-full">
-
-                <label class="label">
-                    <span class="label-text font-medium">Password</span>
-                </label>
-
-                <div class="relative">
-
-                    <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
-                        placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12" />
-
-                    <button type="button" (click)="togglePassword()"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary transition">
-
-                        <!-- Eye Icon -->
-                        @if(passwordVisible){
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-
-                        </svg>
-                        }
-
-                        <!-- Eye Slash -->
-                        @if(!passwordVisible){
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 3l18 18M10.58 10.58a3 3 0 004.24 4.24M9.88 5.09A9.77 9.77 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-2.293 3.774M6.228 6.228A10.45 10.4 0 003.935 12.002C5.227 16.338 9.24419.5 14 19.5" />
-
-                        </svg>
-                        }
-
-                    </button>
-
+                    @if(emailControl?.invalid && emailControl?.touched){
+                    <div class="text-error text-sm mt-1">
+                        Invalid Email
+                    </div>
+                    }
                 </div>
+                <!-- Password -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-medium">Password</span>
+                    </label>
+                    <div class="relative">
+                        <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+                            placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12" />
 
-            </div>
+                        <button type="button" (click)="togglePassword()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2">
 
-            @if(passwordControl?.invalid && passwordControl?.touched){
-            <div class="text-error text-sm mt-1"> Invalid Password </div>
-            }
+                            @if(passwordVisible){
+                            <i class="fa-solid fa-eye"></i>
+                            } @else {
+                            <i class="fa-solid fa-eye-slash"></i>
+                            }
 
-            <div class="flex gap-1 mt-2 h-1">
-                @for (bar of strengthBars; track $index; let i = $index) {
-                <div class="flex-1 rounded" [class]="getBarColor(i+1)">
+                        </button>
+                    </div>
+                    @if(passwordControl?.invalid && passwordControl?.touched){
+                    <div class="text-error text-sm mt-1">
+                        Invalid Password
+                    </div>
+                    }
                 </div>
-                }
-            </div>
-
-            <div class="text-xs mt-1">
-                {{strengthLabel}}
-            </div>
-
-            <!-- Remember -->
-
-            <label class="flex items-center gap-2">
-
-                <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
-
-                Remember me
-
-            </label>
-
-            <!-- Button -->
-
-            <button type="submit" class="btn btn-primary w-full" [disabled]="signupForm.invalid"> Sign up</button>
-        </form>
+                <!-- Strength -->
+                <div class="flex gap-1 mt-2 h-1">
+                    @for (bar of strengthBars; track $index; let i = $index) {
+                    <div class="flex-1 rounded" [class]="getBarColor(i+1)"></div>
+                    }
+                </div>
+                <div class="text-xs mt-1">
+                    {{ strengthLabel }}
+                </div>
+                <!-- Remember -->
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
+                    Remember me
+                </label>
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
+                    Sign up
+                </button>
+            </form>
+        </div>
     </div>
+    }
+    <!-- TABLE -->
+    @else {
+    <div class="hidden sm:block mt-5">
+        <table class="table w-full">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>1</th>
+                    <td>Cy Ganderton</td>
+                    <td>cy@example.com</td>
+                    <td>Admin</td>
+                </tr>
+                <tr>
+                    <th>2</th>
+                    <td>Hart Hagerty</td>
+                    <td>hart@example.com</td>
+                    <td>User</td>
+                </tr>
+                <tr>
+                    <th>3</th>
+                    <td>Brice Swyre</td>
+                    <td>brice@example.com</td>
+                    <td>Manager</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    }
 </div>

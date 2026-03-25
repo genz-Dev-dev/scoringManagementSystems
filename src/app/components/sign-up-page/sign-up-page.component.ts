@@ -17,7 +17,7 @@ export class SignUpPageComponent {
 
   signupForm: FormGroup;
   passwordVisible = false;
-
+  showForm = false;
   passwordStrength = 0;
   strengthLabel = 'No password';
 
@@ -143,5 +143,14 @@ export class SignUpPageComponent {
 
     return 'bg-base-300';
   }
+  toggleView() {
+    this.showForm = !this.showForm;
+  }
+  openForm() {
+    this.showForm = true;
+  }
 
+  closeForm() {
+    this.showForm = false;
+  }
 }

@@ -50,16 +50,13 @@
   </div>
   <ng-template #dashboardContent>
     <!-- ===================== SIDEBAR ===================== -->
-    <!-- Mobile toggle button (visible only on small screens) -->
-    <button (click)="toggleSidebar()"
+    <button (click)="toggleSidebar()" type="button" aria-label="Toggle Sidebar"
       class="fixed top-4 left-4 z-50 md:hidden text-white p-2 rounded-full shadow-lg hover:bg-white/20 transition-colors duration-200">
       <i class="fas fa-bars text-lg"></i>
     </button>
 
-    <!-- Overlay (mobile only, closes sidebar on tap outside) -->
     <div *ngIf="sidebarOpen()" (click)="closeSidebar()" class="fixed inset-0 z-30 md:hidden"></div>
 
-    <!-- Sidebar -->
     <aside class="fixed md:relative z-40 flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white h-full"
       [class.w-64]="sidebarOpen()" [class.w-0]="!sidebarOpen()" [class.md:w-16]="!sidebarOpen()"
       [class.-translate-x-full]="!sidebarOpen()" [class.md:translate-x-0]="true"
@@ -90,7 +87,8 @@
           </p>
           }
 
-          <button *ngFor="let item of section.items; trackBy: trackByLabel" (click)="onClickRouter(item.route)"
+          <button type="button" *ngFor="let item of section.items; trackBy: trackByLabel"
+            (click)="onClickRouter(item.route)" aria-label="{{ item.label }}"
             class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 hover:cursor-pointer"
             [class.bg-blue-300]="item.active" [class.hover:bg-gray-500]="!item.active">
             <span class="w-5 h-5 flex-shrink-0 flex items-center justify-center text-base">
@@ -109,7 +107,8 @@
       <header class="bg-white border-b border-gray-200 flex items-center justify-between px-6 py-3 gap-4">
         <!-- Toggle + Search -->
         <div class="flex items-center gap-4 flex-1">
-          <button (click)="toggleSidebar()" class="btn btn-ghost btn-sm btn-circle text-gray-500">
+          <button type="button" aria-label="Toggle Sidebar" (click)="toggleSidebar()"
+            class="btn btn-ghost btn-sm btn-circle text-gray-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -125,7 +124,7 @@
 
         <!-- Right actions -->
         <div class="flex items-center gap-3">
-          <button class="relative btn btn-ghost btn-sm btn-circle">
+          <button type="button" aria-label="Message" class="relative btn btn-ghost btn-sm btn-circle">
             <!-- Badge / Indicator -->
             <span
               class="absolute top-0 right-0 -mt-1 -mr-1 w-3 h-3 rounded-full bg-blue-500 border-2 border-white"></span>
@@ -133,7 +132,7 @@
             <!-- Font Awesome Icon -->
             <i class="fa-solid fa-comment text-gray-500 text-lg"></i>
           </button>
-          <button class="relative btn btn-ghost btn-sm btn-circle">
+          <button type="button" aria-label="Notification" class="relative btn btn-ghost btn-sm btn-circle">
             <span
               class="absolute top-0 right-0 -mt-1 -mr-1 w-3 h-3 rounded-full bg-red-500 border-2 border-white"></span>
             <i class="fa-solid fa-bell text-lg"></i>
@@ -158,14 +157,48 @@
                 </div>
               </div>
               <!-- Dropdown Menu -->
+
               <dialog #myModal class="modal">
-                <div class="modal-box relative">
-                  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="closeModal()">
+                <div class="modal-box relative w-96">
+
+                  <!-- Close Button -->
+                  <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                    aria-label="Close" (click)="closeModal()">
                     ✕
                   </button>
-                  <button class="btn btn-error p-2" (click)="logoutAdminPage()">Logout</button>
-                  <h3 class="text-lg font-bold">Hello!</h3>
-                  <p class="py-4">Press ESC key or click on ✕ button to close</p>
+
+                  <!-- User Profile -->
+                  <div class="flex flex-col items-center text-center space-y-1">
+                    <!-- User Icon -->
+                    <div class="flex flex-col items-center text-center">
+                      <!-- Profile Icon -->
+                      <div class="w-24 h-24 rounded-full flex items-center justify-center mb-3">
+                        <i class="fa-solid fa-circle-user text-blue-500 text-6xl"></i>
+                      </div>
+                      <!-- User Info -->
+                      <h3 class="text-xl font-bold">
+                        {{ User?.fullName }}
+                      </h3>
+                      <p class="text-gray-500 text-sm mt-1">
+                        {{ User?.email }}
+                      </p>
+                    </div>
+                  </div>
+                  <!-- Actions -->
+                  <div class="mt-6 space-y-2">
+                    <!-- Change Password -->
+                    <button class="btn btn-outline w-full rounded-full" (click)="onClickRouter('change-password')">
+                      <i class="fa-solid fa-key"></i> Change Password
+                    </button>
+                    <!-- Forgot Password -->
+                    <button class="btn btn-outline w-full rounded-full" (click)="onClickRouter('forgot-password')">
+                      <i class="fa-solid fa-lock"></i> Forgot Password
+                    </button>
+                    <!-- Logout -->
+                    <button class="btn btn-error w-full rounded-full" (click)="logoutAdminPage()">
+                      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout Account
+                    </button>
+                  </div>
                 </div>
               </dialog>
             </div>
@@ -175,9 +208,12 @@
 
       <!-- Page Body -->
       <main class="flex-1 overflow-y-auto p-6 space-y-6">
-        <router-outlet> </router-outlet>
+        <router-outlet></router-outlet>
       </main>
+
+      <app-footer-admin-page></app-footer-admin-page>
     </div>
+
   </ng-template>
 
 </div>
