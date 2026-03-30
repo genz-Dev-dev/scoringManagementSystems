@@ -107,4 +107,13 @@ export class AuthServiceService {
       return false;
     }
   }
+
+  private getHttpOption() {
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  }
+
 }

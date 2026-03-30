@@ -30,7 +30,7 @@
 // ];
 import { Routes } from '@angular/router';
 import { LoginGuard } from './api/guard/login.guard';
-
+import { CustomePageNotFoundComponent } from './shared/components/custome-page-not-found/custome-page-not-found.component';
 export const routes: Routes = [
     {
         path: 'signin',
@@ -99,12 +99,25 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import('./components/permission-admin-page/permission-admin-page.component')
                         .then(m => m.PermissionAdminPageComponent)
+            },
+            {
+                path: 'upload-score',
+                loadComponent: () =>
+                    import('./components/upload-score-page/upload-score-page.component')
+                        .then(m => m.UploadScorePageComponent)
+            }, {
+                path: 'class-semester',
+                loadComponent: () =>
+                    import('./components/class-semester-page/class-semester-page.component')
+                        .then(m => m.ClassSemesterPageComponent)
             }
         ]
     },
-
     {
-        path: '**',
-        redirectTo: ''
-    }
+        path: 'not-found',
+        loadComponent: () =>
+            import('./shared/components/custome-page-not-found/custome-page-not-found.component')
+                .then(m => m.CustomePageNotFoundComponent)
+    },
+    { path: '**', component: CustomePageNotFoundComponent }
 ];

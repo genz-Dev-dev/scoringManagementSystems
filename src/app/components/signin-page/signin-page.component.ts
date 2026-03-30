@@ -102,7 +102,7 @@ export class SigninPageComponent {
         // console.log("res", res);
         if (res) {
           const userData = res.data;
-          console.log("res", userData);
+          // console.log("res", userData);
           const token = userData.token || userData.accessToken || userData.verificationToken;
           this.authService.setToken(token, {
             fullName: userData.fullName,

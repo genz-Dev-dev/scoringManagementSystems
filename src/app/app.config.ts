@@ -1,8 +1,7 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
@@ -12,10 +11,9 @@ import { environments } from '../environments/environments';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideClientHydration(),
+    provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withFetch()),
-    provideAnimations(),
+    provideAnimationsAsync(),
     provideFirebaseApp(() => initializeApp(environments.firebase)),
     provideAuth(() => getAuth()),
   ],

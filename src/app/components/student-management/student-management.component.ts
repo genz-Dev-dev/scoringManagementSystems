@@ -98,6 +98,7 @@ export class StudentManagementComponent implements OnInit {
     this.currentUserRole = user.role;
     this.getAllStudents();
     this.handleGetAllClassess();
+
   }
   getAllStudents() {
     this.studentsService.getAllStudents().subscribe({

@@ -1,6 +1,5 @@
 <!-- Overview Title -->
 <h1 class="text-2xl font-bold text-gray-800">Overview</h1>
-
 <!-- Stats Row -->
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     @for (stat of stats; track stat.label) {
@@ -26,7 +25,7 @@
 </div>
 
 <!-- Dashboard Section + Upcoming Events -->
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-4">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
     <!-- Dashboard Main Panel -->
     <div class="xl:col-span-2 card bg-white shadow-sm border border-gray-100">
         <div class="card-body p-5 space-y-4">
@@ -47,7 +46,7 @@
                 @for (tab of tabs; track tab) {
                 <button class="btn btn-sm px-4 rounded-full transition-all" [class.btn-primary]="activeTab() === tab"
                     aria-label="{{ tab }}" type="button" [class.btn-ghost]="activeTab() !== tab"
-                    [class.text-gray-500]="activeTab() !== tab" (click)="setActiveTab(tab)">
+                    [class.text-gray-600]="activeTab() !== tab" (click)="setActiveTab(tab)">
                     {{ tab }}
                 </button>
                 }
@@ -60,10 +59,10 @@
                     Students Performance
                 </h3>
 
-                <div class="flex items-end justify-around h-52 gap-4 px-4 relative">
+                <div class="relative flex flex-wrap gap-4 px-4">
                     <!-- Y-axis labels -->
                     <div
-                        class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-gray-400 pb-6">
+                        class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-gray-600 pb-6">
                         <span>100%</span>
                         <span>75%</span>
                         <span>50%</span>
@@ -71,24 +70,24 @@
                         <span>15%</span>
                         <span>0%</span>
                     </div>
+
                     <!-- Bars -->
-                    @for (bar of performance; track bar.label) {
-                    <div class="flex flex-col items-center gap-1 flex-1">
-                        <span class="text-xs font-bold text-gray-700">{{ bar.passed }}%</span>
-                        <div class="w-full max-w-10 relative rounded-t-lg overflow-hidden bg-gray-100"
-                            style="height: 160px">
-                            <div class="absolute bottom-0 w-full bg-yellow-400 rounded-t-lg transition-all duration-700"
-                                [style.height.%]="bar.passed"></div>
+                    <div class="flex flex-1 flex-wrap gap-4 justify-around w-full mt-6">
+                        @for (bar of performance; track bar.label) {
+                        <div class="flex flex-col items-center gap-1 w-[20px] sm:w-[30px] md:w-[40px]">
+                            <span class="text-xs font-bold text-gray-700">{{ bar.passed }}%</span>
+                            <div class="w-full relative rounded-t-lg overflow-hidden bg-gray-100" style="height: 160px">
+                                <div class="absolute bottom-0 w-full bg-yellow-400 rounded-t-lg transition-all duration-700"
+                                    [style.height.%]="bar.passed"></div>
+                            </div>
+                            <span class="text-[11px] text-gray-600 text-center break-words">{{ bar.label }}</span>
                         </div>
-                        <span class="text-[11px] text-gray-500">{{
-                            bar.label
-                            }}</span>
+                        }
                     </div>
-                    }
                 </div>
 
                 <!-- Legend -->
-                <div class="flex items-center gap-6 justify-center mt-2">
+                <div class="flex flex-wrap items-center gap-6 justify-center mt-4">
                     <div class="flex items-center gap-2 text-sm text-gray-600">
                         <span class="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>
                         Passed
@@ -99,9 +98,8 @@
                     </div>
                 </div>
             </div>
-
             } @else {
-            <div class="flex items-center justify-center h-52 text-gray-400 text-sm">
+            <div class="flex items-center justify-center h-52 text-gray-600 text-sm">
                 Select "Results" tab to view performance chart.
             </div>
             }
@@ -166,7 +164,7 @@
                 @for (event of upcomingEvents; track event.title) {
                 <div class="rounded-xl bg-gray-50 p-3 border border-gray-100">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-medium text-gray-500">{{
+                        <span class="text-xs font-medium text-gray-600">{{
                             event.day
                             }}</span>
                         <span class="badge badge-sm {{ event.badgeClass }}">{{
@@ -185,7 +183,7 @@
                             <p class="text-sm font-semibold text-gray-800 leading-snug">
                                 {{ event.title }}
                             </p>
-                            <p class="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                            <p class="text-xs text-gray-600 mt-1 flex items-center gap-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

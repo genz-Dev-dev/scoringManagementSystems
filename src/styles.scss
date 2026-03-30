@@ -1,28 +1,37 @@
 @use "tailwindcss";
-@plugin "daisyui";
 
-/* everything else AFTER */
-@font-face {
-    font-family: 'Inter';
-    src: url('/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
-    font-weight: 100 900;
-    font-style: normal;
+@plugin "daisyui" {
+    themes: light --default;
 }
 
-// @font-face {
-//     font-family: 'InterCustom';
-//     src: url('/assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
-//     font-weight: 100 900;
-//     font-style: normal;
-// }
+// @source "../src/**/*.{html,ts}";
+
+// Inter — primary font
+@font-face {
+    font-family: 'Inter';
+    src: url('assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
 
 @font-face {
     font-family: 'JetBrainsCustom';
-    src: url('/assets/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    src: url('assets/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
     font-weight: 100 900;
     font-style: normal;
+    font-display: swap;
 }
 
-* {
-    font-family: 'InterCustom', 'JetBrains Mono', monospace;
+// Apply fonts globally
+:root {
+    font-family: 'Inter', sans-serif;
+}
+
+// Only use monospace where needed
+code,
+pre,
+kbd,
+samp {
+    font-family: 'JetBrainsCustom', monospace;
 }

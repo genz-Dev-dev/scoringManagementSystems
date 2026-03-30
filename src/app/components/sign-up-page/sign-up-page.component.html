@@ -1,134 +1,386 @@
-<div class="p-4">
-    <!-- Create Button -->
-    <button type="button" class="btn btn-primary fixed top-20 right-5 z-50" (click)="toggleView()">
-        <i class="fas fa-plus"></i> Create User
-    </button>
-    <!-- FORM -->
-    @if(showForm){
-    <div class="flex justify-center items-center mt-10">
-        <div class="max-w-md w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
-            <!-- Close -->
-            <button type="button" class="btn btn-sm btn-circle absolute right-4 top-4" (click)="closeForm()">
-                ✕
-            </button>
-            <h2 class="text-3xl font-bold text-center mb-6">
-                Create User
-            </h2>
-            <form [formGroup]="signupForm" (ngSubmit)="handleSignupAdminPage()" class="space-y-5">
-                <!-- Username -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Username</span>
-                    </label>
-
-                    <input type="text" formControlName="fullName" placeholder="Enter username"
-                        class="input input-bordered w-full rounded-full"
-                        [class.input-error]="fullNameControl?.invalid && fullNameControl?.touched"
-                        [class.input-success]="fullNameControl?.valid && fullNameControl?.touched" />
-
-                    @if (fullNameControl?.invalid && fullNameControl?.touched) {
-                    <div class="text-error text-sm mt-1">
-                        Username must be 3-20 characters
-                    </div>
-                    }
-                </div>
-                <!-- Email -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Email</span>
-                    </label>
-                    <input type="email" formControlName="email" placeholder="you@example.com"
-                        class="input input-bordered w-full rounded-full"
-                        [class.input-error]="emailControl?.invalid && emailControl?.touched"
-                        [class.input-success]="emailControl?.valid && emailControl?.touched" />
-
-                    @if(emailControl?.invalid && emailControl?.touched){
-                    <div class="text-error text-sm mt-1">
-                        Invalid Email
-                    </div>
-                    }
-                </div>
-                <!-- Password -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text font-medium">Password</span>
-                    </label>
-                    <div class="relative">
-                        <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
-                            placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12" />
-
-                        <button type="button" (click)="togglePassword()"
-                            class="absolute right-3 top-1/2 -translate-y-1/2">
-
-                            @if(passwordVisible){
-                            <i class="fa-solid fa-eye"></i>
-                            } @else {
-                            <i class="fa-solid fa-eye-slash"></i>
-                            }
-
-                        </button>
-                    </div>
-                    @if(passwordControl?.invalid && passwordControl?.touched){
-                    <div class="text-error text-sm mt-1">
-                        Invalid Password
-                    </div>
-                    }
-                </div>
-                <!-- Strength -->
-                <div class="flex gap-1 mt-2 h-1">
-                    @for (bar of strengthBars; track $index; let i = $index) {
-                    <div class="flex-1 rounded" [class]="getBarColor(i+1)"></div>
-                    }
-                </div>
-                <div class="text-xs mt-1">
-                    {{ strengthLabel }}
-                </div>
-                <!-- Remember -->
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
-                    Remember me
+@if(showForm){
+<div class="flex justify-center items-center mt-10">
+    <div class="max-w-md w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
+        <!-- Close -->
+        <button type="button" class="btn btn-sm btn-circle absolute right-4 top-4" (click)="closeForm()">
+            ✕
+        </button>
+        <h2 class="text-3xl font-bold text-center mb-6">
+            Create User
+        </h2>
+        <form [formGroup]="signupForm" class="space-y-5">
+            <!-- Username -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Username</span>
                 </label>
-                <!-- Submit -->
-                <button type="submit" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
-                    Sign up
-                </button>
-            </form>
+
+                <input type="text" formControlName="fullName" placeholder="Enter username"
+                    class="input input-bordered w-full rounded-full"
+                    [class.input-error]="fullNameControl?.invalid && fullNameControl?.touched"
+                    [class.input-success]="fullNameControl?.valid && fullNameControl?.touched" />
+
+                @if (fullNameControl?.invalid && fullNameControl?.touched) {
+                <div class="text-error text-sm mt-1">
+                    Username must be 3-20 characters
+                </div>
+                }
+            </div>
+            <!-- Email -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Email</span>
+                </label>
+                <input type="email" formControlName="email" placeholder="you@example.com"
+                    class="input input-bordered w-full rounded-full"
+                    [class.input-error]="emailControl?.invalid && emailControl?.touched"
+                    [class.input-success]="emailControl?.valid && emailControl?.touched" />
+
+                @if(emailControl?.invalid && emailControl?.touched){
+                <div class="text-error text-sm mt-1">
+                    Invalid Email
+                </div>
+                }
+            </div>
+            <div class="form-control w-full">
+                <select id="role" formControlName="role" class="select select-bordered w-full rounded-full">
+                    <option disabled selected>Select Role</option>
+                    @for (role of roles; track $index) {
+                    <option [value]="role.name">{{ role.name }}</option>
+                    }
+                </select>
+            </div>
+            <!-- Password -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text font-medium">Password</span>
+                </label>
+                <div class="relative">
+                    <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+                        placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12" />
+
+                    <button type="button" (click)="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2">
+
+                        @if(passwordVisible){
+                        <i class="fa-solid fa-eye"></i>
+                        } @else {
+                        <i class="fa-solid fa-eye-slash"></i>
+                        }
+
+                    </button>
+                </div>
+                @if(passwordControl?.invalid && passwordControl?.touched){
+                <div class="text-error text-sm mt-1">
+                    Invalid Password
+                </div>
+                }
+            </div>
+            <!-- Strength -->
+            <div class="flex gap-1 mt-2 h-1">
+                @for (bar of strengthBars; track $index; let i = $index) {
+                <div class="flex-1 rounded" [class]="getBarColor(i+1)"></div>
+                }
+            </div>
+            <div class="text-xs mt-1">
+                {{ strengthLabel }}
+            </div>
+            <!-- Remember -->
+            <label class="flex items-center gap-2">
+                <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
+                Remember me
+            </label>
+            <!-- Submit -->
+            <button type="submit" aria-label="Sign up" aria-disabled="signupForm.invalid"
+                (click)="handleSignupAdminPage()" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
+                Sign up
+            </button>
+        </form>
+    </div>
+</div>
+}
+<!-- TABLE -->
+@else {
+
+<!-- HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-0">
+    <!-- Left Content -->
+    <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-indigo-950 mb-1">
+            User & Role Management
+        </h1>
+        <p class="text-sm text-gray-500 max-w-md leading-relaxed">
+            Assign roles, manage granular system permissions, and oversee the institutional user directory with
+            chancellor-level precision.
+        </p>
+    </div>
+
+    <!-- Right Buttons -->
+    <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
+
+        <button
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-green-600 transition w-full sm:w-auto"
+            (click)="showToast('Export started…')">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> Export Directory
+        </button>
+
+        <button
+            class="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition w-full sm:w-auto"
+            (click)="toggleView()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Create New User
+        </button>
+
+    </div>
+</div>
+<!-- STAT CARDS -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
+    <!-- Card 1 -->
+    <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
+        <div class="p-2 rounded-lg bg-indigo-100">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
+            </svg>
+        </div>
+        <div>
+            <div class="text-2xl font-bold text-indigo-950">2,842</div>
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Total Active Users
+            </div>
         </div>
     </div>
-    }
-    <!-- TABLE -->
-    @else {
-    <div class="hidden sm:block mt-5">
-        <table class="table w-full">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>1</th>
-                    <td>Cy Ganderton</td>
-                    <td>cy@example.com</td>
-                    <td>Admin</td>
-                </tr>
-                <tr>
-                    <th>2</th>
-                    <td>Hart Hagerty</td>
-                    <td>hart@example.com</td>
-                    <td>User</td>
-                </tr>
-                <tr>
-                    <th>3</th>
-                    <td>Brice Swyre</td>
-                    <td>brice@example.com</td>
-                    <td>Manager</td>
-                </tr>
-            </tbody>
-        </table>
+
+    <!-- Card 2 -->
+    <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
+        <div class="p-2 rounded-lg bg-purple-100">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+        </div>
+        <div>
+            <div class="text-2xl font-bold text-indigo-950">14</div>
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Active Administrators
+            </div>
+        </div>
     </div>
-    }
+
+    <!-- Card 3 -->
+    <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
+        <div class="p-2 rounded-lg bg-yellow-100">
+            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+            </svg>
+        </div>
+        <div>
+            <div class="text-2xl font-bold text-indigo-950">8</div>
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Pending Approvals
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
+        <div class="p-2 rounded-lg bg-red-100">
+            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+            </svg>
+        </div>
+        <div>
+            <div class="text-2xl font-bold text-indigo-950">24</div>
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Suspended Accounts
+            </div>
+        </div>
+    </div>
+
 </div>
+<!-- Table Header -->
+<div
+    class="px-4 sm:px-6 py-2 border-b border-gray-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+    <!-- Left -->
+    <div class="flex flex-wrap items-center gap-2">
+        <h2 class="text-sm sm:text-base font-bold text-indigo-950">
+            User Directory
+        </h2>
+
+        <span class="bg-indigo-100 text-indigo-600 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full">
+            43 NEW THIS WEEK
+        </span>
+    </div>
+    <!-- Right -->
+    <div class="flex flex-wrap items-center gap-2 overflow-x-auto">
+        <button class="filter-btn active" (click)="setFilter('all')">All Roles</button>
+        <button class="filter-btn" (click)="setFilter('professor')">Professor</button>
+        <button class="filter-btn" (click)="RouterToDashboard('student-management')">Student</button>
+        <button class="filter-btn" (click)="setFilter('admin')">Admin</button>
+        <!-- Filter -->
+        <button
+            class="flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
+            Filter
+        </button>
+
+    </div>
+</div>
+<!-- Table -->
+<div class="hidden sm:block mt-0">
+    <table class="table w-full">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>ឈ្មោះ</th>
+                <th>អ៊ីមែល</th>
+                <th>តួនាទី</th>
+                <th>ការផ្ទៀងផ្ទាត់</th>
+                <th>ស្ថានភាព</th>
+                <th>សកម្មភាព</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @for (userList of userList; track $index) {
+            <tr class="hover:bg-gray-50 odd:bg-white even:bg-gray-50">
+                <td>{{ $index + 1 }}</td>
+                <td class="px-4 py-3 first-letter:uppercase">{{ userList?.fullName || 'NA'}}</td>
+                <td class="px-4 py-3 first-letter:uppercase">{{ userList?.email || 'NA'}}</td>
+                <td class="px-4 py-3 first-letter:uppercase">{{ userList?.role || 'NA'}}</td>
+                <td class="px-4 py-3">
+                    <span class="px-2 py-1 rounded text-white"
+                        [ngClass]="userList?.verified === true ? 'bg-green-500' : 'bg-yellow-500'">
+                        {{ userList?.verified === true ? 'បានផ្ទៀងផ្ទាត់' : 'មិនទាន់ផ្ទៀងផ្ទាត់' }}
+                    </span>
+                </td>
+                <td class="px-4 py-3">
+                    <span class="px-2 py-1 rounded text-white"
+                        [ngClass]="userList?.status === true ? 'bg-green-500' : 'bg-red-500'">
+                        {{ userList?.status === true ? 'សកម្ម' : 'អសកម្ម' }}
+                    </span>
+                </td>
+                <td class="px-4 py-3">
+                    <div class="flex justify-start gap-2">
+                        <!-- View button: show for everyone except ROLE_ADMIN -->
+                        <button type="button" aria-label="View"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                        <!-- Edit button: show only for ROLE_ADMIN -->
+                        @if(currentUserRole === "ROLE_ADMIN"){
+                        <button type="button" aria-label="Edit"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button type="button" aria-label="Delete"
+                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                        <!-- <input type="checkbox" [checked]="userList?.status == true" class="toggle toggle-primary" />
+                         -->
+                        <input type="checkbox" [checked]="!userList?.status" (change)="toggleStatus(userList)"
+                            class="toggle toggle-primary" />
+                        }
+
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- responsive table -->
+<div class="sm:hidden p-1 mt-8">
+    <div class="grid grid-cols-2 gap-2">
+        <div *ngFor="let userList of userList; let i = index"
+            class="bg-white rounded shadow p-2 border border-gray-200 text-xs">
+            <div class="flex flex-col h-full">
+                <div class="space-y-0.5 flex-grow">
+                    <div class="truncate font-medium first-letter:uppercase">{{ userList?.fullName }}
+                    </div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ userList?.email }}</div>
+                    <div class="text-gray-500">{{ userList?.role }}</div>
+                    <div class="truncate text-gray-500" title="{{ userList?.status }}">
+                        <span class="px-2 py-1 rounded text-white"
+                            [ngClass]="userList?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
+                            {{ userList?.status === 'INACTIVE' ? 'Inactive' : 'Active' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-1 space-x-1">
+                    <button type="button" class="bg-blue-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="View">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    @if(currentUserRole === 'ROLE_ADMIN'){
+                    <button type="button" class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" class="bg-red-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Pagination -->
+<div
+    style="padding:16px 24px;border-top:1px solid #f1f2f7;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:13px;color:#9ca3af;">Showing <b style="color:#374151;">1–{{pageSize}}</b> of <b
+            style="color:#374151;" class="mono">{{totalElements}}</b> Users</div>
+    <div style="display:flex;align-items:center;gap:6px;" id="pagination">
+        <button type="button"
+            style="width:32px;height:32px;border-radius:8px;border:none;background:#4f46e5;color:white;font-size:13px;font-weight:600;cursor:pointer;"
+            (click)="setPage(1)" [disabled]="currentPage === 1" class="page-btn active-page"><i
+                class="fa-solid fa-angle-left"></i></button>
+        <button *ngIf="currentPage > 1" (click)="setPage(1)" class="page-btn">1</button>
+        <span *ngIf="currentPage > 2" style="padding:0 4px;">...</span>
+        <!-- Dynamic pages -->
+        <button *ngFor="let page of pages" (click)="setPage(page)" [ngClass]="{'active-page': page === currentPage}"
+            class="page-btn" style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;">
+            {{ page }}
+        </button>
+        <span *ngIf="currentPage < totalPages - 2" style="padding:0 4px;">...</span>
+        <button *ngIf="currentPage < totalPages - 1" (click)="setPage(totalPages)" class="page-btn">
+            {{ totalPages }}
+        </button>
+        <!-- Next -->
+        <button (click)="changePage(1)" type="button"
+            style="width:32px;height:32px;border-radius:8px;border:none;background:#4f46e5;color:white;font-size:13px;font-weight:600;cursor:pointer;"
+            [disabled]="currentPage === totalPages" class="page-btn"><i class="fa-solid fa-angle-right"></i></button>
+
+        <!-- <button (click)="setPage(1,this)" class="page-btn active-page"
+            style="width:32px;height:32px;border-radius:8px;border:none;background:#4f46e5;color:white;font-size:13px;font-weight:600;cursor:pointer;">1</button>
+        <button (click)="setPage(2,this)" class="page-btn"
+            style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;background:white;color:#374151;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;"
+            onmouseenter="this.style.background='#f5f6ff'" onmouseleave="this.style.background='white'">2</button>
+        <button (click)="setPage(3,this)" class="page-btn"
+            style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;background:white;color:#374151;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;"
+            onmouseenter="this.style.background='#f5f6ff'" onmouseleave="this.style.background='white'">3</button>
+        <span style="color:#9ca3af;padding:0 4px;">…</span>
+        <button (click)="setPage(totalPages,this)" class="page-btn"
+            style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;background:white;color:#374151;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;"
+            onmouseenter="this.style.background='#f5f6ff'" onmouseleave="this.style.background='white'">190</button>
+        <button (click)="changePage(1)"
+            style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;transition:all .15s;"
+            onmouseenter="this.style.background='#f5f6ff'" onmouseleave="this.style.background='white'">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6" />
+            </svg>
+        </button> -->
+    </div>
+</div>
+}

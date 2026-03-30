@@ -11,6 +11,10 @@
             <input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
         </label>
     </div>
+    <button
+        class="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-green-600 transition w-full sm:w-auto">
+        <i class="fa-solid fa-arrow-up-from-bracket"></i> Export
+    </button>
     <!-- Button -->
     <button type="button" aria-label="Add Student" (click)="handleToggleStep()" class="btn btn-primary rounded-full">
         <i class="fa-solid fa-user-plus"></i> Add Student
@@ -118,7 +122,6 @@
     </div>
 </form>
 }@else {
-
 <div class="hidden sm:block mt-5">
     <table class="table w-full">
         <thead>
@@ -164,17 +167,17 @@
                 <td class="px-4 py-3">
                     <div class="flex justify-start gap-2">
                         <!-- View button: show for everyone except ROLE_ADMIN -->
-                        <button type="button" *ngIf="currentUserRole !== 'ROLE_ADMIN'" aria-label="View"
+                        <button type="button" aria-label="View"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-eye"></i>
                         </button>
 
                         <!-- Edit button: show only for ROLE_ADMIN -->
-                        <button type="button" *ngIf="currentUserRole === 'ROLE_STAFF'" aria-label="Edit"
+                        <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button type="button" *ngIf="currentUserRole === 'ROLE_STAFF'" aria-label="Delete"
+                        <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Delete"
                             class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -185,7 +188,6 @@
         </tbody>
     </table>
 </div>
-
 <!-- Mobile Cards -->
 <div class="sm:hidden p-1 mt-5">
     <div class="grid grid-cols-2 gap-2">
@@ -210,16 +212,21 @@
                     </div>
                 </div>
                 <div class="flex justify-between mt-1 space-x-1">
-                    <button type="button" class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                    <button type="button" class="bg-blue-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
                         aria-label="View">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    @if (currentUserRole =="ROLE_ADMIN") {
+                    <button type="button" class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Edit">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    @if(this.currentUserRole === 'ROLE_STAFF'){
                     <button type="button" class="bg-red-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
-                        aria-label="Edit">
+                        aria-label="Delete">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                     }
+
                 </div>
             </div>
         </div>

@@ -117,11 +117,17 @@ export class AdminPageComponent {
 
   // Performance chart data
   performance: PerformanceBar[] = [
-    { label: 'Class A', passed: 95, failed: 5 },
+    { label: 'Class A', passed: 80, failed: 20 },
     { label: 'Class B', passed: 88, failed: 12 },
     { label: 'Class C', passed: 70, failed: 30 },
     { label: 'Class D', passed: 82, failed: 18 },
-    { label: 'Class E', passed: 98, failed: 2 },
+    { label: 'Class E', passed: 90, failed: 10 },
+    { label: 'Class F', passed: 98, failed: 2 },
+    { label: 'Class G', passed: 98, failed: 2 },
+    { label: 'Class H', passed: 98, failed: 2 },
+    { label: 'Class I', passed: 98, failed: 2 },
+    { label: 'Class J', passed: 98, failed: 2 },
+
   ];
 
   // Upcoming events

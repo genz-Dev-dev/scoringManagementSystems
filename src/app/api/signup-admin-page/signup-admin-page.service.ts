@@ -5,13 +5,14 @@ import { Observable } from 'rxjs';
 import { AuthServiceService } from '../auth/auth.service.service';
 import { environments } from 'src/environments/environments.dev';
 const urlExtension = '/auth/signup';
+const url_extension = '/roles';
 @Injectable({
   providedIn: 'root',
 })
 export class SignupAdminPageService {
 
   private API = environments.api_url + urlExtension;
-
+  private API1 = environments.api_url + url_extension;
   constructor(
     private httpClient: HttpClient,
     private authService: AuthServiceService,
@@ -37,6 +38,28 @@ export class SignupAdminPageService {
       this.API,
       data,
       this.getHttpOption()
+    );
+  }
+
+  public getAllUsers() {
+    return this.httpClient.get<any>(
+      environments.api_url + '/users',
+      this.getHttpOption(true)
+    );
+  }
+
+  public getAllRole(): Observable<any> {
+    return this.httpClient.get<any>(
+      this.API1,
+      this.getHttpOption(true)
+    );
+  }
+
+  public createRole(data: any): Observable<any> {
+    return this.httpClient.post<any>(
+      this.API1,
+      data,
+      this.getHttpOption(true)
     );
   }
 }
