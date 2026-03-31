@@ -93,9 +93,9 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
     {
       title: 'ADMINISTRATION',
       items: [
-        { icon: 'fa-solid fa-user-shield', label: ' permissions Roles', route: '/permissions' },
+        { icon: 'fa-solid fa-user-shield', label: 'Permissions Roles', route: '/permissions' },
         { icon: 'fa-solid fa-user-plus', label: 'Create Account', route: '/signup' },
-        { icon: 'fa-solid fa-people-roof', label: 'class Semester', route: '/class-semester' },
+        { icon: 'fa-solid fa-people-roof', label: 'Class Semester', route: '/class-semester' },
         { icon: 'fa-solid fa-user', label: 'Student Management', route: '/student-management' },
         { icon: 'fa-solid fa-cloud-arrow-up', label: 'Upload Score', route: '/upload-score' },
       ],

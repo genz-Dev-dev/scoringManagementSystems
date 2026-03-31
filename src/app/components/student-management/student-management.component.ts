@@ -54,16 +54,19 @@ export interface ApiResponse {
 export class StudentManagementComponent implements OnInit {
   students: any[] = [];
   classess: any[] = [];
+  maleCount: number = 0;
+  totalCount: number = 0;
+  feamleCount: number = 0;
   showStep: boolean = false;
   currentUserRole: string = '';
   currentStep = 1;
   selectedClass: any = '';
   studentForm!: FormGroup;
   stats: StatCard[] = [
-    { icon: 'fa-solid fa-users', label: 'Students', value: 2000, bg: 'bg-blue-50' },
-    { icon: 'fa-solid fa-venus', label: 'Female', value: 120, bg: 'bg-pink-50' },
-    { icon: 'fa-solid fa-mars', label: 'Male', value: 2115, bg: 'bg-orange-50' },
-    { icon: 'fa-solid fa-users', label: 'Staff', value: 82, bg: 'bg-teal-50' },
+    { icon: 'fa-solid fa-users', label: 'Students', value: 0, bg: 'bg-blue-50' },
+    { icon: 'fa-solid fa-venus', label: 'Female', value: 0, bg: 'bg-pink-50' },
+    { icon: 'fa-solid fa-mars', label: 'Male', value: 0, bg: 'bg-orange-50' },
+    { icon: 'fa-solid fa-users', label: 'Staff', value: 0, bg: 'bg-teal-50' },
   ];
 
   constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title) {
@@ -100,17 +103,33 @@ export class StudentManagementComponent implements OnInit {
     this.handleGetAllClassess();
 
   }
+
   getAllStudents() {
     this.studentsService.getAllStudents().subscribe({
       next: (res: ApiResponse) => {
-        this.students = res.content;
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
-  }
+        this.students = res.content || [];
 
+        this.maleCount = 0;
+        this.feamleCount = 0;
+
+        this.students.forEach(student => {
+          if (student.gender === 'M') this.maleCount++;
+          else if (student.gender === 'F') this.feamleCount++;
+        });
+
+        this.stats = [
+          { ...this.stats[0], value: this.students.length },
+          { ...this.stats[1], value: this.feamleCount },
+          { ...this.stats[2], value: this.maleCount },
+          { ...this.stats[3], value: this.students.length }
+        ];
+
+        this.totalCount = this.students.length;
+
+      },
+      error: (err) => console.log(err)
+    });
+  }
   // create students
   handleCreateStudent() {
     if (this.studentForm.invalid) {
