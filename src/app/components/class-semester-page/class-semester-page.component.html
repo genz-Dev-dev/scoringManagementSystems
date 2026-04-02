@@ -10,7 +10,192 @@
 
 @switch (activeTab()) {
 @case ('SEMESTER') {
-<div class="text-reed-400 p-2 mt-4">welcome to semester</div>
+<!-- Header Section -->
+<header class="flex justify-between items-start mb-8">
+    <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-green-700 mb-1">Academic Timeline</p>
+        <h1 class="text-4xl font-bold text-slate-900">Semester Setup</h1>
+        <p class="text-slate-500 mt-2 max-w-md">Configure institutional cycles, term boundaries, and academic
+            windows for the upcoming decade.</p>
+    </div>
+    <button class="btn btn-primary bg-slate-900 border-none normal-case px-6">
+        <span class="text-xl mr-2">+</span> New Semester
+    </button>
+</header>
+
+<div class="grid grid-cols-12 gap-5">
+
+    <!-- Left Column: Configuration & Visualization -->
+    <div class="col-span-8 space-y-8">
+
+        <!-- Configuration Details Card -->
+        <div class="card bg-white shadow-xl border border-slate-100 overflow-visible">
+            <div class="card-body p-0">
+                <div class="flex">
+                    <!-- Form Side -->
+                    <div class="p-8 flex-1">
+                        <h2 class="card-title text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="text-green-600">📅</span> Configuration Details
+                        </h2>
+
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="form-control w-full">
+                                <label class="label"><span
+                                        class="label-text font-bold text-slate-400 uppercase text-xs">Semester
+                                        Name</span></label>
+                                <input type="text" value="Fall 2025"
+                                    class="input input-bordered bg-slate-50 font-semibold" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label"><span
+                                        class="label-text font-bold text-slate-400 uppercase text-xs">Current
+                                        Status</span></label>
+                                <select class="select select-bordered bg-slate-50">
+                                    <option selected>Active</option>
+                                </select>
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label"><span
+                                        class="label-text font-bold text-slate-400 uppercase text-xs">Start
+                                        Date</span></label>
+                                <input type="text" value="08/28/2025" class="input input-bordered bg-slate-50" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label"><span
+                                        class="label-text font-bold text-slate-400 uppercase text-xs">End
+                                        Date</span></label>
+                                <input type="text" value="12/15/2025" class="input input-bordered bg-slate-50" />
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <button class="btn bg-slate-900 text-white flex-1 border-none">Update Schedule</button>
+                            <button class="btn btn-ghost text-slate-500 flex-1">Discard Changes</button>
+                        </div>
+                    </div>
+
+                    <!-- Floating Overlay Stats (The 114 Days Remaining) -->
+                    <div class="relative w-48">
+                        <div
+                            class="absolute -top-4 -right-4 bg-white shadow-2xl rounded-lg p-6 w-64 border border-slate-50 z-10">
+                            <div class="text-center">
+                                <h3 class="text-5xl font-black text-slate-800">114</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">Days
+                                    Remaining</p>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                                    <div class="bg-green-500 h-1.5 rounded-full w-2/3"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 p-3 bg-red-50 border border-red-100 rounded-md">
+                                <p class="text-[10px] font-bold text-red-400 uppercase">Upcoming Deadline</p>
+                                <p class="text-xs font-bold text-slate-800">Drop/Add window closes in 4 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualization Card -->
+        <div class="card bg-white shadow-sm border border-slate-100">
+            <div class="card-body">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-xl font-bold text-slate-800">Academic Year 2025/26 Visualization</h2>
+                    <div class="flex gap-2">
+                        <button class="btn btn-xs btn-ghost text-slate-400">&lt;</button>
+                        <button class="btn btn-xs btn-ghost text-slate-400">&gt;</button>
+                    </div>
+                </div>
+
+                <!-- Timeline UI -->
+                <div class="relative px-4 pb-8">
+                    <div class="h-px bg-slate-200 w-full absolute top-1/2 -translate-y-1/2"></div>
+                    <div class="flex justify-between relative z-10 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-3 h-3 bg-slate-300 rounded-full mb-2"></div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Aug 28</p>
+                            <p class="text-xs font-bold">Term Starts</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-6 h-6 bg-green-500 border-4 border-green-100 rounded-full -mt-1.5 mb-1.5">
+                            </div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Today</p>
+                            <p class="text-xs font-bold">Oct 12</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-3 h-3 bg-slate-300 rounded-full mb-2"></div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Nov 22</p>
+                            <p class="text-xs font-bold">Fall Break</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="w-3 h-3 bg-slate-300 rounded-full mb-2"></div>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">Dec 15</p>
+                            <p class="text-xs font-bold">Finals End</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Cycle History -->
+    <div class="col-span-4">
+        <h2 class="text-xl font-bold text-slate-800 mb-6">Cycle History</h2>
+        <div class="space-y-4">
+
+            <!-- Sidebar Card 1 (Planning) -->
+            <div class="card bg-white border border-slate-200 shadow-sm">
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-bold text-lg">Spring 2026</h3>
+                        <div class="badge badge-sm bg-blue-50 text-blue-600 border-none font-bold py-3 px-3">
+                            PLANNING</div>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium">JAN 12 - MAY 18</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-slate-400">👥 0 Enrolled</span>
+                        <span class="text-xs font-bold text-slate-900 border-b-2 border-slate-900">Setup
+                            Details</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Card 2 (Active Highlight) -->
+            <div class="card bg-slate-900 text-white shadow-xl ring-4 ring-slate-100">
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-bold text-lg">Fall 2025</h3>
+                        <div
+                            class="badge badge-sm bg-green-500 text-white border-none font-bold py-3 px-3 uppercase text-[10px]">
+                            Active</div>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium">AUG 28 - DEC 15</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <span class="text-xs text-slate-300">👥 12.4k Enrolled</span>
+                        <span class="text-xs font-bold flex items-center">In Progress <span class="ml-2">→</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Archived Card -->
+            <div class="card bg-slate-50 opacity-60 border border-dashed border-slate-300">
+                <div class="p-5">
+                    <div class="flex justify-between">
+                        <h3 class="font-bold text-slate-500">Summer 2025</h3>
+                        <span class="text-[10px] font-bold text-slate-400">ARCHIVED</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-outline btn-block border-dashed border-slate-300 text-slate-400 normal-case">
+                Load Historical Archives
+            </button>
+
+        </div>
+    </div>
+
+</div>
 }
 @case ('RESULTS') {
 <div class="text-reed-400 p-2 mt-4">welcome to results</div>
@@ -112,7 +297,7 @@
             <div class="flex items-center gap-2">
                 <div class="avatar">
                     <div class="w-6 rounded-full ring ring-white">
-                        <img [src]="course.facultyAvatar" />
+                        <img [src]="course.facultyAvatar" alt="image" />
                     </div>
                 </div>
                 <span class="text-xs font-medium">{{ course.facultyLead }}</span>
@@ -165,39 +350,276 @@
 </div> -->
 }
 @case ('CLASS') {
-<div class="text-reed-400 p-2 mt-4">welcome to class</div>
-}
-@default {
-@if(modalCreateClass()){
-<form [formGroup]="formCreateClass" (ngSubmit)="onSubmit()" class="max-w-lg mx-auto mt-10">
-    <div class="bg-white shadow-lg rounded-2xl p-6 space-y-5">
-        <!-- Title -->
-        <h2 class="text-xl font-semibold text-gray-800">Create Class</h2>
-        <!-- Name -->
-        <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-                Role Name
-            </label>
-            <input type="text" formControlName="name" placeholder="Enter role name"
-                class="w-full px-4 py-2 border focus:ring-2 focus:ring-blue-500 outline-none rounded-full" />
-        </div>
-        <!-- Description -->
-        <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">
-                Description
-            </label>
-            <input formControlName="description" placeholder="Enter description"
-                class="w-full px-4 py-2 border focus:ring-2 focus:ring-blue-500 outline-none rounded-full" />
-        </div>
-        <!-- Buttons -->
-        <div class="flex justify-end gap-3 pt-3">
-            <button type="submit" aria-label="Create" [disabled]="formCreateClass.invalid"
-                class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition disabled:opacity-50">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Create
-            </button>
+
+<!-- Header -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 md:gap-0">
+    <!-- Left side: title and description -->
+    <div class="max-w-2xl">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#001529]">
+            Class
+        </h1>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">
+            Curate and manage the intellectual foundation of our institution. Oversee departmental alignment and credit
+            distribution.
+        </p>
+    </div>
+
+    <!-- Right side: Add button -->
+    <button aria-label="addNewClass" type="button"
+        class="btn btn-neutral bg-[#001529] border-none rounded-lg normal-case px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base w-full md:w-auto"
+        onclick="my_modal_3.showModal()">
+        <span class="mr-2 text-lg"><i class="fa-solid fa-plus"></i></span> Add New Class
+    </button>
+</header>
+
+<!-- Top Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Total Courses</p>
+        <div class="text-4xl font-bold">{{ courses.length }}</div>
+        <p class="text-xs text-success font-medium mt-2">↑ +12 this semester</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Active Classes</p>
+        <div class="text-4xl font-bold">{{filteredCourses.length}}</div>
+        <div class="w-full bg-slate-100 h-1 mt-4 rounded-full">
+            <div class="bg-success h-1 rounded-full" style="width: 70%"></div>
         </div>
     </div>
-</form>
+    <div class="bg-[#1E293B] p-6 rounded-2xl text-white relative overflow-hidden">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Upcoming Registration</p>
+        <h3 class="text-xl font-bold">Fall 2024 Enrollment</h3>
+        <p class="text-xs text-slate-400 mt-2">Review and approve 42 pending course proposals before the July 15th
+            deadline.</p>
+        <div class="absolute right-4 bottom-4 opacity-10 text-6xl">📅</div>
+    </div>
+</div>
+
+<!-- Filters & Table Section -->
+<div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <!-- Toolbar -->
+    <div class="p-6 flex flex-wrap justify-between items-center border-b border-slate-50 gap-4">
+        <div class="tabs tabs-boxed bg-slate-100 p-1 rounded-xl">
+            <a class="tab tab-active bg-[#001529] text-white rounded-lg">All Courses</a>
+            <a class="tab text-slate-500">Undergraduate</a>
+            <a class="tab text-slate-500">Postgraduate</a>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="form-control">
+                <label class="label cursor-pointer gap-3">
+                    <input type="checkbox" class="toggle toggle-success toggle-sm" [(ngModel)]="showActiveOnly" />
+                    <span class="label-text font-bold text-slate-600 text-xs">Show Active Classes Only</span>
+                </label>
+            </div>
+            <select [(ngModel)]="selectedDepartment"
+                class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
+                <option value="All" selected>Department: All</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mathematics">Mathematics</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <tr *ngFor="let course of filteredCourses" class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+        <td class="py-5 pl-8">
+            <div class="flex items-center gap-4">
+                <div
+                    class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[10px]">
+                    {{ course.department.slice(0,2).toUpperCase() }}
+                </div>
+                <div>
+                    <div class="font-bold text-sm">{{ course.id }}: {{ course.name }}</div>
+                    <div class="text-[10px] italic text-slate-400">{{ course.level }}</div>
+                </div>
+            </div>
+        </td>
+        <td><span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">{{ course.department
+                }}</span></td>
+        <td class="font-bold text-sm">{{ course.credits }}</td>
+        <td>
+            <div class="badge badge-success badge-outline gap-1 text-[9px] font-bold px-3 py-3">
+                <span class="w-1 h-1 rounded-full bg-success"></span> {{ course.activeClasses }} Active
+            </div>
+        </td>
+        <td>
+            <div class="flex items-center gap-2">
+                <div class="avatar">
+                    <div class="w-6 rounded-full ring ring-white">
+                        <img [src]="course.facultyAvatar" alt="image" />
+                    </div>
+                </div>
+                <span class="text-xs font-medium">{{ course.facultyLead }}</span>
+            </div>
+        </td>
+        <td class="text-right pr-8">
+            <button class="btn btn-ghost btn-xs text-slate-300 font-black">⋮</button>
+        </td>
+    </tr>
+
+    <!-- Pagination -->
+    <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
+        <span>Showing <b>1-20</b> of <b>{{ courses.length }}</b> courses</span>
+        <div class="join">
+            <button class="join-item btn btn-xs btn-ghost"><i class="fa-solid fa-angle-left"></i></button>
+            <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
+            <button class="join-item btn btn-xs btn-ghost">2</button>
+            <button class="join-item btn btn-xs btn-ghost">3</button>
+            <button class="join-item btn btn-xs btn-ghost"><i class="fa-solid fa-angle-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Insight Cards -->
+<!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+    <div class="bg-[#E6F4EA] p-8 rounded-[2rem] border border-green-100">
+        <div class="bg-green-700 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-6">📊</div>
+        <h4 class="font-bold text-slate-800 mb-2">Department Efficiency</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+            Computer Science courses currently have an average of 82% class capacity utilization across all active
+            semesters.
+        </p>
+    </div>
+    <div class="bg-[#EDF2F7] p-8 rounded-[2rem] border border-slate-200">
+        <div class="bg-[#001529] w-10 h-10 rounded-xl flex items-center justify-center text-white mb-6">🔍</div>
+        <h4 class="font-bold text-slate-800 mb-2">Curriculum Audit</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+            8 courses in the Biological Sciences department are overdue for a curriculum review to meet 2024
+            accreditation standards.
+        </p>
+    </div>
+    <div class="bg-[#FCE8E6] p-8 rounded-[2rem] border border-red-100">
+        <div class="bg-red-800 w-10 h-10 rounded-xl flex items-center justify-center text-white mb-6">📋</div>
+        <h4 class="font-bold text-slate-800 mb-2">Pending Approvals</h4>
+        <p class="text-xs text-slate-600 leading-relaxed">
+            There are 14 course change requests awaiting administrative signature for the upcoming Fall Semester
+            cycle.
+        </p>
+    </div>
+</div> -->
+
+<dialog id="my_modal_3" class="modal">
+    <div class="modal-box">
+        <form method="dialog" formGroup="formCreateClasses">
+            <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <!-- Name -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Course Name</span>
+                </label>
+                <input type="text" name="name" formControlName="name" required placeholder="Enter course name"
+                    class="input input-bordered w-full" />
+            </div>
+
+            <!-- Department -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Department</span>
+                </label>
+                <select id="department_id" formControlName="department_id" name="department_id"
+                    class="select select-bordered w-full" required>
+                    <option value="" disabled selected>Select Department</option>
+                    <option *ngFor="let dept of departments" [value]="dept.id">
+                        {{ dept.name }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Academic Year -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Academic Year</span>
+                </label>
+                <input type="text" name="academic_year" formControlName="academic_year" required
+                    placeholder="e.g. 2025-2026" class="input input-bordered w-full" />
+            </div>
+
+            <!-- Generation -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Generation</span>
+                </label>
+                <input type="number" name="generation" formControlName="generation" required
+                    placeholder="Enter generation" class="input input-bordered w-full" />
+            </div>
+
+            <!-- Submit -->
+            <div class="form-control mt-6">
+                <button type="submit" class="btn btn-primary w-full" [disabled]="courseForm.invalid">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>
+}
+@default {
+@if(modalCreateDepartment){
+<div class="card">
+    <!-- File Preview Strip -->
+    <div class="preview-strip" *ngIf="imagePreview">
+        <div class="preview-img">
+            <img [src]="imagePreview" alt="preview"
+                style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+        </div>
+        <div class="preview-info">
+            <div class="preview-name">{{ selectedFile?.name }}</div>
+            <div class="preview-size">{{ (selectedFile?.size / 1048576).toFixed(1) }} MB</div>
+        </div>
+        <button type="button" class="remove-btn" (click)="imagePreview = null; selectedFile = null">✕</button>
+    </div>
+
+    <form [formGroup]="formCreateClass">
+
+        <!-- Name + Code row -->
+        <div class="field-row">
+            <div class="field">
+                <label for="name">Department name</label>
+                <input id="name" type="text" formControlName="name" placeholder="e.g. Computer Science" />
+            </div>
+            <!-- description -->
+            <div class="field">
+                <label for="description">Description</label>
+                <input id="description" type="text" formControlName="description" placeholder="e.g. CS-101" />
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Upload -->
+        <div class="field">
+            <label>Class image</label>
+            <label class="upload-zone" for="fileInput">
+                <div class="upload-icon">
+                    <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        stroke="currentColor">
+                        <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="upload-label">Click to upload</div>
+                <div class="upload-sub">PNG or JPG, up to 5 MB</div>
+                <input type="file" id="fileInput" class="hidden-input" accept=".png,.jpg,.jpeg"
+                    (change)="handleOnFileChange($event)" />
+            </label>
+        </div>
+        <!-- Buttons -->
+        <div class="submit-row">
+            <button type="button" class="btn-cancel" routerLink="/classes">Cancel</button>
+            <button type="button" class="btn-submit" (click)="handleCreateDepartment()">
+                <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                    stroke="white">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Create class
+            </button>
+        </div>
+
+    </form>
+</div>
 }@else {
 <!-- TOP NAV / TITLE -->
 <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
@@ -210,8 +632,8 @@
         </p>
     </div>
     <button class="btn btn-neutral bg-[#0F172A] border-none px-8 rounded-xl normal-case hover:scale-105 transition-all"
-        (click)="toggleModalCreateClass()">
-        <lucide-icon name="plus" class="w-4 h-4 mr-2"></lucide-icon>
+        (click)="createDepartment()">
+        <i class="fa-solid fa-plus"></i>
         Create New Department
     </button>
 </div>
@@ -281,7 +703,7 @@
             <div class="flex items-center gap-3">
                 <div class="avatar shadow-md">
                     <div class="w-10 rounded-full ring ring-white ring-offset-base-100 ring-offset-2">
-                        <img [src]="dept.avatar" />
+                        <img [src]="dept.avatar" alt="image" />
                     </div>
                 </div>
                 <div>

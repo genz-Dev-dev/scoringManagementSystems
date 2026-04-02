@@ -62,4 +62,12 @@ export class SignupAdminPageService {
       this.getHttpOption(true)
     );
   }
+
+  public updateStatus(id: string, status: boolean): Observable<any> {
+    return this.httpClient.put<any>(
+      `${environments.api_url}/users/update-status/${id}?status=${status}`,
+      null,
+      this.getHttpOption(true)
+    );
+  }
 }

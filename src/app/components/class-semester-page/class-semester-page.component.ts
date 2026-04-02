@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 interface Department {
   title: string;
   school: string;
@@ -24,17 +25,21 @@ interface Course {
 }
 @Component({
   selector: 'app-class-semester-page',
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './class-semester-page.component.html',
   styleUrl: './class-semester-page.component.scss',
 })
 
-export class ClassSemesterPageComponent {
+export class ClassSemesterPageComponent implements OnInit {
   activeTab = signal('DEPARTMENT');
   tabs = ['DEPARTMENT', 'CLASS', 'SEMESTER', 'COURSES', 'RESULTS'];
   modalCreateClass = signal(false);
   formCreateClass!: FormGroup;
-
+  formCreateDepartment!: FormGroup;
+  formCreateClasses!: FormGroup;
+  modalCreateDepartment: Boolean = false;
+  imagePreview: String | ArrayBuffer | null = null;
+  selectedFile!: File;
   departments: Department[] = [
     {
       title: 'Computer Science',
@@ -85,6 +90,27 @@ export class ClassSemesterPageComponent {
   showActiveOnly: boolean = false;
   selectedDepartment: string = 'All';
 
+  // constructor 
+  constructor(private fb: FormBuilder, private router: Router, private departmentClassService: DepartmentClassServiceService) {
+    this.formCreateClass = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      status: ['ACTIVE', Validators.required],
+    })
+
+    this.formCreateDepartment = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      image: ['', Validators.required],
+    })
+
+    this
+  }
+
+  ngOnInit(): void {
+
+  }
+
   // Computed property to replace the pipe
   get filteredCourses(): Course[] {
     return this.courses.filter((course) => {
@@ -95,27 +121,47 @@ export class ClassSemesterPageComponent {
     });
   }
 
+
+  handleCreateDepartment() {
+    // if (this.formCreateDepartment.invalid) {
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append('name', this.formCreateDepartment.get('name')?.value);
+    formData.append('description', this.formCreateDepartment.get('description')?.value);
+    if (this.selectedFile) formData.append('image', this.selectedFile, this.selectedFile.name);
+
+    console.log(formData);
+
+  }
+
+  private handleCreateClasses() {
+  }
+
   // Optional: department creation handler
   createDepartment() {
-    console.log('Create New Department clicked');
+    this.modalCreateDepartment = true;
   }
 
   addNewCourse() {
     console.log('Add New Course clicked');
   }
-  // constructor 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.formCreateClass = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      status: ['ACTIVE', Validators.required],
-    })
-  }
+
   // Actions
   setActiveTab(tab: string): void {
     this.activeTab.set(tab);
   }
-  toggleModalCreateClass() {
-    this.modalCreateClass.set(!this.modalCreateClass());
+
+  handleOnFileChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }

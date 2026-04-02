@@ -6,6 +6,7 @@ import { SignupAdminPageService } from 'src/app/api/signup-admin-page/signup-adm
 import { AuthServiceService } from 'src/app/api/auth/auth.service.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/Users';
+import { user } from '@angular/fire/auth';
 interface Role {
   id: number;
   name: string;
@@ -36,6 +37,10 @@ export class SignUpPageComponent implements OnInit {
   strengthBars = [1, 2, 3, 4];
   currentUser: any;
   currentUserRole: string = '';
+  countUser: Number = 0;
+  countUserByVerityTrue: Number = 0;
+  countUserByVerityFalse: number = 0;
+  countUserUnactive: number = 0;
   constructor(private fb: FormBuilder, private signupAdminPageService: SignupAdminPageService, private authService: AuthServiceService, private router: Router) {
     this.signupForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -53,7 +58,6 @@ export class SignUpPageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllRoles();
     this.getAllUsers();
-
     const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
     this.currentUserRole = user.role;
@@ -66,6 +70,29 @@ export class SignUpPageComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error:", err);
+      }
+    });
+  }
+
+  private handleUpdateStatusUser(id: string, checked: boolean) {
+    const status = !checked; // 🔥 reverse
+
+    console.log("checked:", checked);   // true/false
+    console.log("status:", status);     // reversed value
+
+    this.signupAdminPageService.updateStatus(id, status).subscribe({
+      next: (res) => {
+        console.log("API response:", res);
+
+        if (res.success) {
+          const user = this.userList.find(u => u.id === id);
+          if (user) {
+            user.status = status;
+          }
+        }
+      },
+      error: (err) => {
+        console.log("ERROR:", err);
       }
     });
   }
@@ -136,22 +163,28 @@ export class SignUpPageComponent implements OnInit {
     this.signupAdminPageService.getAllUsers().subscribe({
       next: (res) => {
         this.userList = res.content;
-        console.log("res", this.userList)
         this.currentPage = res.number;
         this.pageSize = res.size;
         this.totalPages = res.totalPage;
         this.totalElements = res.totalElement;
         this.hasPrevious = res.hastPrevious;
         this.hasNext = res.hastNext;
+        this.countUser = res.totalElement;
+        this.countUserByVerityTrue = res.content.filter((user: any) => user.verified === true).length;
+        this.countUserByVerityFalse = res.content.filter((user: any) => user.verified === false).length;
+        this.countUserUnactive = res.content.filter((user: any) => user.status === false).length;
         this.generatePages();
-        console.log("Page info:", {
-          currentPage: this.currentPage,
-          pageSize: this.pageSize,
-          totalPages: this.totalPages,
-          totalElements: this.totalElements,
-          hasPrevious: this.hasPrevious,
-          hasNext: this.hasNext
-        });
+
+        // console.log("count By veriry", this.countUserByVerityTrue);
+        // console.log("count user unactive", this.countUserByVerityFalse)
+        // console.log("Page info:", {
+        //   currentPage: this.currentPage,
+        //   pageSize: this.pageSize,
+        //   totalPages: this.totalPages,
+        //   totalElements: this.totalElements,
+        //   hasPrevious: this.hasPrevious,
+        //   hasNext: this.hasNext
+        // });
       }, error: (err) => {
         console.log("err", err)
       }
@@ -215,18 +248,6 @@ export class SignUpPageComponent implements OnInit {
     this.showForm = !this.showForm;
   }
 
-  toggleStatus(userList: any) {
-    userList.status = !userList.status;
-    // console.log('Updated status:', userList.status);
-    // this.signupAdminPageService.updateStatus(userList.id, userList.status).subscribe({
-    //   next: (res) => {
-    //     console.log("API response:", res);
-    //   },
-    //   error: (err) => {
-    //     console.log("ERROR:", err);
-    //   }
-    // });
-  }
   openForm() {
     this.showForm = true;
   }
