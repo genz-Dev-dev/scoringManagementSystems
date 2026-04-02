@@ -115,8 +115,7 @@ export class SignUpPageComponent implements OnInit {
   }
 
   handleSignupAdminPage() {
-
-    console.log("form value", this.signupForm.value);
+    // console.log("form value", this.signupForm.value);
 
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();
@@ -126,8 +125,6 @@ export class SignUpPageComponent implements OnInit {
     this.signupAdminPageService.signupAdminPage(this.signupForm.value).subscribe({
 
       next: (res) => {
-        console.log("API response:", res);
-
         if (res && res.token) {
           localStorage.setItem('access_token', res.token);
           localStorage.setItem('user', JSON.stringify(res.data));

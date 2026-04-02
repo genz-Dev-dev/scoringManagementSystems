@@ -119,11 +119,12 @@ export class StudentsServiceService {
   }
 
   // Fetch all students (cached)
-  public getAllStudents(): Observable<any> {
-    return this.fetchWithCache<any>(this.API, 'studentsCache');
+  public getAllStudents(page: number = 0, size: number = 10) {
+    return this.httpClient.get<any>(
+      `${this.API}?page=${page}&size=${size}`,
+      this.getHttpOption(true)
+    );
   }
-
-
   // Fetch all classes (cached)
   public getAllClass(status: boolean, forceRefresh: boolean = false): Observable<any> {
     const params = new HttpParams().set('status', status);

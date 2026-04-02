@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { AuthServiceService } from 'src/app/api/auth/auth.service.service';
@@ -43,11 +43,13 @@ export interface ApiResponse {
   size: number;
   totalPage: number;
   totalElement: number;
+  hastPrevious: boolean;
+  hastNext: boolean;
 }
 @Component({
   selector: 'app-student-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './student-management.component.html',
   styleUrl: './student-management.component.scss'
 })
@@ -62,6 +64,14 @@ export class StudentManagementComponent implements OnInit {
   currentStep = 1;
   selectedClass: any = '';
   studentForm!: FormGroup;
+  searchQuery: string = '';
+  filtterStudents: any[] = [];
+  number: number = 1;
+  size: number = 10;
+  totalPage: number = 0;
+  totalElement: number = 0;
+  hastPrevious: boolean;
+  hastNext: boolean;
   stats: StatCard[] = [
     { icon: 'fa-solid fa-users', label: 'Students', value: 0, bg: 'bg-blue-50' },
     { icon: 'fa-solid fa-venus', label: 'Female', value: 0, bg: 'bg-pink-50' },
@@ -71,18 +81,17 @@ export class StudentManagementComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title) {
     this.getAllStudents();
-    // this.handleGetAllClassess();
     this.studentForm = this.fb.group({
       khFirstName: [''],
       khLastName: [''],
       enFirstName: [''],
       enLastName: [''],
-      studentCode: [''],
       classId: [''],
       gender: [''],
       email: [''],
       phoneNumber: [''],
       dateOfBirth: [''],
+      enrollmentDate: [''],
       status: [true],
       address: this.fb.group({
         houseNumber: [''],
@@ -94,38 +103,37 @@ export class StudentManagementComponent implements OnInit {
       })
     });
   }
-  ngOnInit() {
+  ngOnInit(): void {
     this.meta.addTag({ name: 'description', content: 'Student Management' });
     this.title.setTitle('Student Management');
     const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
     this.currentUserRole = user.role;
-    this.getAllStudents();
     this.handleGetAllClassess();
-
   }
-
   getAllStudents() {
     this.studentsService.getAllStudents().subscribe({
       next: (res: ApiResponse) => {
         this.students = res.content || [];
-
+        this.filtterStudents = res.content || [];
+        this.number = res.number;
+        this.size = res.size;
+        this.totalPage = res.totalPage;
+        this.totalElement = res.totalElement;
+        this.hastPrevious = res.hastPrevious;
+        this.hastNext = res.hastNext;
         this.maleCount = 0;
         this.feamleCount = 0;
-
         this.students.forEach(student => {
           if (student.gender === 'M') this.maleCount++;
           else if (student.gender === 'F') this.feamleCount++;
         });
-
         this.stats = [
           { ...this.stats[0], value: this.students.length },
           { ...this.stats[1], value: this.feamleCount },
           { ...this.stats[2], value: this.maleCount },
           { ...this.stats[3], value: this.students.length }
         ];
-
         this.totalCount = this.students.length;
-
       },
       error: (err) => console.log(err)
     });
@@ -136,15 +144,12 @@ export class StudentManagementComponent implements OnInit {
       this.studentForm.markAllAsTouched();
       return;
     }
-
     // Prepare payload
     const payload = {
       ...this.studentForm.value,
       status: true,
     };
-
     // console.log("layload", payload);
-
     this.studentsService.createStudent(payload).subscribe({
       next: (res: any) => {
         localStorage.removeItem('studentsCache');
@@ -152,7 +157,6 @@ export class StudentManagementComponent implements OnInit {
         this.showStep = false;
         this.currentStep = 1;
         this.getAllStudents();
-
         Swal.fire({
           icon: 'success',
           timer: 2500,
@@ -178,8 +182,38 @@ export class StudentManagementComponent implements OnInit {
 
   handleGetAllClassess() {
     this.studentsService.getAllClass(true, true).subscribe(res => {
-      this.classess = res.data;
+      this.classess = res.content;
+      // console.log("res", this.classess)
     });
+  }
+
+  filterStudents() {
+    const keyword = this.searchQuery.toLowerCase();
+
+    this.filtterStudents = this.students.filter(student =>
+      student.khFirstName?.toLowerCase().includes(keyword) ||
+      student.khLastName?.toLowerCase().includes(keyword) ||
+      student.enFirstName?.toLowerCase().includes(keyword) ||
+      student.enLastName?.toLowerCase().includes(keyword) ||
+      student.studentCode?.toLowerCase().includes(keyword) ||
+      student.phoneNumber?.toLowerCase().includes(keyword) ||
+      student.address?.province?.toLowerCase().includes(keyword) ||
+      student.address?.country?.toLowerCase().includes(keyword)
+    );
+  }
+
+  handlePreviousPage() {
+    if (this.number > 1) {
+      this.number--;
+      this.getAllStudents();
+    }
+  }
+
+  handleNextPage() {
+    if (this.number < this.totalPage) {
+      this.number++;
+      this.getAllStudents();
+    }
   }
 
   handleToggleStep() {

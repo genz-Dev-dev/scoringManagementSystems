@@ -8,7 +8,8 @@
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
             </svg>
-            <input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
+            <input type="search" class="grow border-0 bg-transparent outline-none" [(ngModel)]="searchQuery"
+                (input)="filterStudents()" placeholder="Search" />
         </label>
     </div>
     <button
@@ -47,7 +48,7 @@
     <li class="step" [class.step-primary]="currentStep >= 2">Address Information</li>
     <!-- <li class="step" [class.step-primary]="currentStep >= 3">Review</li> -->
 </ul>
-<form [formGroup]="studentForm" (ngSubmit)="handleCreateStudent()">
+<form [formGroup]="studentForm">
     @if(currentStep === 1){
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <input type="text" placeholder="Khmer First Name" formControlName="khFirstName"
@@ -88,6 +89,10 @@
                 placeholder="Phone" pattern="[0-9]*" minlength="10" maxlength="10" title="Must be 10 digits" />
         </label>
         <p class="absolute right-80 top-125 validator-hint">Must be 10 digits</p>
+        <label class="input validator rounded-full"> enrollmentDate
+            <input type="date" class="tabular-nums w-full rounded-full" formControlName="enrollmentDate" required
+                placeholder="Enrollment Date" />
+        </label>
     </div>
     }@else {
     <div [formGroupName]="'address'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -115,7 +120,8 @@
         </ng-container>
 
         <ng-container *ngIf="currentStep === 2">
-            <button type="submit" class="btn btn-primary rounded-full" aria-label="Submit">
+            <button type="submit" class="btn btn-primary rounded-full" aria-label="Submit"
+                (click)="handleCreateStudent()">
                 <i class="fa-solid fa-cloud-arrow-up"></i> Submit
             </button>
         </ng-container>
@@ -123,70 +129,87 @@
 </form>
 }@else {
 <div class="hidden sm:block mt-5">
-    <table class="table w-full">
-        <thead>
-            <tr>
-                <th>#លេខរៀង</th>
-                <th>នាមត្រកូលខ្មែរ</th>
-                <th>នាមខ្លួនខ្មែរ</th>
-                <th class="first-letter:uppercase">នាមត្រកូលអង់គ្លេស</th>
-                <th class="first-letter:uppercase">នាមខ្លួនអង់គ្លេស</th>
-                <th class="first-letter:uppercase">លេខកូដសិស្ស</th>
-                <th>ថ្នាក់</th>
-                <th>ភេទ</th>
-                <th>លេខទូរស័ព្ទ</th>
-                <th>ថ្ងៃខែឆ្នាំកំណើត</th>
-                <th>ខេត្ត</th>
-                <th>ប្រទេស</th>
-                <th>ស្ថានភាព</th>
-                <th>សកម្មភាព</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @for (student of students; track $index) {
-            <tr class="hover:bg-gray-50 odd:bg-white even:bg-gray-50">
-                <td>{{ $index + 1 }}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.khFirstName || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.khLastName || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.enFirstName || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.enLastName || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.studentCode || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.className || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase"> {{ student?.gender === 'M' ? 'MALE' : 'FEMALE' ||'NA' }}
-                </td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.phoneNumber || 'NA' }}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.dateOfBirth || 'NA'}}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.province ||'NA' }}</td>
-                <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.country ||'NA' }}</td>
-                <td class="px-4 py-3">
-                    <span class="px-2 py-1 rounded text-white"
-                        [ngClass]="student?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
-                        {{ student?.status === 'INACTIVE' ? 'Inactive' : 'Active' }}
-                    </span>
-                </td>
-                <td class="px-4 py-3">
-                    <div class="flex justify-start gap-2">
-                        <!-- View button: show for everyone except ROLE_ADMIN -->
-                        <button type="button" aria-label="View"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
+    <div class="max-h-[650px] overflow-y-auto  rounded-lg">
+        <table class="table w-full">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>នាមត្រកូលខ្មែរ</th>
+                    <th>នាមខ្លួនខ្មែរ</th>
+                    <th class="first-letter:uppercase">នាមត្រកូលអង់គ្លេស</th>
+                    <th class="first-letter:uppercase">នាមខ្លួនអង់គ្លេស</th>
+                    <th class="first-letter:uppercase">លេខកូដសិស្ស</th>
+                    <th>ថ្ងៃចូលរៀន</th>
+                    <th>ថ្នាក់</th>
+                    <th>ភេទ</th>
+                    <th>លេខទូរស័ព្ទ</th>
+                    <th>ថ្ងៃខែឆ្នាំកំណើត</th>
+                    <th>ខេត្ត</th>
+                    <th>ប្រទេស</th>
+                    <th>ស្ថានភាព</th>
+                    <th>សកម្មភាព</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @for (student of filtterStudents; track $index) {
+                <tr class="hover:bg-gray-50 odd:bg-white even:bg-gray-50">
+                    <td>{{ $index + 1 }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.khFirstName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.khLastName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enFirstName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enLastName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.studentCode || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enrollmentDate || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.className || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase"> {{ student?.gender === 'M' ? 'MALE' : 'FEMALE' ||'NA'
+                        }}
+                    </td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.phoneNumber || 'NA' }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.dateOfBirth || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.province ||'NA' }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.country ||'NA' }}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 rounded text-white"
+                            [ngClass]="student?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
+                            {{ student?.status === 'INACTIVE' ? 'Inactive' : 'Active' }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex justify-start gap-2">
+                            <!-- View button: show for everyone except ROLE_ADMIN -->
+                            <button type="button" aria-label="View"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
 
-                        <!-- Edit button: show only for ROLE_ADMIN -->
-                        <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Delete"
-                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+                            <!-- Edit button: show only for ROLE_ADMIN -->
+                            <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Delete"
+                                class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
+            <span>Showing <b>1-10</b> of <b>{{ totalElement }}</b> students</span>
+            <div class="join">
+                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastPrevious"
+                    (click)="handlePreviousPage()"><i class="fa-solid fa-angle-left"></i></button>
+                <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
+                <button class="join-item btn btn-xs btn-ghost">2</button>
+                <button class="join-item btn btn-xs btn-ghost">3</button>
+                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastNext" (click)="handleNextPage()"><i
+                        class="fa-solid fa-angle-right"></i></button>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Mobile Cards -->
 <div class="sm:hidden p-1 mt-5">
