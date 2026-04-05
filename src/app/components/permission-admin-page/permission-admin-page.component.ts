@@ -18,6 +18,7 @@ export class PermissionAdminPageComponent implements OnInit {
   rolesList: any[] = [];
   permissionList: any[] = [];
   ModalPermission = signal(false);
+  currentUserRole: string = '';
   constructor(private fb: FormBuilder, private router: Router, private rolePermissionService: RolePermissionServiceService) {
     this.permissionForm = this.fb.group({
       name: ['', Validators.required],
@@ -26,6 +27,9 @@ export class PermissionAdminPageComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+    this.currentUserRole = user.role;
     this.getAllPermission();
   }
   // Actions
