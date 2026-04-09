@@ -277,8 +277,9 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllSemester = res.data;
         this.countSemester = res.data.length;
-        console.log( "count", this.countSemester )
-        console.log( "Semester", this.getAllSemester );
+        console.log( "data semster", this.getAllSemester )
+        // console.log( "count", this.countSemester )
+        // console.log( "Semester", this.getAllSemester );
       },
       error: ( err ) =>
       {

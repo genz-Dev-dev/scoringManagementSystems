@@ -4,14 +4,16 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthServiceService } from '../auth/auth.service.service';
 const url_extension = '/auth/signin';
-@Injectable({
+@Injectable( {
   providedIn: 'root',
-})
-export class SigninAdminPageService {
+} )
+export class SigninAdminPageService
+{
   private API = environments.api_url + url_extension;
-  constructor(private httpClient: HttpClient, private authService: AuthServiceService) { }
+  constructor( private httpClient: HttpClient, private authService: AuthServiceService ) { }
 
-  private getHttpOption() {
+  private getHttpOption ()
+  {
     return {
       headers: {
         'Content-Type': 'application/json'
@@ -19,13 +21,14 @@ export class SigninAdminPageService {
     }
   }
 
-  public signinAdminPage(data: any): Observable<any> {
+  public signinAdminPage ( data: any ): Observable<any>
+  {
     const payload = {
       email: data.email,
       password: data.password
     }
     return this.httpClient.post<any>(
-      `${this.API}`,
+      `${ this.API }`,
       payload,
       this.getHttpOption()
     );
@@ -34,17 +37,26 @@ export class SigninAdminPageService {
    * Send OTP to user email
    * @param email user email
    */
-  sendOtp(email: string): Observable<any> {
-    return this.httpClient.post(`${this.API}/send-otp`, { email });
+  public sendOtp ( email: string ): Observable<any>
+  {
+    return this.httpClient.post(
+      `${ environments.api_url }/users/send-otp`,
+      { email },
+      {
+        headers: {
+          Authorization: `Bearer ${ this.authService.getToken() }`
+        }
+      }
+    );
   }
-
   /**
    * Verify OTP
    * @param email user email
    * @param otp code sent to email
    */
-  verifyOtp(email: string, otp: string): Observable<any> {
-    return this.httpClient.post(`${this.API}/auth/forgot-password/verify-otp`, { email, otp });
+  verifyOtp ( email: string, otp: string ): Observable<any>
+  {
+    return this.httpClient.post( `${ this.API }/auth/forgot-password/verify-otp`, { email, otp } );
   }
 
   /**
@@ -53,12 +65,13 @@ export class SigninAdminPageService {
    * @param otp code sent to email
    * @param newPassword new password
    */
-  changePassword(email: string, otp: string, newPassword: string): Observable<any> {
-    return this.httpClient.post(`${this.API}/auth/forgot-password/change-password`, {
+  changePassword ( email: string, otp: string, newPassword: string ): Observable<any>
+  {
+    return this.httpClient.post( `${ this.API }/auth/forgot-password/change-password`, {
       email,
       otp,
       newPassword,
-    });
+    } );
   }
 
 }
