@@ -54,9 +54,13 @@ export class SigninAdminPageService
    * @param email user email
    * @param otp code sent to email
    */
-  verifyOtp ( email: string, otp: string ): Observable<any>
+  public verifyOtp ( email: string, otp: string ): Observable<any>
   {
-    return this.httpClient.post( `${ this.API }/auth/forgot-password/verify-otp`, { email, otp } );
+    return this.httpClient.post( `${ environments.api_url }/users/verify-otp`, { email, otp }, {
+      headers: {
+        Authorization: `Bearer ${ this.authService.getToken() }`
+      }
+    } );
   }
 
   /**
@@ -65,13 +69,19 @@ export class SigninAdminPageService
    * @param otp code sent to email
    * @param newPassword new password
    */
-  changePassword ( email: string, otp: string, newPassword: string ): Observable<any>
+  public changePassword ( token: string, newPassword: string ): Observable<any>
   {
-    return this.httpClient.post( `${ this.API }/auth/forgot-password/change-password`, {
-      email,
-      otp,
-      newPassword,
-    } );
+    return this.httpClient.post(
+      `${ environments.api_url }/users/reset-password`,
+      {
+        token,
+        password: newPassword
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${ this.authService.getToken() }`
+        }
+      }
+    );
   }
-
 }
