@@ -37,7 +37,7 @@
                                             class="label-text font-bold text-slate-400 uppercase text-xs">Semester
                                             Name</span></label>
                                     <input type="text" formControlName="name" placeholder="name"
-                                        class="input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none" />
+                                        class=" input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none" />
                                 </div>
                                 <div class="form-control w-full">
                                     <label class="label"><span
@@ -51,14 +51,14 @@
                                             class="label-text font-bold text-slate-400 uppercase text-xs">Start
                                             Date</span></label>
                                     <input type="date" formControlName="startDate"
-                                        class="input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none" />
+                                        class="input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none rounded-full" />
                                 </div>
                                 <div class="form-control w-full">
                                     <label class="label"><span
                                             class="label-text font-bold text-slate-400 uppercase text-xs">End
                                             Date</span></label>
                                     <input type="date" formControlName="endDate"
-                                        class="input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none" />
+                                        class="input input-bordered bg-slate-50 focus:border-green-500 focus:ring-2 focus:ring-green-400 focus:outline-none rounded-full" />
                                 </div>
                             </div>
                             <div class="flex gap-4">
@@ -69,24 +69,6 @@
                                     Changes</button>
                             </div>
                         </form>
-                    </div>
-                    <!-- Floating Overlay Stats (The 114 Days Remaining) -->
-                    <div class="relative w-48">
-                        <div
-                            class="absolute -top-4 -right-4 bg-white shadow-2xl rounded-lg p-6 w-64 border border-slate-50 z-10">
-                            <div class="text-center">
-                                <h3 class="text-5xl font-black text-slate-800">114</h3>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-1">Days
-                                    Remaining</p>
-                                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-4">
-                                    <div class="bg-green-500 h-1.5 rounded-full w-2/3"></div>
-                                </div>
-                            </div>
-                            <div class="mt-8 p-3 bg-red-50 border border-red-100 rounded-md">
-                                <p class="text-[10px] font-bold text-red-400 uppercase">Upcoming Deadline</p>
-                                <p class="text-xs font-bold text-slate-800">Drop/Add window closes in 4 days.</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -243,7 +225,7 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
         <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Total Courses</p>
-        <div class="text-4xl font-bold">{{ courses.length }}</div>
+        <div class="text-4xl font-bold">{{ getAllCourse.length }}</div>
         <p class="text-xs text-success font-medium mt-2">↑ +12 this semester</p>
     </div>
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
@@ -388,7 +370,7 @@
     </tr> -->
     <!-- Pagination -->
     <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
-        <span>Showing <b>1-20</b> of <b>{{ courses.length }}</b> courses</span>
+        <span>Showing <b>1-20</b> of <b>{{ getAllCourse.length }}</b> courses</span>
         <div class="join">
             <button class="join-item btn btn-xs btn-ghost">«</button>
             <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
@@ -667,12 +649,14 @@
         <div class="field-row">
             <div class="field">
                 <label for="name">Department name</label>
-                <input id="name" type="text" formControlName="name" placeholder="e.g. Computer Science" />
+                <input id="name" type="text" formControlName="name" class="rounded-full"
+                    placeholder="e.g. Computer Science" />
             </div>
             <!-- description -->
             <div class="field">
                 <label for="description">Description</label>
-                <input id="description" type="text" formControlName="description" placeholder="e.g. CS-101" />
+                <input id="description" type="text" formControlName="description" class="rounded-full"
+                    placeholder="e.g. CS-101" />
             </div>
         </div>
         <div class="divider"></div>

@@ -37,38 +37,38 @@
 	}
 }
 
-.nav-item {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	padding: 8px 16px;
-	font-size: 13px;
-	color: #888;
-	cursor: pointer;
-	text-decoration: none;
-	transition: background 0.15s;
+// .nav-item {
+// 	display: flex;
+// 	align-items: center;
+// 	gap: 8px;
+// 	padding: 8px 16px;
+// 	font-size: 13px;
+// 	color: #888;
+// 	cursor: pointer;
+// 	text-decoration: none;
+// 	transition: background 0.15s;
 
-	&:hover {
-		background: #f5f5f3;
-		color: #333;
-	}
+// 	&:hover {
+// 		background: #f5f5f3;
+// 		color: #333;
+// 	}
 
-	&.active {
-		background: var(--accent-light);
-		color: var(--accent);
-		font-weight: 500;
-		border-right: 2px solid var(--accent);
-	}
-}
+// 	&.active {
+// 		background: var(--accent-light);
+// 		color: var(--accent);
+// 		font-weight: 500;
+// 		border-right: 2px solid var(--accent);
+// 	}
+// }
 
-.nav-dot {
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background: currentColor;
-	opacity: 0.6;
-	flex-shrink: 0;
-}
+// .nav-dot {
+// 	width: 6px;
+// 	height: 6px;
+// 	border-radius: 50%;
+// 	background: currentColor;
+// 	opacity: 0.6;
+// 	flex-shrink: 0;
+// }
 
 /* ── Main area ───────────────────────────────────────────── */
 .main {
@@ -81,13 +81,13 @@
 }
 
 /* ── Topbar ──────────────────────────────────────────────── */
-.topbar {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding-bottom: 16px;
-	border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
-}
+// .topbar {
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: space-between;
+// 	padding-bottom: 16px;
+// 	border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+// }
 
 .topbar-title {
 	font-size: 15px;
@@ -189,40 +189,19 @@ label {
 	text-transform: uppercase;
 }
 
-input[type=text] {
+input[type=text],
+select,
+input[type=number],
+input[type=date] {
 	height: 36px;
 	padding: 0 10px;
-	border-radius: 8px;
+	border-radius: 90px;
 	border: 0.5px solid rgba(0, 0, 0, 0.18);
 	background: #fff;
 	font-size: 13px;
 	color: #111;
 	width: 100%;
 	outline: none;
-	transition: border-color 0.15s, box-shadow 0.15s;
-
-	&::placeholder {
-		color: #bbb;
-	}
-
-	&:focus {
-		border-color: var(--accent-mid);
-		box-shadow: 0 0 0 3px var(--accent-light);
-	}
-}
-
-textarea {
-	padding: 8px 10px;
-	border-radius: 8px;
-	border: 0.5px solid rgba(0, 0, 0, 0.18);
-	background: #fff;
-	font-size: 13px;
-	color: #111;
-	width: 100%;
-	resize: none;
-	outline: none;
-	font-family: inherit;
-	line-height: 1.5;
 	transition: border-color 0.15s, box-shadow 0.15s;
 
 	&::placeholder {

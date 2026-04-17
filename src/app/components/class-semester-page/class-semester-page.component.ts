@@ -17,17 +17,6 @@ interface Department
   icon: string;
   color: string;
 }
-interface Course
-{
-  id: string;
-  name: string;
-  level: string;
-  department: string;
-  credits: number;
-  activeClasses: number;
-  facultyLead: string;
-  facultyAvatar: string;
-}
 @Component( {
   selector: 'app-class-semester-page',
   imports: [ CommonModule, ReactiveFormsModule, FormsModule, CourseFormComponent ],
@@ -79,28 +68,7 @@ export class ClassSemesterPageComponent implements OnInit
     },
     // Add more departments as needed
   ];
-  courses: Course[] = [
-    {
-      id: 'CS-302',
-      name: 'Neural Networks',
-      level: 'Level 300 Core',
-      department: 'Computer Science',
-      credits: 4.0,
-      activeClasses: 12,
-      facultyLead: 'Dr. Elena Volkov',
-      facultyAvatar: 'https://ui-avatars.com/api/?name=Elena+Volkov',
-    },
-    {
-      id: 'MA-101',
-      name: 'Calculus I',
-      level: 'Level 100 Core',
-      department: 'Mathematics',
-      credits: 3.0,
-      activeClasses: 20,
-      facultyLead: 'Dr. John Smith',
-      facultyAvatar: 'https://ui-avatars.com/api/?name=John+Smith',
-    },
-  ];
+
   // constructor 
   constructor( private fb: FormBuilder, private router: Router, private departmentClassService: DepartmentClassServiceService, private signupAdminPageService: SignupAdminPageService )
   {
@@ -143,7 +111,6 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllCourse = Response.content;
         this.countCourse = Response.content.length;
-        // console.log( this.getAllCourse )
       },
       error: ( err ) =>
       {
