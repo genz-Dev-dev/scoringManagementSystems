@@ -7,27 +7,35 @@
 
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
     <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs">Department</span></label>
-        <select class="select select-bordered bg-white" ng-model="filters.dept">
-            <option>Architecture & Design</option>
+        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Department</span></label>
+        <select class="select select-bordered bg-white rounded-full">
+            @for (department of department; track $index) {
+            <option [value]="department.id">{{ department.name }}</option>
+            }
         </select>
     </div>
     <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs">Class</span></label>
-        <select class="select select-bordered bg-white" ng-model="filters.class">
-            <option>Sophomore Studio A</option>
+        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Class</span></label>
+        <select class="select select-bordered bg-white rounded-full">
+            @for (class of classes; track $index) {
+            <option [value]="class.id">{{ class.name }}</option>
+            }
         </select>
     </div>
     <div class="form-control w-full">
         <label class="label"><span class="label-text font-bold uppercase text-xs">Course</span></label>
-        <select class="select select-bordered bg-white" ng-model="filters.course">
-            <option>DSGN-204 Theory</option>
+        <select class="select select-bordered bg-white rounded-full">
+            @for (course of courses; track $index) {
+            <option [value]="course.id">{{ course.name }}</option>
+            }
         </select>
     </div>
     <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs">Semester</span></label>
-        <select class="select select-bordered bg-white" ng-model="filters.semester">
-            <option>Fall 2024</option>
+        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Semester</span></label>
+        <select class="select select-bordered bg-white rounded-full">
+            @for (semester of semesters; track $index) {
+            <option [value]="semester.id">{{ semester.name }}</option>
+            }
         </select>
     </div>
 </div>
@@ -92,7 +100,7 @@
                         <th>FINAL GRADE</th>
                     </tr>
                 </thead>
-                <tbody>
+                <!-- <tbody>
                     <tr *ngFor="let student of students" class="hover:bg-slate-50 border-b border-slate-50">
                         <td class="font-mono text-xs text-slate-500">{{student.id}}</td>
                         <td class="font-semibold text-slate-700">{{student.name}}</td>
@@ -108,12 +116,12 @@
                             </span>
                         </td>
                     </tr>
-                </tbody>
+                </tbody> -->
             </table>
         </div>
 
         <div class="p-4 flex justify-center border-t border-slate-100">
-            <button class="btn btn-ghost btn-sm text-primary font-bold" ng-click="addEntry()">+ Add New
+            <button class="btn btn-ghost btn-sm text-primary font-bold">+ Add New
                 Entry</button>
         </div>
     </div>

@@ -7,14 +7,13 @@
     </button>
     }
 </div>
-
 @switch (activeTab()) {
-@case ('SEMESTER') {
+@case ('SEMESTERS') {
 <!-- Header Section -->
 <header class="flex justify-between items-start mb-8">
     <div>
         <p class="text-xs font-bold uppercase tracking-widest text-green-700 mb-1">Academic Timeline</p>
-        <h1 class="text-4xl font-bold text-slate-900">Semester</h1>
+        <h1 class="text-4xl font-bold text-slate-900">Semesters</h1>
         <p class="text-slate-500 mt-2 max-w-md">Configure institutional cycles, term boundaries, and academic
             windows for the upcoming decade.</p>
     </div>
@@ -215,10 +214,9 @@
             </div>
         </div>
     </div>
-
 </div>
 }
-@case ('RESULTS') {
+@case ('SUBJECTS') {
 <div class="text-reed-400 p-2 mt-4">welcome to results</div>
 }
 @case ('COURSES') {
@@ -237,7 +235,7 @@
     <!-- Right side: Add button -->
     <button
         class="btn btn-neutral bg-[#001529] border-none rounded-lg normal-case px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base w-full md:w-auto"
-        (click)="handleCreateCourse()">
+        (click)="handleCreateCourseModal()">
         <span class="mr-2 text-lg">+</span> Add New Course
     </button>
 </header>
@@ -250,7 +248,7 @@
     </div>
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
         <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Active Classes</p>
-        <div class="text-4xl font-bold">{{filteredCourses.length}}</div>
+        <div class="text-4xl font-bold">{{countCourse}}</div>
         <div class="w-full bg-slate-100 h-1 mt-4 rounded-full">
             <div class="bg-success h-1 rounded-full" style="width: 70%"></div>
         </div>
@@ -265,37 +263,100 @@
 </div>
 <!-- Filters & Table Section -->
 <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    @if(modalCreateCourse){
+    <app-course-form></app-course-form>
+    }@else{
     <!-- Toolbar -->
     <div class="p-6 flex flex-wrap justify-between items-center border-b border-slate-50 gap-4">
         <div class=""></div>
-        <!-- <div class="tabs tabs-boxed bg-slate-100 p-1 rounded-xl">
-            <a class="tab tab-active bg-[#001529] text-white rounded-lg">All Courses</a>
-            <a class="tab text-slate-500">Undergraduate</a>
-            <a class="tab text-slate-500">Postgraduate</a>
-        </div> -->
         <div class="flex items-center gap-6">
             <div class="form-control">
                 <label class="label cursor-pointer gap-3">
-                    <input type="checkbox" class="toggle toggle-success toggle-sm" [(ngModel)]="showActiveOnly" />
+                    <input type="checkbox" class="toggle toggle-success toggle-sm" />
                     <span class="label-text font-bold text-slate-600 text-xs">Show Active Classes Only</span>
                 </label>
             </div>
-            <select [(ngModel)]="selectedDepartment"
-                class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
+            <select class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
                 <option value="All" selected>Department: All</option>
                 <option value="Computer Science">Computer Science</option>
                 <option value="Mathematics">Mathematics</option>
             </select>
         </div>
     </div>
-
     <!-- Table -->
-    <tr *ngFor="let course of filteredCourses" class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+    <div class="overflow-x-auto bg-white rounded-xl shadow-sm">
+        <table class="table w-full">
+            <!-- 🔷 TABLE HEADER -->
+            <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                <tr>
+                    <th class="pl-8 py-4">Course</th>
+                    <th>Subject</th>
+                    <th>Instructor</th>
+                    <th>Schedule</th>
+                    <th>Duration</th>
+                    <th class="text-right pr-8">Action</th>
+                </tr>
+            </thead>
+            <!-- 🔷 TABLE BODY -->
+            <tbody>
+                <tr *ngFor="let course of getAllCourse"
+                    class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+
+                    <!-- Course Info -->
+                    <td class="py-5 pl-8">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[10px]">
+                                {{ course.subjectName }}
+                            </div>
+                            <div>
+                                <div class="font-bold text-sm">
+                                    {{ course.name }}
+                                </div>
+                                <div class="text-[10px] italic text-slate-400">
+                                    {{ course.semesterName }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- Subject -->
+                    <td>
+                        <span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">
+                            {{ course.subjectName }}
+                        </span>
+                    </td>
+                    <!-- Instructor -->
+                    <td class="font-bold text-sm">
+                        {{ course.instructorName }}
+                    </td>
+                    <!-- Schedule (Loop) -->
+                    <td>
+                        <div *ngFor="let s of course.schedules" class="text-xs">
+                            {{ s.dayOfWeek }} {{ s.startTime }}-{{ s.endTime }} (Room {{ s.room }})
+                        </div>
+                    </td> <!-- Duration -->
+                    <td class="text-xs">
+                        {{ course.startAt }} → {{ course.endAt }}
+                    </td>
+                    <!-- Action -->
+                    <td class="text-right pr-8">
+                        <button class="btn btn-warning btn-xs text-white font-bold hover:text-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn btn-error btn-xs text-white font-bold hover:text-error">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- <tr *ngFor="let course of getAllCourse" class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
         <td class="py-5 pl-8">
             <div class="flex items-center gap-4">
                 <div
                     class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[10px]">
-                    {{ course.department.slice(0,2).toUpperCase() }}
+                    {{ course.departmentId}}
                 </div>
                 <div>
                     <div class="font-bold text-sm">{{ course.id }}: {{ course.name }}</div>
@@ -305,7 +366,7 @@
         </td>
         <td><span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">{{ course.department
                 }}</span></td>
-        <td class="font-bold text-sm">{{ course.credits }}</td>
+        <td class="font-bold text-sm">{{ course.instructorName }}</td>
         <td>
             <div class="badge badge-success badge-outline gap-1 text-[9px] font-bold px-3 py-3">
                 <span class="w-1 h-1 rounded-full bg-success"></span> {{ course.activeClasses }} Active
@@ -324,8 +385,7 @@
         <td class="text-right pr-8">
             <button class="btn btn-ghost btn-xs text-slate-300 font-black">⋮</button>
         </td>
-    </tr>
-
+    </tr> -->
     <!-- Pagination -->
     <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
         <span>Showing <b>1-20</b> of <b>{{ courses.length }}</b> courses</span>
@@ -337,8 +397,8 @@
             <button class="join-item btn btn-xs btn-ghost">»</button>
         </div>
     </div>
+    }
 </div>
-
 <!-- Bottom Insight Cards -->
 <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
     <div class="bg-[#E6F4EA] p-8 rounded-[2rem] border border-green-100">
@@ -367,7 +427,7 @@
     </div>
 </div> -->
 }
-@case ('CLASS') {
+@case ('CLASSES') {
 <!-- Header -->
 <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 md:gap-0">
     <!-- Left side: title and description -->
@@ -542,39 +602,39 @@
             <!-- Name -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Course Name</span>
+                    <span class="label-text">ឈ្មោះ​ ថ្នាក់</span>
                 </label>
                 <input type="text" name="name" formControlName="name" required placeholder="Enter course name"
-                    class="input input-bordered w-full" />
+                    class="input input-bordered w-full rounded-full" />
             </div>
             <!-- Department -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Department</span>
+                    <span class="label-text">នាយកដ្ឋាន</span>
                 </label>
                 <select id="department_id" formControlName="departmentId" name="department_id"
-                    class="select select-bordered w-full" required>
+                    class="select select-bordered w-full rounded-full" required>
                     <option value="" disabled selected>Select Department</option>
                     <option *ngFor="let dept of getAllDepartment" [value]="dept.id">
                         {{ dept.name }}
                     </option>
                 </select>
             </div>
-            <!-- Academic Year -->
+            <!-- AcademicYear -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Academic Year</span>
+                    <span class="label-text">ឆ្នាំសិក្សា</span>
                 </label>
                 <input type="text" name="academic_year" formControlName="academicYear" required
-                    placeholder="e.g. 2025-2026" class="input input-bordered w-full" />
+                    placeholder="e.g. 2025-2026" class="input input-bordered w-full rounded-full" />
             </div>
             <!-- Generation -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Generation</span>
+                    <span class="label-text">ជំនាន់</span>
                 </label>
                 <input type="number" name="generation" formControlName="generation" required
-                    placeholder="Enter generation" class="input input-bordered w-full" />
+                    placeholder="Enter generation" class="input input-bordered w-full rounded-full" />
             </div>
             <!-- Submit -->
             <div class="form-control mt-6">
@@ -709,14 +769,14 @@
         class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
         <div class="flex justify-between items-start mb-8">
             <div [class]="'p-4 rounded-2xl ' + dept.color">
-                <lucide-icon [name]="dept.icon" class="w-6 h-6"></lucide-icon>
+                <i class="fa-solid fa-graduation-cap"></i>
             </div>
             <div class="flex gap-1">
                 <button class="btn btn-ghost btn-sm btn-circle text-slate-300">
-                    <lucide-icon name="pencil" class="w-4 h-4"></lucide-icon>
+                    <i class="fa-solid fa-pen-to-square"></i>
                 </button>
                 <button class="btn btn-ghost btn-sm btn-circle text-slate-300">
-                    <lucide-icon name="more-vertical" class="w-4 h-4"></lucide-icon>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
             </div>
         </div>

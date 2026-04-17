@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
+import { CourseFormComponent } from '../course-form/course-form.component';
+import { SignupAdminPageService } from 'src/app/api/signup-admin-page/signup-admin-page.service';
 interface Department
 {
   title: string;
@@ -28,7 +30,7 @@ interface Course
 }
 @Component( {
   selector: 'app-class-semester-page',
-  imports: [ CommonModule, ReactiveFormsModule, FormsModule ],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule, CourseFormComponent ],
   templateUrl: './class-semester-page.component.html',
   styleUrl: './class-semester-page.component.scss',
 } )
@@ -36,8 +38,9 @@ interface Course
 export class ClassSemesterPageComponent implements OnInit
 {
   activeTab = signal( 'DEPARTMENT' );
-  tabs = [ 'DEPARTMENT', 'CLASS', 'SEMESTER', 'COURSES', 'RESULTS' ];
+  tabs = [ 'DEPARTMENTS', 'CLASSES', 'SEMESTERS', 'SUBJECTS', 'COURSES' ];
   modalCreateClass = signal( false );
+  modalCreateCourse: Boolean = false;
   formCreateClass!: FormGroup;
   formCreateDepartment!: FormGroup;
   formCreateSemester!: FormGroup;
@@ -45,14 +48,16 @@ export class ClassSemesterPageComponent implements OnInit
   imagePreview: String | ArrayBuffer | null = null;
   selectedFile!: File;
   getAllDepartment: any[] = [];
+  getAllUser: any[] = [];
   getAllClass: any[] = [];
+  getAllCourse: any[] = [];
+  getAllSubject: any = [];
   getAllSemester: any[] = [];
   countSemester: number = 0;
   countClass: number = 0;
+  countCourse: number = 0;
   countDepartment: Number = 0;
-  showActiveOnly: boolean = false;
   currentUserRole: string = '';
-  selectedDepartment: string = 'All';
   departments: Department[] = [
     {
       title: 'Computer Science',
@@ -97,7 +102,7 @@ export class ClassSemesterPageComponent implements OnInit
     },
   ];
   // constructor 
-  constructor( private fb: FormBuilder, private router: Router, private departmentClassService: DepartmentClassServiceService )
+  constructor( private fb: FormBuilder, private router: Router, private departmentClassService: DepartmentClassServiceService, private signupAdminPageService: SignupAdminPageService )
   {
     this.formCreateClass = this.fb.group( {
       name: [ '', Validators.required ],
@@ -123,19 +128,28 @@ export class ClassSemesterPageComponent implements OnInit
     this.handleGetAllDepartment();
     this.handleGetAllClass();
     this.handleGetAllSemester();
+    this.handleGetAllCourse();
     const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
     this.currentUserRole = user.role;
   }
-  // Computed property to replace the pipe
-  get filteredCourses (): Course[]
+  // get all users
+
+
+  // get all course
+  private handleGetAllCourse ()
   {
-    return this.courses.filter( ( course ) =>
-    {
-      const matchesActive = this.showActiveOnly ? course.activeClasses > 0 : true;
-      const matchesDepartment =
-        this.selectedDepartment === 'All' || course.department === this.selectedDepartment;
-      return matchesActive && matchesDepartment;
-    } );
+    this.departmentClassService.getAllCourse().subscribe( {
+      next: ( Response ) =>
+      {
+        this.getAllCourse = Response.content;
+        this.countCourse = Response.content.length;
+        // console.log( this.getAllCourse )
+      },
+      error: ( err ) =>
+      {
+        console.log( err );
+      }
+    } )
   }
   // handle create department
   private handleCreateDepartment ()
@@ -226,8 +240,8 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllClass = res.content;
         this.countClass = res.content.length;
-        console.log( "count", this.countClass )
-        console.log( "Class", this.getAllClass );
+        // console.log( "count", this.countClass )
+        // console.log( "Class", this.getAllClass );
       },
       error: ( err ) =>
       {
@@ -253,7 +267,7 @@ export class ClassSemesterPageComponent implements OnInit
           showCancelButton: false,
           showConfirmButton: false,
         } );
-        this.handleGetAllClass();
+        this.handleGetAllSemester();
       },
       error: ( err ) =>
       {
@@ -277,9 +291,6 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllSemester = res.data;
         this.countSemester = res.data.length;
-        console.log( "data semster", this.getAllSemester )
-        // console.log( "count", this.countSemester )
-        // console.log( "Semester", this.getAllSemester );
       },
       error: ( err ) =>
       {
@@ -287,9 +298,13 @@ export class ClassSemesterPageComponent implements OnInit
       }
     } );
   }
-  private handleCreateCourse ()
+  handleCreateCourseModal ()
   {
-
+    this.modalCreateCourse = true;
+  }
+  hnadleCreateCourseModalClose ()
+  {
+    this.modalCreateCourse = false;
   }
   // Actions
   setActiveTab ( tab: string ): void

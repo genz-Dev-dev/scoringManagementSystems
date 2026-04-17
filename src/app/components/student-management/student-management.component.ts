@@ -7,14 +7,16 @@ import { Router } from '@angular/router';
 import { AuthServiceService } from 'src/app/api/auth/auth.service.service';
 import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
 import { User } from 'src/app/models/Users';
-interface StatCard {
+interface StatCard
+{
   icon: string;
   label: string;
   value: number;
   bg: string;
 }
 
-export interface Student {
+export interface Student
+{
   id: string;
   studentCode: string;
   classId: string;
@@ -37,7 +39,8 @@ export interface Student {
   status: boolean;
 }
 
-export interface ApiResponse {
+export interface ApiResponse
+{
   content: Student[];
   number: number;
   size: number;
@@ -46,14 +49,15 @@ export interface ApiResponse {
   hastPrevious: boolean;
   hastNext: boolean;
 }
-@Component({
+@Component( {
   selector: 'app-student-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [ CommonModule, ReactiveFormsModule, FormsModule ],
   templateUrl: './student-management.component.html',
   styleUrl: './student-management.component.scss'
-})
-export class StudentManagementComponent implements OnInit {
+} )
+export class StudentManagementComponent implements OnInit
+{
   students: any[] = [];
   classess: any[] = [];
   maleCount: number = 0;
@@ -79,40 +83,44 @@ export class StudentManagementComponent implements OnInit {
     { icon: 'fa-solid fa-users', label: 'Staff', value: 0, bg: 'bg-teal-50' },
   ];
 
-  constructor(private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title) {
+  constructor( private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title )
+  {
     this.getAllStudents();
-    this.studentForm = this.fb.group({
-      khFirstName: [''],
-      khLastName: [''],
-      enFirstName: [''],
-      enLastName: [''],
-      classId: [''],
-      gender: [''],
-      email: [''],
-      phoneNumber: [''],
-      dateOfBirth: [''],
-      enrollmentDate: [''],
-      status: [true],
-      address: this.fb.group({
-        houseNumber: [''],
-        street: [''],
-        sangkat: [''],
-        khan: [''],
-        province: [''],
-        country: ['']
-      })
-    });
+    this.studentForm = this.fb.group( {
+      khFirstName: [ '' ],
+      khLastName: [ '' ],
+      enFirstName: [ '' ],
+      enLastName: [ '' ],
+      classId: [ '' ],
+      gender: [ '' ],
+      email: [ '' ],
+      phoneNumber: [ '' ],
+      dateOfBirth: [ '' ],
+      enrollmentDate: [ '' ],
+      status: [ true ],
+      address: this.fb.group( {
+        houseNumber: [ '' ],
+        street: [ '' ],
+        sangkat: [ '' ],
+        khan: [ '' ],
+        province: [ '' ],
+        country: [ '' ]
+      } )
+    } );
   }
-  ngOnInit(): void {
-    this.meta.addTag({ name: 'description', content: 'Student Management' });
-    this.title.setTitle('Student Management');
-    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  ngOnInit (): void
+  {
+    this.meta.addTag( { name: 'description', content: 'Student Management' } );
+    this.title.setTitle( 'Student Management' );
+    const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
     this.currentUserRole = user.role;
     this.handleGetAllClassess();
   }
-  getAllStudents() {
-    this.studentsService.getAllStudents().subscribe({
-      next: (res: ApiResponse) => {
+  private getAllStudents ()
+  {
+    this.studentsService.getAllStudents().subscribe( {
+      next: ( res: ApiResponse ) =>
+      {
         this.students = res.content || [];
         this.filtterStudents = res.content || [];
         this.number = res.number;
@@ -123,24 +131,27 @@ export class StudentManagementComponent implements OnInit {
         this.hastNext = res.hastNext;
         this.maleCount = 0;
         this.feamleCount = 0;
-        this.students.forEach(student => {
-          if (student.gender === 'M') this.maleCount++;
-          else if (student.gender === 'F') this.feamleCount++;
-        });
+        this.students.forEach( student =>
+        {
+          if ( student.gender === 'M' ) this.maleCount++;
+          else if ( student.gender === 'F' ) this.feamleCount++;
+        } );
         this.stats = [
-          { ...this.stats[0], value: this.students.length },
-          { ...this.stats[1], value: this.feamleCount },
-          { ...this.stats[2], value: this.maleCount },
-          { ...this.stats[3], value: this.students.length }
+          { ...this.stats[ 0 ], value: this.students.length },
+          { ...this.stats[ 1 ], value: this.feamleCount },
+          { ...this.stats[ 2 ], value: this.maleCount },
+          { ...this.stats[ 3 ], value: this.students.length }
         ];
         this.totalCount = this.students.length;
       },
-      error: (err) => console.log(err)
-    });
+      error: ( err ) => console.log( err )
+    } );
   }
   // create students
-  handleCreateStudent() {
-    if (this.studentForm.invalid) {
+  handleCreateStudent ()
+  {
+    if ( this.studentForm.invalid )
+    {
       this.studentForm.markAllAsTouched();
       return;
     }
@@ -150,82 +161,94 @@ export class StudentManagementComponent implements OnInit {
       status: true,
     };
     // console.log("layload", payload);
-    this.studentsService.createStudent(payload).subscribe({
-      next: (res: any) => {
-        localStorage.removeItem('studentsCache');
-        localStorage.removeItem('studentsCache_expiry');
+    this.studentsService.createStudent( payload ).subscribe( {
+      next: ( res: any ) =>
+      {
+        localStorage.removeItem( 'studentsCache' );
+        localStorage.removeItem( 'studentsCache_expiry' );
         this.showStep = false;
         this.currentStep = 1;
         this.getAllStudents();
-        Swal.fire({
+        Swal.fire( {
           icon: 'success',
           timer: 2500,
           iconColor: '#10b981',
           html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #10b981;">create student successfully</span>បានទេ!</p>`,
           showCancelButton: false,
           showConfirmButton: false,
-        });
+        } );
       },
-      error: (err) => {
-        Swal.fire({
+      error: ( err ) =>
+      {
+        Swal.fire( {
           icon: 'error',
           timer: 2500,
           iconColor: '#ef4444',
           html: `<p style="font-size:16px;">បាន<span style="font-weight: bold;color: #ef4444;">មិនអាចបង្កើតបាន</span>ទេ!</p>`,
           showCancelButton: false,
           showConfirmButton: false,
-        });
-        console.error('Create student error', err);
+        } );
+        console.error( 'Create student error', err );
       }
-    });
+    } );
   }
 
-  handleGetAllClassess() {
-    this.studentsService.getAllClass(true, true).subscribe(res => {
+  handleGetAllClassess ()
+  {
+    this.studentsService.getAllClass( true, true ).subscribe( res =>
+    {
       this.classess = res.content;
       // console.log("res", this.classess)
-    });
+    } );
   }
 
-  filterStudents() {
+  filterStudents ()
+  {
     const keyword = this.searchQuery.toLowerCase();
 
-    this.filtterStudents = this.students.filter(student =>
-      student.khFirstName?.toLowerCase().includes(keyword) ||
-      student.khLastName?.toLowerCase().includes(keyword) ||
-      student.enFirstName?.toLowerCase().includes(keyword) ||
-      student.enLastName?.toLowerCase().includes(keyword) ||
-      student.studentCode?.toLowerCase().includes(keyword) ||
-      student.phoneNumber?.toLowerCase().includes(keyword) ||
-      student.address?.province?.toLowerCase().includes(keyword) ||
-      student.address?.country?.toLowerCase().includes(keyword)
+    this.filtterStudents = this.students.filter( student =>
+      student.khFirstName?.toLowerCase().includes( keyword ) ||
+      student.khLastName?.toLowerCase().includes( keyword ) ||
+      student.enFirstName?.toLowerCase().includes( keyword ) ||
+      student.enLastName?.toLowerCase().includes( keyword ) ||
+      student.studentCode?.toLowerCase().includes( keyword ) ||
+      student.phoneNumber?.toLowerCase().includes( keyword ) ||
+      student.address?.province?.toLowerCase().includes( keyword ) ||
+      student.address?.country?.toLowerCase().includes( keyword )
     );
   }
 
-  handlePreviousPage() {
-    if (this.number > 1) {
+  handlePreviousPage ()
+  {
+    if ( this.number > 1 )
+    {
       this.number--;
       this.getAllStudents();
     }
   }
 
-  handleNextPage() {
-    if (this.number < this.totalPage) {
+  handleNextPage ()
+  {
+    if ( this.number < this.totalPage )
+    {
       this.number++;
       this.getAllStudents();
     }
   }
 
-  handleToggleStep() {
+  handleToggleStep ()
+  {
     this.showStep = !this.showStep;
   }
-  nextStep() {
-    if (this.currentStep < 2)
+  nextStep ()
+  {
+    if ( this.currentStep < 2 )
       this.currentStep++;
   }
 
-  prevStep() {
-    if (this.currentStep > 1)
+  prevStep ()
+  {
+    if ( this.currentStep > 1 )
       this.currentStep--;
   }
 }

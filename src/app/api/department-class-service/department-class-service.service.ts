@@ -8,12 +8,14 @@ import { Auth } from '@angular/fire/auth';
 
 const api_extension = '/classes';
 const api_extension1 = '/departments';
-@Injectable({
+@Injectable( {
   providedIn: 'root',
-})
-export class DepartmentClassServiceService {
+} )
+export class DepartmentClassServiceService
+{
 
-  constructor(private httpClient: HttpClient, private authService: AuthServiceService) {
+  constructor( private httpClient: HttpClient, private authService: AuthServiceService )
+  {
 
   }
 
@@ -21,17 +23,20 @@ export class DepartmentClassServiceService {
 
   private API1 = environments.api_url + api_extension1;
 
-  private getHttpOption(withToken: boolean = false) {
+  private getHttpOption ( withToken: boolean = false )
+  {
 
     let headers = new HttpHeaders();
-    if (withToken) {
+    if ( withToken )
+    {
       const token = this.authService.getToken();
-      if (token) headers = headers.set('Authorization', `Bearer ${token}`);
+      if ( token ) headers = headers.set( 'Authorization', `Bearer ${ token }` );
     }
     return { headers: headers };
   }
 
-  public createDepartment(data: any): Observable<any> {
+  public createDepartment ( data: any ): Observable<any>
+  {
     return this.httpClient.post<any>(
       this.API,
       data,
@@ -39,34 +44,49 @@ export class DepartmentClassServiceService {
     );
   }
 
-  public getAllDepartment() {
+  public getAllDepartment ()
+  {
     return this.httpClient.get<any>(
       this.API1,
-      this.getHttpOption(true)
+      this.getHttpOption( true )
     );
   }
   // create class service
-  public createClass(data: any): Observable<any> {
+  public createClass ( data: any ): Observable<any>
+  {
     return this.httpClient.post<any>(
       this.API,
       data,
-      this.getHttpOption(true)
+      this.getHttpOption( true )
     );
   }
 
   // get AllClass 
-  public getAllClass(): Observable<any> {
-    return this.httpClient.get<any>(this.API, this.getHttpOption(true));
+  public getAllClass (): Observable<any>
+  {
+    return this.httpClient.get<any>( this.API, this.getHttpOption( true ) );
   }
 
-  public createSemester(data: any): Observable<any> {
+  public createSemester ( data: any ): Observable<any>
+  {
     return this.httpClient.post<any>(
       environments.api_url + '/semesters',
       data,
-      this.getHttpOption(true)
+      this.getHttpOption( true )
     );
   }
-  public getAllSemster(): Observable<any> {
-    return this.httpClient.get<any>(environments.api_url + '/semesters', this.getHttpOption(true));
+  public getAllSemster (): Observable<any>
+  {
+    return this.httpClient.get<any>( environments.api_url + '/semesters', this.getHttpOption( true ) );
+  }
+  // get all course
+  public getAllCourse (): Observable<any>
+  {
+    return this.httpClient.get<any>( environments.api_url + '/courses', this.getHttpOption( true ) );
+  }
+  // get all subject
+  public getAllSubject (): Observable<any>
+  {
+    return this.httpClient.get<any>( environments.api_url + '/subjects', this.getHttpOption( true ) );
   }
 }

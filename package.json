@@ -21,6 +21,8 @@
     "@angular/platform-browser": "^20.3.17",
     "@angular/platform-browser-dynamic": "^20.3.17",
     "@angular/router": "^20.3.17",
+    "@cloudinary/ng": "^2.1.6",
+    "@cloudinary/url-gen": "^1.22.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "firebase": "^12.10.0",

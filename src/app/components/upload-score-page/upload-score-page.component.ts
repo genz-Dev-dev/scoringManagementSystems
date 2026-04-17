@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 interface StudentScore
 {
   id: string;
@@ -14,8 +16,27 @@ interface StudentScore
   templateUrl: './upload-score-page.component.html',
   styleUrl: './upload-score-page.component.scss',
 } )
-export class UploadScorePageComponent
+export class UploadScorePageComponent implements OnInit
 {
+
+  classes: any[] = [];
+  courses: any[] = [];
+  semesters: any[] = [];
+  department: any = [];
+  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService )
+  {
+
+  }
+
+  ngOnInit (): void
+  {
+
+    this.handleGetClass();
+    this.handleGetAllSemester();
+    this.handleGetAllCourse();
+    this.handleGellDepartment();
+  }
+
   filters = {
     department: 'Architecture & Design',
     class: 'Sophomore Studio A',
@@ -29,8 +50,64 @@ export class UploadScorePageComponent
     { id: 'AA-2024-069', name: 'Elena Vasquez', score: 75, grade: 'C' },
     { id: 'AA-2024-112', name: 'Simon Croft', score: null, grade: null },
     { id: 'AA-2024-145', name: 'Beatrice Cho', score: 98, grade: 'A+' },
-  ];
 
+  ];
+  // handleGetAllClass
+  private handleGetClass ()
+  {
+    this.departmentClassService.getAllClass().subscribe( {
+      next: ( reponse ) =>
+      {
+        this.classes = reponse.content;
+      },
+      error: ( error ) =>
+      {
+        console.log( "errorResponse", error );
+      }
+    } )
+  }
+  // hanldegetAllSemester
+  private handleGetAllSemester ()
+  {
+    this.departmentClassService.getAllSemster().subscribe( {
+      next: ( reponse ) =>
+      {
+        this.semesters = reponse.data;
+      },
+      error: ( error ) =>
+      {
+        console.log( "errorResponse", error );
+      }
+    } )
+  }
+  // handleGetAllCourse
+  private handleGetAllCourse ()
+  {
+    this.departmentClassService.getAllCourse().subscribe( {
+      next: ( Response ) =>
+      {
+        this.courses = Response.content;
+      },
+      error: ( errorResponse ) =>
+      {
+        console.log( "errorResponse", errorResponse );
+      }
+    } )
+  }
+  // handleAllDepartment
+  private handleGellDepartment ()
+  {
+    this.departmentClassService.getAllDepartment().subscribe( {
+      next: ( Response ) =>
+      {
+        this.department = Response.data;
+      },
+      error ( errorResponse )
+      {
+        console.log( "errorResponse", errorResponse );
+      }
+    } )
+  }
   get validatedCount () { return this.students.filter( s => s.grade ).length; }
   get pendingCount () { return this.students.filter( s => !s.grade ).length; }
 
