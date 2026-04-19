@@ -1,20 +1,19 @@
 @if(showForm){
 <div class="flex justify-center items-center mt-10">
-    <div class="max-w-md w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
+    <div class="max-w-xxl w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
         <!-- Close -->
         <button type="button" class="btn btn-sm btn-circle absolute right-4 top-4" (click)="closeForm()">
             ✕
         </button>
-        <h2 class="text-3xl font-bold text-center mb-6">
+        <h2 class="text-3xl font-bold text-start mb-6">
             Create User
         </h2>
-        <form [formGroup]="signupForm" class="space-y-5">
+        <form [formGroup]="signupForm" class="grid grid-cols-2 gap-4">
             <!-- Username -->
-            <div class="form-control">
+            <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text">Username</span>
                 </label>
-
                 <input type="text" formControlName="fullName" placeholder="Enter username"
                     class="input input-bordered w-full rounded-full"
                     [class.input-error]="fullNameControl?.invalid && fullNameControl?.touched"
@@ -27,7 +26,7 @@
                 }
             </div>
             <!-- Email -->
-            <div class="form-control">
+            <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text">Email</span>
                 </label>
@@ -35,38 +34,35 @@
                     class="input input-bordered w-full rounded-full"
                     [class.input-error]="emailControl?.invalid && emailControl?.touched"
                     [class.input-success]="emailControl?.valid && emailControl?.touched" />
-
                 @if(emailControl?.invalid && emailControl?.touched){
                 <div class="text-error text-sm mt-1">
                     Invalid Email
                 </div>
                 }
             </div>
-            <div class="form-control w-full">
+            <div class="form-control col-span-1">
+                <label for="role">Select Role</label>
                 <select id="role" formControlName="role" class="select select-bordered w-full rounded-full">
-                    <option disabled selected>Select Role</option>
+                    <option value="All" selected>Select Role</option>
                     @for (role of roles; track $index) {
                     <option [value]="role.name">{{ role.name }}</option>
                     }
                 </select>
             </div>
             <!-- Password -->
-            <div class="form-control">
+            <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text font-medium">Password</span>
                 </label>
                 <div class="relative">
                     <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
                         placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12" />
-
                     <button type="button" (click)="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2">
-
                         @if(passwordVisible){
                         <i class="fa-solid fa-eye"></i>
                         } @else {
                         <i class="fa-solid fa-eye-slash"></i>
                         }
-
                     </button>
                 </div>
                 @if(passwordControl?.invalid && passwordControl?.touched){
@@ -81,19 +77,25 @@
                 <div class="flex-1 rounded" [class]="getBarColor(i+1)"></div>
                 }
             </div>
+            <!-- <div class="col-span-2"> -->
             <div class="text-xs mt-1">
                 {{ strengthLabel }}
             </div>
+            <!-- </div> -->
             <!-- Remember -->
-            <label class="flex items-center gap-2">
-                <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
-                Remember me
-            </label>
+            <div class="col-span-2">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
+                    Remember me
+                </label>
+            </div>
             <!-- Submit -->
-            <button type="submit" aria-label="Sign up" aria-disabled="signupForm.invalid"
-                (click)="handleSignupAdminPage()" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
-                Sign up
-            </button>
+            <div class="col-span-2">
+                <button type="submit" aria-label="Sign up" aria-disabled="signupForm.invalid"
+                    (click)="handleSignupAdminPage()" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
+                    Sign up
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -229,7 +231,6 @@
             </svg>
             Filter
         </button>
-
     </div>
 </div>
 <!-- Table -->
@@ -272,7 +273,6 @@
                             class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-eye"></i>
                         </button>
-
                         <!-- Edit button: show only for ROLE_ADMIN -->
                         @if(currentUserRole === "ROLE_ADMIN"){
                         <button type="button" aria-label="Edit"
@@ -283,9 +283,7 @@
                             class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-trash"></i>
                         </button>
-
-                        <!-- <input type="checkbox" [checked]="userList?.status == true" class="toggle toggle-primary" />
-                         -->
+                        <!-- <input type="checkbox" [checked]="userList?.status == true" class="toggle toggle-primary" />-->
                         <input type="checkbox" [checked]="userList?.status === false"
                             (change)="handleUpdateStatusUser(userList.id, $event.target.checked)"
                             class="toggle toggle-primary" />

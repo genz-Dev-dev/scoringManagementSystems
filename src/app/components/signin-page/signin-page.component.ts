@@ -33,32 +33,25 @@ export class SigninPageComponent
       this.checkPasswordStrength( value );
     } );
   }
-
   // getters
   get fullNameControl ()
   {
     return this.signinForm.get( 'fullName' );
   }
-
   get emailControl ()
   {
     return this.signinForm.get( 'email' );
   }
-
   get passwordControl ()
   {
     return this.signinForm.get( 'password' );
   }
-
   togglePassword ()
   {
     this.passwordVisible = !this.passwordVisible;
   }
-
-
   checkPasswordStrength ( password: string )
   {
-
     let strength = 0;
 
     if ( !password )
@@ -67,7 +60,6 @@ export class SigninPageComponent
       this.strengthLabel = 'No password';
       return;
     }
-
     if ( password.length >= 6 ) strength++;
     if ( password.match( /[A-Z]/ ) ) strength++;
     if ( password.match( /[0-9]/ ) ) strength++;
@@ -82,13 +74,10 @@ export class SigninPageComponent
       'Strong',
       'Very Strong'
     ];
-
     this.strengthLabel = labels[ strength ];
   }
-
   getBarColor ( level: number )
   {
-
     if ( this.passwordStrength >= level )
     {
 
@@ -98,11 +87,8 @@ export class SigninPageComponent
       if ( this.passwordStrength >= 4 ) return 'bg-success';
 
     }
-
     return 'bg-base-300';
   }
-
-
   handleSigninAdminPage ()
   {
     if ( this.signinForm.invalid )

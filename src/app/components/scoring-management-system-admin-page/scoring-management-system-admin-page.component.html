@@ -1,7 +1,6 @@
 <div class="flex h-screen bg-gray-50 font-sans overflow-hidden">
   <!-- Skeleton Loader -->
   <div *ngIf="isLoading; else dashboardContent" class="flex h-screen w-full bg-gray-100">
-
     <!-- ===================== SIDEBAR SKELETON ===================== -->
     <aside class="flex flex-col bg-[#1a2a5e] p-4 w-64 space-y-6">
       <!-- Logo -->
@@ -12,7 +11,6 @@
           <div class="h-3 w-20 bg-gray-300 rounded animate-pulse"></div>
         </div>
       </div>
-
       <!-- Navigation Sections -->
       <div class="flex-1 space-y-4 overflow-y-auto">
         <ng-container *ngFor="let section of [1,2,3]">
@@ -26,15 +24,12 @@
         </ng-container>
       </div>
     </aside>
-
     <!-- ===================== MAIN CONTENT SKELETON ===================== -->
     <div class="flex-1 flex flex-col p-6 space-y-6">
-
       <!-- Top Loading Text -->
       <span class="text-center text-lg font-semibold text-gray-600 animate-pulse">
         Your dashboard is loading...!!
       </span>
-
       <!-- Top Cards -->
       <div class="grid grid-cols-4 gap-4">
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
@@ -42,10 +37,8 @@
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
       </div>
-
       <!-- Main Content -->
       <div class="flex-1 bg-gray-300 rounded animate-pulse"></div>
-
     </div>
   </div>
   <ng-template #dashboardContent>
@@ -54,14 +47,11 @@
       class="fixed top-4 left-4 z-50 md:hidden text-white p-2 rounded-full shadow-lg hover:bg-white/20 transition-colors duration-200">
       <i class="fas fa-bars text-lg"></i>
     </button>
-
     <div *ngIf="sidebarOpen()" (click)="closeSidebar()" class="fixed inset-0 z-30 md:hidden"></div>
-
     <aside class="fixed md:relative z-40 flex flex-col transition-all duration-300 bg-[#1a2a5e] text-white h-full"
       [class.w-64]="sidebarOpen()" [class.w-0]="!sidebarOpen()" [class.md:w-16]="!sidebarOpen()"
       [class.-translate-x-full]="!sidebarOpen()" [class.md:translate-x-0]="true"
       [class.overflow-hidden]="!sidebarOpen()">
-
       <!-- Logo -->
       <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10">
         <div class="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden object-cover">
@@ -75,7 +65,6 @@
           <p class="text-sm font-bold leading-tight">Bur Kari University</p>
         </div>
       </div>
-
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
         <div *ngFor="let section of navSections; trackBy: trackByTitle">
@@ -84,7 +73,6 @@
             {{ section.title }}
           </p>
           }
-
           <button type="button" *ngFor="let item of section.items; trackBy: trackByLabel"
             (click)="onClickRouter(item.route)" aria-label="{{ item.label }}"
             class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-150 hover:cursor-pointer"
@@ -150,17 +138,14 @@
                 </div>
               </div>
               <!-- Dropdown Menu -->
-
               <dialog #myModal class="modal">
                 <div class="modal-box relative w-96">
-
                   <!-- Close Button -->
                   <button type="button"
                     class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 is-size-5 icon-close"
                     aria-label="Close" (click)="closeModal()">
                     ✕
                   </button>
-
                   <!-- User Profile -->
                   <div class="flex flex-col items-center text-center space-y-1">
                     <!-- User Icon -->
@@ -199,15 +184,11 @@
           </div>
         </div>
       </header>
-
       <!-- Page Body -->
       <main class="flex-1 overflow-y-auto p-4 space-y-4">
         <router-outlet></router-outlet>
       </main>
-
       <app-footer-admin-page></app-footer-admin-page>
     </div>
-
   </ng-template>
-
 </div>

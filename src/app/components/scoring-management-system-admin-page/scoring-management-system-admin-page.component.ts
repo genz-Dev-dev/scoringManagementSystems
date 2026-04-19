@@ -9,25 +9,29 @@ import Swal from 'sweetalert2';
 import { FooterAdminPageComponent } from 'src/app/shared/components/footer-admin-page/footer-admin-page.component';
 import { TokenStoragesService } from 'src/app/api/tokens/token-storages.service';
 
-interface NavItem {
+interface NavItem
+{
   icon: string;
   label: string;
   route?: string;
   active?: boolean;
 }
 
-interface NavSection {
+interface NavSection
+{
   title: string;
   items: NavItem[];
 }
 
-interface PerformanceBar {
+interface PerformanceBar
+{
   label: string;
   passed: number;
   failed: number;
 }
 
-interface Event {
+interface Event
+{
   day: string;
   date: number;
   month: string;
@@ -37,42 +41,42 @@ interface Event {
   time: string;
 }
 
-interface Achiever {
+interface Achiever
+{
   name: string;
   avatar: string;
   medal: string;
 }
 
-@Component({
+@Component( {
   selector: 'app-scoring-management-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FooterAdminPageComponent],
+  imports: [ CommonModule, FormsModule, RouterModule, FooterAdminPageComponent ],
   templateUrl: './scoring-management-system-admin-page.component.html',
-  styleUrls: ['./scoring-management-system-admin-page.component.scss'],
-})
-export class ScoringManagementSystemAdminPageComponent implements OnInit {
+  styleUrls: [ './scoring-management-system-admin-page.component.scss' ],
+} )
+export class ScoringManagementSystemAdminPageComponent implements OnInit
+{
   isLoading = true;
   User: User | null = null;
-  @ViewChild('myModal') myModal!: ElementRef<HTMLDialogElement>;
-  constructor(private router: Router, private authService: AuthServiceService, private tokenStorage: TokenStoragesService) {
-
-  }
-  ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
+  sidebarOpen = signal( true );
+  selectedClass = signal( 'Class 9' );
+  activeTab = signal( 'Results' );
+  @ViewChild( 'myModal' ) myModal!: ElementRef<HTMLDialogElement>;
+  constructor( private router: Router, private authService: AuthServiceService, private tokenStorage: TokenStoragesService )
+  { }
+  ngOnInit (): void
+  {
+    this.authService.currentUser$.subscribe( user =>
+    {
       this.User = user;
-      setTimeout(() => {
+      setTimeout( () =>
+      {
         this.isLoading = false;
-      }, 100);
-    });
+      }, 100 );
+    } );
   }
-  // Sidebar state
-  sidebarOpen = signal(true);
 
-  // Filters and tabs
-  selectedClass = signal('Class 9');
-  activeTab = signal('Results');
-
-  // Dropdown options
   classes = [
     'Class 6',
     'Class 7',
@@ -82,13 +86,12 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
     'Class 11',
     'Class 12',
   ];
-  tabs = ['Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance'];
-
+  tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
   // Navigation sections
   navSections: NavSection[] = [
     {
       title: 'MAIN',
-      items: [{ icon: 'fa-solid fa-gauge-high', label: 'Dashboard', route: '/admin', active: true }],
+      items: [ { icon: 'fa-solid fa-gauge-high', label: 'Dashboard', route: '/admin', active: true } ],
     },
     {
       title: 'ADMINISTRATION',
@@ -118,7 +121,6 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
       ],
     },
   ];
-
   // Performance chart data
   performance: PerformanceBar[] = [
     { label: 'Class A', passed: 95, failed: 5 },
@@ -158,52 +160,30 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
       time: '01:00 Am – 02:30 Pm',
     },
   ];
-
   // Top achievers and players
   topAchievers: Achiever[] = [
     { name: 'Madhiha Sharma', avatar: 'MS', medal: '🥇' },
     { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
     { name: 'Aisha Khan', avatar: 'AK', medal: '🥉' },
   ];
-
   topPlayers: Achiever[] = [
     { name: 'Madhiha Sharma', avatar: 'MS', medal: '🥇' },
     { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
     { name: 'Priya Singh', avatar: 'PS', medal: '🥉' },
   ];
-
   // Actions
-  setActiveTab(tab: string): void {
-    this.activeTab.set(tab);
+  setActiveTab ( tab: string ): void
+  {
+    this.activeTab.set( tab );
   }
-
-  toggleSidebar(): void {
-    this.sidebarOpen.update((v) => !v);
+  toggleSidebar (): void
+  {
+    this.sidebarOpen.update( ( v ) => !v );
   }
-
-  // Helper for nav icons
-  // getNavIcon(icon: string): string {
-  //   const icons: Record<string, string> = {
-  //     grid: '⊞',
-  //     shield: '🛡',
-  //     'book-open': '📖',
-  //     layers: '📚',
-  //     'file-text': '📄',
-  //     printer: '🖨',
-  //     user: '👤',
-  //     'credit-card': '💳',
-  //     clipboard: '📋',
-  //     truck: '🚌',
-  //     book: '📗',
-  //     calendar: '📅',
-  //     list: '📝',
-  //   };
-  //   return icons[icon] ?? '•';
-  // }
-
-  logoutAdminPage(): void {
+  logoutAdminPage (): void
+  {
     this.myModal.nativeElement.close();
-    Swal.fire({
+    Swal.fire( {
       icon: 'question',
       iconColor: '#b91c1c',
       showCancelButton: true,
@@ -218,26 +198,29 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit {
       color: '#b91c1c',
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-    })
-      .then((result) => {
-        if (result.isConfirmed) {
+    } )
+      .then( ( result ) =>
+      {
+        if ( result.isConfirmed )
+        {
           this.tokenStorage.removeToken();
-          this.router.navigate(['/signin']).then(() => {
+          this.router.navigate( [ '/signin' ] ).then( () =>
+          {
             window.location.reload();
-          });
+          } );
         }
-      });
+      } );
   }
-
-  onClickRouter(router: string) {
-    this.router.navigate([router]);
+  onClickRouter ( router: string )
+  {
+    this.router.navigate( [ router ] );
   }
-
-  openModal() {
+  openModal ()
+  {
     this.myModal.nativeElement.showModal();
   }
-
-  closeModal() {
+  closeModal ()
+  {
     this.myModal.nativeElement.close();
   }
 }

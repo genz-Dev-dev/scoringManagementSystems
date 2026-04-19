@@ -76,11 +76,13 @@ export class StudentManagementComponent implements OnInit
   totalElement: number = 0;
   hastPrevious: boolean;
   hastNext: boolean;
+  errorResponse: any[] = [];
+  countStudentActive: number = 0;
   stats: StatCard[] = [
-    { icon: 'fa-solid fa-users', label: 'Students', value: 0, bg: 'bg-blue-50' },
-    { icon: 'fa-solid fa-venus', label: 'Female', value: 0, bg: 'bg-pink-50' },
-    { icon: 'fa-solid fa-mars', label: 'Male', value: 0, bg: 'bg-orange-50' },
-    { icon: 'fa-solid fa-users', label: 'Staff', value: 0, bg: 'bg-teal-50' },
+    { icon: 'fa-solid fa-users', label: 'Students Total', value: 0, bg: 'bg-blue-50' },
+    { icon: 'fa-solid fa-venus', label: 'Students Female', value: 0, bg: 'bg-pink-50' },
+    { icon: 'fa-solid fa-mars', label: 'Students Male', value: 0, bg: 'bg-orange-50' },
+    { icon: 'fa-solid fa-users', label: 'Students Active', value: 0, bg: 'bg-green-50' },
   ];
 
   constructor( private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title )
@@ -131,6 +133,7 @@ export class StudentManagementComponent implements OnInit
         this.hastNext = res.hastNext;
         this.maleCount = 0;
         this.feamleCount = 0;
+        this.countStudentActive = this.students.filter( student => student.status === true ).length;
         this.students.forEach( student =>
         {
           if ( student.gender === 'M' ) this.maleCount++;
@@ -140,11 +143,17 @@ export class StudentManagementComponent implements OnInit
           { ...this.stats[ 0 ], value: this.students.length },
           { ...this.stats[ 1 ], value: this.feamleCount },
           { ...this.stats[ 2 ], value: this.maleCount },
-          { ...this.stats[ 3 ], value: this.students.length }
+          { ...this.stats[ 3 ], value: this.countStudentActive }
         ];
-        this.totalCount = this.students.length;
+        // this.totalCount = this.students.length;
+        // console.log( "Acitve", this.countStudentActive )
+        // console.log( res )
       },
-      error: ( err ) => console.log( err )
+      error: ( err ) =>
+      {
+        this.errorResponse = err.message;
+        console.log( "Error Response", this.errorResponse )
+      }
     } );
   }
   // create students
@@ -198,14 +207,12 @@ export class StudentManagementComponent implements OnInit
     this.studentsService.getAllClass( true, true ).subscribe( res =>
     {
       this.classess = res.content;
-      // console.log("res", this.classess)
     } );
   }
 
   filterStudents ()
   {
     const keyword = this.searchQuery.toLowerCase();
-
     this.filtterStudents = this.students.filter( student =>
       student.khFirstName?.toLowerCase().includes( keyword ) ||
       student.khLastName?.toLowerCase().includes( keyword ) ||
@@ -217,7 +224,6 @@ export class StudentManagementComponent implements OnInit
       student.address?.country?.toLowerCase().includes( keyword )
     );
   }
-
   handlePreviousPage ()
   {
     if ( this.number > 1 )
@@ -226,7 +232,6 @@ export class StudentManagementComponent implements OnInit
       this.getAllStudents();
     }
   }
-
   handleNextPage ()
   {
     if ( this.number < this.totalPage )
@@ -235,7 +240,6 @@ export class StudentManagementComponent implements OnInit
       this.getAllStudents();
     }
   }
-
   handleToggleStep ()
   {
     this.showStep = !this.showStep;
@@ -245,7 +249,6 @@ export class StudentManagementComponent implements OnInit
     if ( this.currentStep < 2 )
       this.currentStep++;
   }
-
   prevStep ()
   {
     if ( this.currentStep > 1 )

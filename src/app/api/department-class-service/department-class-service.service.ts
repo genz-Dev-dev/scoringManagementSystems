@@ -8,6 +8,7 @@ import { Auth } from '@angular/fire/auth';
 
 const api_extension = '/classes';
 const api_extension1 = '/departments';
+const api_extension2 = '/subjects';
 @Injectable( {
   providedIn: 'root',
 } )
@@ -23,6 +24,7 @@ export class DepartmentClassServiceService
 
   private API1 = environments.api_url + api_extension1;
 
+  private API2 = environments.api_url + api_extension2;
   private getHttpOption ( withToken: boolean = false )
   {
 
@@ -43,14 +45,6 @@ export class DepartmentClassServiceService
       this.getHttpOption()
     );
   }
-
-  public getAllDepartment ()
-  {
-    return this.httpClient.get<any>(
-      this.API1,
-      this.getHttpOption( true )
-    );
-  }
   // create class service
   public createClass ( data: any ): Observable<any>
   {
@@ -60,13 +54,6 @@ export class DepartmentClassServiceService
       this.getHttpOption( true )
     );
   }
-
-  // get AllClass 
-  public getAllClass (): Observable<any>
-  {
-    return this.httpClient.get<any>( this.API, this.getHttpOption( true ) );
-  }
-
   public createSemester ( data: any ): Observable<any>
   {
     return this.httpClient.post<any>(
@@ -75,6 +62,21 @@ export class DepartmentClassServiceService
       this.getHttpOption( true )
     );
   }
+  public getAllDepartment ()
+  {
+    return this.httpClient.get<any>(
+      this.API1,
+      this.getHttpOption( true )
+    );
+  }
+
+
+  // get AllClass 
+  public getAllClass (): Observable<any>
+  {
+    return this.httpClient.get<any>( this.API, this.getHttpOption( true ) );
+  }
+
   public getAllSemster (): Observable<any>
   {
     return this.httpClient.get<any>( environments.api_url + '/semesters', this.getHttpOption( true ) );
@@ -87,6 +89,6 @@ export class DepartmentClassServiceService
   // get all subject
   public getAllSubject (): Observable<any>
   {
-    return this.httpClient.get<any>( environments.api_url + '/subjects', this.getHttpOption( true ) );
+    return this.httpClient.get<any>( this.API2, this.getHttpOption( true ) );
   }
 }

@@ -1,5 +1,4 @@
 <div class="bg-brand-bg p-2 sm:p-2 text-slate-700">
-
     <!-- TOP STATS ROW -->
     <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <!-- Main Class Card -->
@@ -16,29 +15,28 @@
                 <span class="text-slate-400 font-medium text-xs sm:text-sm">Average Daily Attendance</span>
             </div>
         </div>
-
         <!-- Stat Card: Present -->
         <div
             class="col-span-1 sm:col-span-3 card bg-white shadow-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center">
             <div
                 class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2 sm:mb-4">
-                👤</div>
+                <i class="fa-solid fa-user-check"></i>
+            </div>
             <p class="text-slate-400 text-xs sm:text-sm font-semibold">Present Today</p>
             <h2 class="text-2xl sm:text-4xl font-bold text-brand-navy">28<span
                     class="text-slate-200 text-sm sm:text-2xl">/32</span></h2>
         </div>
-
         <!-- Stat Card: Late -->
         <div
             class="col-span-1 sm:col-span-3 card bg-white shadow-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center text-brand-navy">
             <div
                 class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-50 text-orange-400 rounded-full flex items-center justify-center mb-2 sm:mb-4">
-                🔄</div>
+                <i class="fa-solid fa-user-clock"></i>
+            </div>
             <p class="text-slate-400 text-xs sm:text-sm font-semibold">Late/Excused</p>
             <h2 class="text-2xl sm:text-4xl font-bold">4</h2>
         </div>
     </div>
-
     <!-- MAIN CONTENT GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
 
@@ -61,9 +59,8 @@
                     <span class="p-1 sm:p-2">5</span><span class="p-1 sm:p-2">6</span>
                 </div>
                 <button class="btn btn-outline border-slate-200 mt-4 sm:mt-6 w-full normal-case text-slate-600">Download
-                    Attendance PDF 📥</button>
+                    Attendance PDF</button>
             </div>
-
             <!-- Class Performance -->
             <div class="card bg-slate-100 p-4 sm:p-6 border border-slate-200">
                 <h3 class="text-xs sm:text-sm font-bold uppercase text-slate-500 mb-2 sm:mb-4 tracking-widest">Class
@@ -82,7 +79,6 @@
                 </div>
             </div>
         </div>
-
         <!-- STUDENT ROSTER TABLE -->
         <div class="col-span-1 lg:col-span-9 card bg-white shadow-sm overflow-x-auto">
             <div
@@ -153,11 +149,9 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- moblie responsive -->
             <div class="block sm:hidden">
                 <div *ngFor="let student of students" class="bg-white p-3 rounded-xl shadow mb-3">
-
                     <!-- Top -->
                     <div class="flex items-center gap-3">
                         <img [src]="student.avatar" class="w-10 h-10 rounded-full border" />
@@ -166,20 +160,17 @@
                             <div class="text-xs text-gray-400">ID: #{{student.id}}</div>
                         </div>
                     </div>
-
                     <!-- Actions -->
                     <div class="flex flex-wrap gap-1 mt-2">
                         <button (click)="updateStatus(student, 'Present')" class="btn btn-xs">P</button>
                         <button (click)="updateStatus(student, 'Absent')" class="btn btn-xs">A</button>
                         <button (click)="updateStatus(student, 'Late')" class="btn btn-xs">L</button>
                     </div>
-
                     <!-- History -->
                     <div class="flex gap-1 mt-2">
                         <span *ngFor="let color of student.history" class="w-2 h-2 rounded-full"
                             [style.backgroundColor]="color"></span>
                     </div>
-
                 </div>
             </div>
             <!-- Footer Actions -->
@@ -198,6 +189,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

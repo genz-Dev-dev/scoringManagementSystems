@@ -7,16 +7,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 import { CourseFormComponent } from '../course-form/course-form.component';
 import { SignupAdminPageService } from 'src/app/api/signup-admin-page/signup-admin-page.service';
-interface Department
-{
-  title: string;
-  school: string;
-  head: string;
-  courses: number;
-  avatar: string;
-  icon: string;
-  color: string;
-}
+import { name } from '@cloudinary/url-gen/actions/namedTransformation';
 @Component( {
   selector: 'app-class-semester-page',
   imports: [ CommonModule, ReactiveFormsModule, FormsModule, CourseFormComponent ],
@@ -32,8 +23,10 @@ export class ClassSemesterPageComponent implements OnInit
   modalCreateCourse: Boolean = false;
   formCreateClass!: FormGroup;
   formCreateDepartment!: FormGroup;
+  formCreateSubject !: FormGroup;
   formCreateSemester!: FormGroup;
   modalCreateDepartment: Boolean = false;
+  modalCreateSubject: Boolean = false;
   imagePreview: String | ArrayBuffer | null = null;
   selectedFile!: File;
   getAllDepartment: any[] = [];
@@ -47,28 +40,7 @@ export class ClassSemesterPageComponent implements OnInit
   countCourse: number = 0;
   countDepartment: Number = 0;
   currentUserRole: string = '';
-  departments: Department[] = [
-    {
-      title: 'Computer Science',
-      school: 'Engineering',
-      head: 'Dr. Alice Smith',
-      courses: 12,
-      avatar: 'https://imgs.search.brave.com/c4wuuWaeZW5Q_ucX-hUSfoh492ttSjxmhnyIF_MeJxM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/ZnJvbnQuZnJlZXBp/ay5jb20vaG9tZS9h/bm9uLXJ2bXAvY3Jl/YXRpdmUtc3VpdGUv/YWR2ZXJ0aXNpbmcv/cGhvdG8tdmlkZW8u/d2VicA',
-      icon: 'cpu',
-      color: 'bg-blue-100'
-    },
-    {
-      title: 'Business Admin',
-      school: 'Business',
-      head: 'Dr. John Doe',
-      courses: 8,
-      avatar: 'https://imgs.search.brave.com/UFN91E77kzkZQuIIPh9XEM0xZmdP8tRIjn-c2UENj4Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvY29tbW9ucy90/aHVtYi9iL2I2L0lt/YWdlX2NyZWF0ZWRf/d2l0aF9hX21vYmls/ZV9waG9uZS5wbmcv/MTI4MHB4LUltYWdl/X2NyZWF0ZWRfd2l0/aF9hX21vYmlsZV9w/aG9uZS5wbmc',
-      icon: 'briefcase',
-      color: 'bg-green-100'
-    },
-    // Add more departments as needed
-  ];
-
+  errorResponse: any[] = [];
   // constructor 
   constructor( private fb: FormBuilder, private router: Router, private departmentClassService: DepartmentClassServiceService, private signupAdminPageService: SignupAdminPageService )
   {
@@ -90,6 +62,12 @@ export class ClassSemesterPageComponent implements OnInit
       startDate: [ '', Validators.required ],
       endDate: [ '', Validators.required ],
     } )
+
+    this.formCreateSubject = this.fb.group( {
+      name: [ '', Validators.required ],
+      image: [],
+      description: [ '', Validators.required ]
+    } )
   }
   ngOnInit (): void
   {
@@ -97,12 +75,10 @@ export class ClassSemesterPageComponent implements OnInit
     this.handleGetAllClass();
     this.handleGetAllSemester();
     this.handleGetAllCourse();
+    this.handleGellAllSubject();
     const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
     this.currentUserRole = user.role;
   }
-  // get all users
-
-
   // get all course
   private handleGetAllCourse ()
   {
@@ -114,7 +90,79 @@ export class ClassSemesterPageComponent implements OnInit
       },
       error: ( err ) =>
       {
-        console.log( err );
+        this.errorResponse = err.message;
+        console.log( "errorResponse", this.errorResponse );
+      }
+    } )
+  }
+  // handle get all department
+  private handleGetAllDepartment ()
+  {
+    this.departmentClassService.getAllDepartment().subscribe( {
+      next: ( res ) =>
+      {
+        this.getAllDepartment = res.data;
+        this.countDepartment = res.data.length;
+        // console.log( "Department Response", this.getAllDepartment )
+      },
+      error: ( err ) =>
+      {
+        this.errorResponse = err.message;
+        console.log( "errorResponse", this.errorResponse );
+      }
+    } );
+  }
+  // handle get all class
+  private handleGetAllClass (): void
+  {
+    this.departmentClassService.getAllClass().subscribe( {
+      next: ( res ) =>
+      {
+        this.getAllClass = res.content;
+        this.countClass = res.content.length;
+        // console.log( "count", this.countClass )
+        // console.log( "Class", this.getAllClass );
+      },
+      error: ( err ) =>
+      {
+        this.errorResponse = err.message;
+        console.log( "ERROR:", this.errorResponse );
+      }
+    } );
+  }
+  // get all semester
+  private handleGetAllSemester (): void
+  {
+    this.departmentClassService.getAllSemster().subscribe( {
+      next: ( res ) =>
+      {
+        this.getAllSemester = res.data;
+        this.countSemester = res.data.length;
+      },
+      error: ( err ) =>
+      {
+        this.errorResponse = err.message;
+        console.log( "ERROR:", err );
+      }
+    } );
+  }
+  // handle get all subject 
+  countSubect: number = 0;
+  private handleGellAllSubject ()
+  {
+
+    this.departmentClassService.getAllSubject().subscribe( {
+      next: ( Response ) =>
+      {
+        this.getAllSubject = Response.data;
+        this.countSubect = Response.data.length;
+        console.log( "response subject", this.getAllSubject );
+        // console.log( "count Response", this.countSubect )
+      },
+      error: ( errorResponse ) =>
+      {
+        this.errorResponse = errorResponse.message;
+        console.log( "Error Response", this.errorResponse );
       }
     } )
   }
@@ -145,26 +193,7 @@ export class ClassSemesterPageComponent implements OnInit
       reader.readAsDataURL( file );
     }
   }
-  //department creation handler
-  openDepartmentModal ()
-  {
-    this.modalCreateDepartment = true;
-  }
-  // handle get all department
-  private handleGetAllDepartment ()
-  {
-    this.departmentClassService.getAllDepartment().subscribe( {
-      next: ( res ) =>
-      {
-        this.getAllDepartment = res.data;
-        this.countDepartment = res.data.length;
-      },
-      error: ( err ) =>
-      {
-        console.log( err );
-      }
-    } );
-  }
+
   // handle create classes
   private handleCreateClasses ()
   {
@@ -198,23 +227,6 @@ export class ClassSemesterPageComponent implements OnInit
         } );
       }
     } )
-  }
-  // handle get all class
-  private handleGetAllClass (): void
-  {
-    this.departmentClassService.getAllClass().subscribe( {
-      next: ( res ) =>
-      {
-        this.getAllClass = res.content;
-        this.countClass = res.content.length;
-        // console.log( "count", this.countClass )
-        // console.log( "Class", this.getAllClass );
-      },
-      error: ( err ) =>
-      {
-        console.log( "ERROR:", err );
-      }
-    } );
   }
   // create department
   private handleCreateSemester ()
@@ -250,20 +262,14 @@ export class ClassSemesterPageComponent implements OnInit
       }
     } )
   }
-  // get all semester
-  private handleGetAllSemester (): void
+  //department creation handler
+  openDepartmentModal ()
   {
-    this.departmentClassService.getAllSemster().subscribe( {
-      next: ( res ) =>
-      {
-        this.getAllSemester = res.data;
-        this.countSemester = res.data.length;
-      },
-      error: ( err ) =>
-      {
-        console.log( "ERROR:", err );
-      }
-    } );
+    this.modalCreateDepartment = true;
+  }
+  handleSubjectModal ()
+  {
+    this.modalCreateSubject = true;
   }
   handleCreateCourseModal ()
   {

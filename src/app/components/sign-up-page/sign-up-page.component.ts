@@ -58,7 +58,6 @@ export class SignUpPageComponent implements OnInit
       this.checkPasswordStrength( value );
     } );
   }
-
   ngOnInit (): void
   {
     this.getAllRoles();
@@ -109,7 +108,6 @@ export class SignUpPageComponent implements OnInit
       }
     } );
   }
-
   // getters
   get fullNameControl ()
   {
@@ -209,18 +207,15 @@ export class SignUpPageComponent implements OnInit
     const pages = [];
     const start = Math.max( 1, this.currentPage - 2 );
     const end = Math.min( this.totalPages, this.currentPage + 2 );
-
     for ( let i = start; i <= end; i++ )
     {
       pages.push( i );
     }
-
     this.pages = pages;
   }
   // password strength
   checkPasswordStrength ( password: string )
   {
-
     let strength = 0;
 
     if ( !password )
@@ -229,7 +224,6 @@ export class SignUpPageComponent implements OnInit
       this.strengthLabel = 'No password';
       return;
     }
-
     if ( password.length >= 6 ) strength++;
     if ( password.match( /[A-Z]/ ) ) strength++;
     if ( password.match( /[0-9]/ ) ) strength++;
