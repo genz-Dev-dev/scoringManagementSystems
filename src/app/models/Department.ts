@@ -1,4 +1,5 @@
-export interface Department {
+export interface Department
+{
     id: number;
     name: string;
     school: string;
@@ -6,4 +7,5 @@ export interface Department {
     headImage: string;
     coursesCount: number;
     icon: string; // DaisyUI or Lucide icon name
+    status: boolean;
 }

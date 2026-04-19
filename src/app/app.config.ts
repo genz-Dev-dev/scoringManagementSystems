@@ -6,15 +6,14 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { routes } from './app.routes';
-import { environments } from '../environments/environments';
-
+import { environments } from 'src/environments/environments.dev';
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
-    provideHttpClient(withFetch()),
+    provideZoneChangeDetection( { eventCoalescing: true } ),
+    provideRouter( routes, withPreloading( PreloadAllModules ) ),
+    provideHttpClient( withFetch() ),
     provideAnimationsAsync(),
-    provideFirebaseApp(() => initializeApp(environments.firebase)),
-    provideAuth(() => getAuth()),
+    // provideFirebaseApp(() => initializeApp(environments.firebase)),
+    provideAuth( () => getAuth() ),
   ],
 };
