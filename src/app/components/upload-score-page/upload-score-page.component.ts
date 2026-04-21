@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
 import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 interface StudentScore
 {
@@ -23,7 +24,7 @@ export class UploadScorePageComponent implements OnInit
   courses: any[] = [];
   semesters: any[] = [];
   department: any = [];
-  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService )
+  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService, private studentService: StudentsServiceService )
   {
 
   }
@@ -35,6 +36,7 @@ export class UploadScorePageComponent implements OnInit
     this.handleGetAllSemester();
     this.handleGetAllCourse();
     this.handleGellDepartment();
+    this.handleGetAllStudent();
   }
 
   filters = {
@@ -107,6 +109,24 @@ export class UploadScorePageComponent implements OnInit
         console.log( "errorResponse", errorResponse );
       }
     } )
+  }
+  // handle get all student 
+  getAllStudent: any[] = [];
+  errorResponse: any[] = [];
+  private handleGetAllStudent ()
+  {
+    this.studentService.getAllStudents().subscribe( {
+      next: ( Response ) =>
+      {
+        this.getAllStudent = Response.content;
+        console.log( "Response", this.getAllStudent );
+      }, error: ( erorr ) =>
+      {
+        this.errorResponse = erorr.message;
+        console.log( "Error Response", this.errorResponse );
+      }
+    } )
+
   }
   get validatedCount () { return this.students.filter( s => s.grade ).length; }
   get pendingCount () { return this.students.filter( s => !s.grade ).length; }

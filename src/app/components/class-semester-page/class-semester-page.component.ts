@@ -8,6 +8,7 @@ import { DepartmentClassServiceService } from 'src/app/api/department-class-serv
 import { CourseFormComponent } from '../course-form/course-form.component';
 import { SignupAdminPageService } from 'src/app/api/signup-admin-page/signup-admin-page.service';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
+import { environments } from 'src/environments/environments.dev';
 @Component( {
   selector: 'app-class-semester-page',
   imports: [ CommonModule, ReactiveFormsModule, FormsModule, CourseFormComponent ],
@@ -53,7 +54,7 @@ export class ClassSemesterPageComponent implements OnInit
     this.formCreateDepartment = this.fb.group( {
       name: [ '', Validators.required ],
       description: [ '', Validators.required ],
-      image: [ '', Validators.required ],
+      image: [ null, Validators.required ],
     } )
 
     this.formCreateSemester = this.fb.group( {
@@ -103,7 +104,7 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllDepartment = res.data;
         this.countDepartment = res.data.length;
-        // console.log( "Department Response", this.getAllDepartment )
+        console.log( "Department Response", this.getAllDepartment )
       },
       error: ( err ) =>
       {
@@ -156,7 +157,7 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllSubject = Response.data;
         this.countSubect = Response.data.length;
-        console.log( "response subject", this.getAllSubject );
+        // console.log( "response subject", this.getAllSubject );
         // console.log( "count Response", this.countSubect )
       },
       error: ( errorResponse ) =>
@@ -169,14 +170,46 @@ export class ClassSemesterPageComponent implements OnInit
   // handle create department
   private handleCreateDepartment ()
   {
-    if ( this.formCreateDepartment.invalid )
-    {
-      return;
-    }
+    if ( this.formCreateDepartment.invalid ) return;
+
     const formData = new FormData();
+
     formData.append( 'name', this.formCreateDepartment.get( 'name' )?.value );
     formData.append( 'description', this.formCreateDepartment.get( 'description' )?.value );
-    if ( this.selectedFile ) formData.append( 'image', this.selectedFile, this.selectedFile.name );
+
+    const imageFile = this.formCreateDepartment.get( 'image' )?.value;
+    if ( imageFile )
+    {
+      formData.append( 'image', imageFile );
+    }
+
+    this.departmentClassService.createDepartment( formData ).subscribe( {
+      next: ( res ) =>
+      {
+        Swal.fire( {
+          icon: 'success',
+          timer: 2500,
+          iconColor: '#10b981',
+          html: `<p style="font-size:16px;"><span style="font-weight: bold;color: #10b981;">${ res.message }</span></p>`,
+          showConfirmButton: false,
+        } );
+
+        this.handleGetAllDepartment();
+        this.formCreateDepartment.reset();
+        this.closeDepartmentModal();
+      },
+
+      error: ( err ) =>
+      {
+        Swal.fire( {
+          icon: 'warning',
+          timer: 2500,
+          iconColor: '#b91c1c',
+          html: `<p style="font-size:16px;">មិនអាច<span style="font-weight: bold;color: #b91c1c;">បង្កើតថ្នាក់</span>បានទេ!</p>`,
+          showConfirmButton: false,
+        } );
+      }
+    } );
   }
   // handle file for upload  department
   private handleOnFileChange ( event: Event )
@@ -184,7 +217,7 @@ export class ClassSemesterPageComponent implements OnInit
     const file = ( event.target as HTMLInputElement ).files?.[ 0 ];
     if ( file )
     {
-      this.selectedFile = file;
+      this.formCreateDepartment.get( 'image' )?.setValue( file );
       const reader = new FileReader();
       reader.onload = () =>
       {
@@ -228,7 +261,7 @@ export class ClassSemesterPageComponent implements OnInit
       }
     } )
   }
-  // create department
+  // create semester
   private handleCreateSemester ()
   {
     if ( this.formCreateSemester.invalid )
@@ -266,6 +299,10 @@ export class ClassSemesterPageComponent implements OnInit
   openDepartmentModal ()
   {
     this.modalCreateDepartment = true;
+  }
+  closeDepartmentModal ()
+  {
+    this.modalCreateDepartment = false;
   }
   handleSubjectModal ()
   {

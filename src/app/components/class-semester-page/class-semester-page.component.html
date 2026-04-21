@@ -760,12 +760,12 @@
         <!-- Buttons -->
         <div class="submit-row">
             <button type="button" class="btn-cancel" aria-label="Cancel" routerLink="/classes">Cancel</button>
-            <button type="button" class="btn-submit" aria-label="Create class" (click)="handleCreateDepartment()">
+            <button type="button" class="btn-submit" aria-label="Create Department" (click)="handleCreateDepartment()">
                 <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                     stroke="white">
                     <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                Create class
+                Create Department
             </button>
         </div>
     </form>
@@ -849,7 +849,9 @@
             <div class="flex items-center gap-3">
                 <div class="avatar shadow-md">
                     <div class="w-10 rounded-full ring ring-white ring-offset-base-100 ring-offset-2">
-                        <img [src]="dept.thumbnail" alt="image" />
+                        <img [src]="dept.thumbnail ? environment.image_url + dept.thumbnail : 'assets/default.png'"
+                            alt="image" />
+                        <!-- <img [src]="environments.image_url + dept.thumbnail" alt="image" /> -->
                     </div>
                 </div>
                 <div>

@@ -5,7 +5,7 @@
         CSV/Excel or enter grades manually into the ledger below.</p>
 </header>
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
     <div class="form-control w-full">
         <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Department</span></label>
         <select class="select select-bordered bg-white rounded-full">
@@ -38,6 +38,12 @@
             }
         </select>
     </div>
+    <div class="form-controll w-full mt-6">
+        <button aria-label="Filter"
+            class="btn btn-outline-primary bg-primary border-primary px-10 text-white rounded-lg"><i
+                class="fa-solid fa-filter"></i>
+            Filter</button>
+    </div>
 </div>
 
 <div class="flex flex-col lg:flex-row gap-8">
@@ -46,11 +52,7 @@
         <div class="card bg-white shadow-sm border border-slate-200 p-8 text-center">
             <div class="flex justify-center mb-4">
                 <div class="bg-blue-50 p-4 rounded-xl text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
+                    <i class="fa-solid fa-file-arrow-up text-4xl"></i>
                 </div>
             </div>
             <h3 class="text-lg font-bold">Bulk Upload</h3>
@@ -94,29 +96,28 @@
             <table class="table w-full">
                 <thead>
                     <tr class="text-slate-400 border-b border-slate-100">
-                        <th>STUDENT ID</th>
-                        <th>FULL NAME</th>
-                        <th>ASSIGNMENT SCORE</th>
-                        <th>FINAL GRADE</th>
+                        <th>Name Khmer</th>
+                        <th>Name English</th>
+                        <th>Gender</th>
+                        <th>Code</th>
                     </tr>
                 </thead>
-                <!-- <tbody>
-                    <tr *ngFor="let student of students" class="hover:bg-slate-50 border-b border-slate-50">
-                        <td class="font-mono text-xs text-slate-500">{{student.id}}</td>
-                        <td class="font-semibold text-slate-700">{{student.name}}</td>
-                        <td>
-                            <input type="text" ng-model="student.score"
-                                class="input input-sm input-bordered w-16 text-center focus:border-primary"
-                                placeholder="--">
+                <tbody>
+                    @for(student of getAllStudent; track $index) {
+
+                    <tr class="hover:bg-slate-50 border-b border-slate-50">
+                        <td class="font-semibold text-sm text-slate-700">{{student.khFirstName +' '+
+                            student.khLastName}}
                         </td>
-                        <td>
-                            <span class="font-bold"
-                                ng-class="{'text-blue-600': student.grade != 'Pending', 'text-orange-400': student.grade == 'Pending'}">
-                                {{student.grade}}
-                            </span>
+                        <td class="font-semibold text-slate-700">{{student.enFirstName +' '+ student.enLastName}}</td>
+                        <td class="font-semibold text-slate-700"> {{student.gender}}
+                        </td>
+                        <td class="font-semibold text-slate-700">
+                            {{student.studentCode}}
                         </td>
                     </tr>
-                </tbody> -->
+                    }
+                </tbody>
             </table>
         </div>
 

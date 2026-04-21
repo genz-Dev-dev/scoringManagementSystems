@@ -91,22 +91,24 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
   navSections: NavSection[] = [
     {
       title: 'MAIN',
-      items: [ { icon: 'fa-solid fa-gauge-high', label: 'Dashboard', route: '/admin', active: true } ],
+      items: [ { icon: 'fa-solid fa-chart-bar', label: 'Dashboard', route: '/admin', active: true } ],
     },
     {
       title: 'ADMINISTRATION',
       items: [
         { icon: 'fa-solid fa-user-shield', label: 'Permissions Roles', route: '/permissions' },
-        { icon: 'fa-solid fa-user-plus', label: 'Create Account', route: '/signup' },
-        { icon: 'fa-solid fa-people-roof', label: 'Class Semester', route: '/class-semester' },
-        { icon: 'fa-solid fa-user', label: 'Student Management', route: '/student-management' },
-        { icon: 'fa-solid fa-cloud-arrow-up', label: 'Upload Score', route: '/upload-score' },
+        { icon: 'fa-solid fa-user-plus', label: 'Create Accounts', route: '/signup' },
+        { icon: 'fa-solid fa-people-roof', label: 'Academic Programs', route: '/class-semester' },
+        { icon: 'fa-solid fa-user', label: 'Student Reports', route: '/student-management' },
+        { icon: 'fa-solid fa-cloud-arrow-up', label: 'Upload Scores', route: '/upload-score' },
+        { icon: 'fas fa-chart-bar', label: 'Score Overview', route: '/list-score' },
+        { icon: 'fa-solid fa-list-check', label: 'Attendance', route: '/students' },
+        { icon: 'fa-solid fa-clock-rotate-left', label: 'System Logs', route: '/system-log' },
       ],
     },
     {
       title: 'STUDENT',
       items: [
-        { icon: 'fa-solid fa-list-check', label: 'Attendance', route: '/students' },
         { icon: 'credit-card', label: 'Student Fees' },
         { icon: 'clipboard', label: 'Homework' },
         { icon: 'truck', label: 'Transport' },

@@ -25,6 +25,7 @@ export class DepartmentClassServiceService
   private API1 = environments.api_url + api_extension1;
 
   private API2 = environments.api_url + api_extension2;
+
   private getHttpOption ( withToken: boolean = false )
   {
 
@@ -40,9 +41,9 @@ export class DepartmentClassServiceService
   public createDepartment ( data: any ): Observable<any>
   {
     return this.httpClient.post<any>(
-      this.API,
+      this.API1,
       data,
-      this.getHttpOption()
+      this.getHttpOption( true )
     );
   }
   // create class service
@@ -69,8 +70,6 @@ export class DepartmentClassServiceService
       this.getHttpOption( true )
     );
   }
-
-
   // get AllClass 
   public getAllClass (): Observable<any>
   {

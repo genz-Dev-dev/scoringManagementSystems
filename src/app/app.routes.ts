@@ -8,12 +8,6 @@ export const routes: Routes = [
             import( './components/signin-page/signin-page.component' )
                 .then( m => m.SigninPageComponent )
     },
-    // {
-    //     path: 'course-form',
-    //     loadComponent: () =>
-    //         import( './components/course-form/course-form.component' )
-    //             .then( m => m.CourseFormComponent )
-    // },
     {
         path: 'forgot-password',
         loadComponent: () =>
@@ -21,20 +15,12 @@ export const routes: Routes = [
                 .then( m => m.ForgotPasswordPageComponent )
     },
     {
-        path: 'change-password',
-        loadComponent: () =>
-            import( './components/change-password-page/change-password-page.component' )
-                .then( m => m.ChangePasswordPageComponent )
-    },
-    {
         path: '',
         loadComponent: () =>
             import( './components/scoring-management-system-admin-page/scoring-management-system-admin-page.component' )
                 .then( m => m.ScoringManagementSystemAdminPageComponent ),
-
         canActivate: [ LoginGuard ],
         canActivateChild: [ LoginGuard ],
-
         children: [
             { path: '', redirectTo: 'admin', pathMatch: 'full' },
 
@@ -76,11 +62,22 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import( './components/upload-score-page/upload-score-page.component' )
                         .then( m => m.UploadScorePageComponent )
+            },
+            {
+                path: 'list-score',
+                loadComponent: () =>
+                    import( './components/list-score-page/list-score.component' )
+                        .then( m => m.ListScoreComponent )
             }, {
                 path: 'class-semester',
                 loadComponent: () =>
                     import( './components/class-semester-page/class-semester-page.component' )
                         .then( m => m.ClassSemesterPageComponent )
+            }, {
+                path: 'system-log',
+                loadComponent: () =>
+                    import( './components/system-log-page/system-log-page.component' )
+                        .then( m => m.SystemLogPageComponent )
             }
         ]
     },

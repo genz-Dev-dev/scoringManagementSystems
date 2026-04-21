@@ -1,3 +1,25 @@
 {
-    "angular.enable-strict-mode-prompt": false
+    "angular.enable-strict-mode-prompt": false,
+    "tailwindCSS.experimental.configFile": null,
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "typescript": "typescript",
+        "scss": "scss"
+    },
+    "tailwindCSS.files.exclude": [
+        "**/.git/**",
+        "**/node_modules/**",
+        "**/.hg/**",
+        "**/dist/**"
+    ],
+    "tailwindCSS.classAttributes": [
+        "class",
+        "className",
+        "ngClass"
+    ],
+    "css.validate": false,
+    "scss.validate": false,
+    "editor.quickSuggestions": {
+        "strings": "on"
+    }
 }
