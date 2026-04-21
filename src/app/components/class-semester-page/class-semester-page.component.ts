@@ -104,7 +104,6 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllDepartment = res.data;
         this.countDepartment = res.data.length;
-        console.log( "Department Response", this.getAllDepartment )
       },
       error: ( err ) =>
       {
@@ -151,7 +150,6 @@ export class ClassSemesterPageComponent implements OnInit
   countSubect: number = 0;
   private handleGellAllSubject ()
   {
-
     this.departmentClassService.getAllSubject().subscribe( {
       next: ( Response ) =>
       {
@@ -170,6 +168,7 @@ export class ClassSemesterPageComponent implements OnInit
   // handle create department
   private handleCreateDepartment ()
   {
+    console.log( "formCreateDepartment", this.formCreateDepartment.value );
     if ( this.formCreateDepartment.invalid ) return;
 
     const formData = new FormData();

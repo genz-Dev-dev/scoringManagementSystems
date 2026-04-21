@@ -121,7 +121,7 @@ export class PermissionAdminPageComponent implements OnInit
       next: ( Response ) =>
       {
         this.getAllRoles = Response.data;
-        console.log( "Response data", this.getAllRoles )
+        // console.log( "Response data", this.getAllRoles )
       },
       error: ( error ) =>
       {

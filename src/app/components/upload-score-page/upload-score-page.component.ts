@@ -119,7 +119,7 @@ export class UploadScorePageComponent implements OnInit
       next: ( Response ) =>
       {
         this.getAllStudent = Response.content;
-        console.log( "Response", this.getAllStudent );
+        // console.log( "Response", this.getAllStudent );
       }, error: ( erorr ) =>
       {
         this.errorResponse = erorr.message;

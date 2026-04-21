@@ -105,23 +105,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
         { icon: 'fa-solid fa-list-check', label: 'Attendance', route: '/students' },
         { icon: 'fa-solid fa-clock-rotate-left', label: 'System Logs', route: '/system-log' },
       ],
-    },
-    {
-      title: 'STUDENT',
-      items: [
-        { icon: 'credit-card', label: 'Student Fees' },
-        { icon: 'clipboard', label: 'Homework' },
-        { icon: 'truck', label: 'Transport' },
-        { icon: 'book', label: 'Library' },
-      ],
-    },
-    {
-      title: 'EXAMS',
-      items: [
-        { icon: 'calendar', label: 'Date Sheet' },
-        { icon: 'list', label: 'Syllabus' },
-      ],
-    },
+    }
   ];
   // Performance chart data
   performance: PerformanceBar[] = [
