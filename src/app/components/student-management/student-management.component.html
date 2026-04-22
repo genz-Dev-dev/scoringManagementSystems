@@ -115,13 +115,11 @@
             [disabled]="currentStep === 1">
             <i class="fa-solid fa-circle-chevron-left font"></i> Back
         </button>
-
         <ng-container *ngIf="currentStep < 2">
             <button type="button" class="btn btn-soft btn-primary" aria-label="Next" (click)="nextStep()">
                 <i class="fa-solid fa-circle-chevron-right"></i> Next
             </button>
         </ng-container>
-
         <ng-container *ngIf="currentStep === 2">
             <button type="submit" class="btn btn-primary rounded-full" aria-label="Submit"
                 (click)="handleCreateStudent()">
@@ -184,7 +182,6 @@
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                                 <i class="fa-solid fa-eye"></i>
                             </button>
-
                             <!-- Edit button: show only for ROLE_ADMIN -->
                             <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
                                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
@@ -208,8 +205,9 @@
                 <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
                 <button class="join-item btn btn-xs btn-ghost">2</button>
                 <button class="join-item btn btn-xs btn-ghost">3</button>
-                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastNext" (click)="handleNextPage()"><i
-                        class="fa-solid fa-angle-right"></i></button>
+                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastNext" (click)="handleNextPage()">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -252,7 +250,6 @@
                         <i class="fa-solid fa-trash"></i>
                     </button>
                     }
-
                 </div>
             </div>
         </div>

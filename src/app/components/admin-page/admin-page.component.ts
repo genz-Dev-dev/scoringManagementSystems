@@ -2,32 +2,23 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-interface NavItem {
-  icon: string;
-  label: string;
-  route?: string;
-  active?: boolean;
-}
-
-interface NavSection {
-  title: string;
-  items: NavItem[];
-}
-
-interface StatCard {
+interface StatCard
+{
   icon: string;
   label: string;
   value: number;
   bg: string;
 }
 
-interface PerformanceBar {
+interface PerformanceBar
+{
   label: string;
   passed: number;
   failed: number;
 }
 
-interface Event {
+interface Event
+{
   day: string;
   date: number;
   month: string;
@@ -37,28 +28,25 @@ interface Event {
   time: string;
 }
 
-interface Achiever {
+interface Achiever
+{
   name: string;
   avatar: string;
   medal: string;
 }
 
-@Component({
+@Component( {
   selector: 'app-admin-page',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule ],
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss'
-})
-export class AdminPageComponent {
-
-
-  // Sidebar state
-  sidebarOpen = signal(true);
-
+} )
+export class AdminPageComponent
+{
   // Filters and tabs
-  selectedClass = signal('Class 9');
-  activeTab = signal('Results');
+  selectedClass = signal( 'Class 9' );
+  activeTab = signal( 'Results' );
 
   // Dropdown options
   classes = [
@@ -70,42 +58,7 @@ export class AdminPageComponent {
     'Class 11',
     'Class 12',
   ];
-  tabs = ['Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance'];
-
-  // Navigation sections
-  navSections: NavSection[] = [
-    {
-      title: 'MAIN',
-      items: [{ icon: 'grid', label: 'Dashboard', active: true }],
-    },
-    {
-      title: 'ADMINISTRATION',
-      items: [
-        { icon: 'shield', label: 'Admin Section' },
-        { icon: 'book-open', label: 'Academics' },
-        { icon: 'layers', label: 'Study Material' },
-        { icon: 'file-text', label: 'Lesson Plan' },
-        { icon: 'printer', label: 'Bulk Print' },
-      ],
-    },
-    {
-      title: 'STUDENT',
-      items: [
-        { icon: 'user', label: 'Student Info' },
-        { icon: 'credit-card', label: 'Student Fees' },
-        { icon: 'clipboard', label: 'Homework' },
-        { icon: 'truck', label: 'Transport' },
-        { icon: 'book', label: 'Library' },
-      ],
-    },
-    {
-      title: 'EXAMS',
-      items: [
-        { icon: 'calendar', label: 'Date Sheet' },
-        { icon: 'list', label: 'Syllabus' },
-      ],
-    },
-  ];
+  tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
 
   // Stat cards
   stats: StatCard[] = [
@@ -173,34 +126,5 @@ export class AdminPageComponent {
     { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
     { name: 'Priya Singh', avatar: 'PS', medal: '🥉' },
   ];
-
-  // Actions
-  setActiveTab(tab: string): void {
-    this.activeTab.set(tab);
-  }
-
-  toggleSidebar(): void {
-    this.sidebarOpen.update((v) => !v);
-  }
-
-  // Helper for nav icons
-  getNavIcon(icon: string): string {
-    const icons: Record<string, string> = {
-      grid: '⊞',
-      shield: '🛡',
-      'book-open': '📖',
-      layers: '📚',
-      'file-text': '📄',
-      printer: '🖨',
-      user: '👤',
-      'credit-card': '💳',
-      clipboard: '📋',
-      truck: '🚌',
-      book: '📗',
-      calendar: '📅',
-      list: '📝',
-    };
-    return icons[icon] ?? '•';
-  }
 
 }

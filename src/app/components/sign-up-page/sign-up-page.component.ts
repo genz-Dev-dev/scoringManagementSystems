@@ -84,15 +84,11 @@ export class SignUpPageComponent implements OnInit
   private handleUpdateStatusUser ( id: string, checked: boolean )
   {
     const status = !checked; // 🔥 reverse
-
-    console.log( "checked:", checked );   // true/false
-    console.log( "status:", status );     // reversed value
-
+    // console.log( "checked:", checked );   // true/false
+    // console.log( "status:", status );     // reversed value
     this.signupAdminPageService.updateStatus( id, status ).subscribe( {
       next: ( res ) =>
       {
-        console.log( "API response:", res );
-
         if ( res.success )
         {
           const user = this.userList.find( u => u.id === id );
@@ -217,20 +213,17 @@ export class SignUpPageComponent implements OnInit
   checkPasswordStrength ( password: string )
   {
     let strength = 0;
-
     if ( !password )
     {
       this.passwordStrength = 0;
       this.strengthLabel = 'No password';
       return;
     }
-    if ( password.length >= 6 ) strength++;
+    if ( password.length >= 8 ) strength++;
     if ( password.match( /[A-Z]/ ) ) strength++;
     if ( password.match( /[0-9]/ ) ) strength++;
     if ( password.match( /[^A-Za-z0-9]/ ) ) strength++;
-
     this.passwordStrength = strength;
-
     const labels = [
       'Very Weak',
       'Weak',
@@ -238,40 +231,32 @@ export class SignUpPageComponent implements OnInit
       'Strong',
       'Very Strong'
     ];
-
     this.strengthLabel = labels[ strength ];
   }
-
   getBarColor ( level: number )
   {
-
     if ( this.passwordStrength >= level )
     {
-
       if ( this.passwordStrength <= 1 ) return 'bg-error';
       if ( this.passwordStrength == 2 ) return 'bg-warning';
       if ( this.passwordStrength == 3 ) return 'bg-info';
       if ( this.passwordStrength >= 4 ) return 'bg-success';
 
     }
-
     return 'bg-base-300';
   }
   toggleView ()
   {
     this.showForm = !this.showForm;
   }
-
   openForm ()
   {
     this.showForm = true;
   }
-
   closeForm ()
   {
     this.showForm = false;
   }
-
   RouterToDashboard ( router: string )
   {
     this.router.navigate( [ router ] );

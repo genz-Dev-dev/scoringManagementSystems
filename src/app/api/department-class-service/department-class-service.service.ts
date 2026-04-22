@@ -46,6 +46,14 @@ export class DepartmentClassServiceService
       this.getHttpOption( true )
     );
   }
+  public createSubjects ( data: any ): Observable<any>
+  {
+    return this.httpClient.post<any>(
+      this.API2,
+      data,
+      this.getHttpOption( true )
+    )
+  }
   // create class service
   public createClass ( data: any ): Observable<any>
   {
@@ -73,21 +81,29 @@ export class DepartmentClassServiceService
   // get AllClass 
   public getAllClass (): Observable<any>
   {
-    return this.httpClient.get<any>( this.API, this.getHttpOption( true ) );
+    return this.httpClient.get<any>(
+      this.API
+      , this.getHttpOption( true ) );
   }
 
   public getAllSemster (): Observable<any>
   {
-    return this.httpClient.get<any>( environments.api_url + '/semesters', this.getHttpOption( true ) );
+    return this.httpClient.get<any>(
+      environments.api_url + '/semesters',
+      this.getHttpOption( true ) );
   }
   // get all course
   public getAllCourse (): Observable<any>
   {
-    return this.httpClient.get<any>( environments.api_url + '/courses', this.getHttpOption( true ) );
+    return this.httpClient.get<any>(
+      environments.api_url + '/courses'
+      , this.getHttpOption( true ) );
   }
   // get all subject
   public getAllSubject (): Observable<any>
   {
-    return this.httpClient.get<any>( this.API2, this.getHttpOption( true ) );
+    return this.httpClient.get<any>(
+      this.API2
+      , this.getHttpOption( true ) );
   }
 }

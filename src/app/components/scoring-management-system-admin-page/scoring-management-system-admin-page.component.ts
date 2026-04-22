@@ -23,31 +23,6 @@ interface NavSection
   items: NavItem[];
 }
 
-interface PerformanceBar
-{
-  label: string;
-  passed: number;
-  failed: number;
-}
-
-interface Event
-{
-  day: string;
-  date: number;
-  month: string;
-  badge: string;
-  badgeClass: string;
-  title: string;
-  time: string;
-}
-
-interface Achiever
-{
-  name: string;
-  avatar: string;
-  medal: string;
-}
-
 @Component( {
   selector: 'app-scoring-management-admin',
   standalone: true,
@@ -76,21 +51,10 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
       }, 100 );
     } );
   }
-
-  classes = [
-    'Class 6',
-    'Class 7',
-    'Class 8',
-    'Class 9',
-    'Class 10',
-    'Class 11',
-    'Class 12',
-  ];
-  tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
   // Navigation sections
   navSections: NavSection[] = [
     {
-      title: 'MAIN',
+      title: 'MAIN DASHBOARD',
       items: [ { icon: 'fa-solid fa-chart-bar', label: 'Dashboard', route: '/admin', active: true } ],
     },
     {
@@ -107,56 +71,6 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
       ],
     }
   ];
-  // Performance chart data
-  performance: PerformanceBar[] = [
-    { label: 'Class A', passed: 95, failed: 5 },
-    { label: 'Class B', passed: 88, failed: 12 },
-    { label: 'Class C', passed: 70, failed: 30 },
-    { label: 'Class D', passed: 82, failed: 18 },
-    { label: 'Class E', passed: 98, failed: 2 },
-  ];
-
-  // Upcoming events
-  upcomingEvents: Event[] = [
-    {
-      day: 'Tuesday',
-      date: 6,
-      month: 'Feb',
-      badge: 'Today',
-      badgeClass: 'badge-error text-white',
-      title: 'School President Elections',
-      time: '11:00 Am – 12:30 Pm',
-    },
-    {
-      day: 'Tuesday',
-      date: 9,
-      month: 'Feb',
-      badge: 'In 3 days',
-      badgeClass: 'badge-warning text-white',
-      title: 'Special Guest Lecture',
-      time: '11:00 Am – 12:30 Pm',
-    },
-    {
-      day: 'Tuesday',
-      date: 9,
-      month: 'Feb',
-      badge: 'In 3 days',
-      badgeClass: 'badge-warning text-white',
-      title: 'Webinar on Career Trends for Class 11',
-      time: '01:00 Am – 02:30 Pm',
-    },
-  ];
-  // Top achievers and players
-  topAchievers: Achiever[] = [
-    { name: 'Madhiha Sharma', avatar: 'MS', medal: '🥇' },
-    { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
-    { name: 'Aisha Khan', avatar: 'AK', medal: '🥉' },
-  ];
-  topPlayers: Achiever[] = [
-    { name: 'Madhiha Sharma', avatar: 'MS', medal: '🥇' },
-    { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
-    { name: 'Priya Singh', avatar: 'PS', medal: '🥉' },
-  ];
   // Actions
   setActiveTab ( tab: string ): void
   {
@@ -166,7 +80,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
   {
     this.sidebarOpen.update( ( v ) => !v );
   }
-  logoutAdminPage (): void
+  private handlelogoutAdminPage (): void
   {
     this.myModal.nativeElement.close();
     Swal.fire( {
@@ -179,8 +93,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
       html: `
           <div class="text-lg">
             <p class="text-lg">តើអ្នកពិតជាចង់ចាកចេញពីកម្មវិធីនេះ?</p>
-          </div>
-      `,
+          </div>`,
       color: '#b91c1c',
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',

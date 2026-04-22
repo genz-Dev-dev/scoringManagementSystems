@@ -210,10 +210,19 @@
         <div class="field-row">
             <div class="field">
                 <label for="name">Subject Name</label>
-                <input id="name" type="text" formControlName="name" class="rounded-full"
+                <input id="name" type="text" formControlName="name" class="rounded-full" autocapitalize=""
                     placeholder="e.g. Computer Science" />
             </div>
-            <!-- description -->
+            <!-- departmentId -->
+            <div class="form-control w-full">
+                <label class="label"><span
+                        class="label-text font-bold uppercase text-xs rounded-full">Semester</span></label>
+                <select class="select select-bordered bg-white rounded-full">
+                    @for (department of getAllDepartment; track $index) {
+                    <option [value]="department.id">{{ department.name }}</option>
+                    }
+                </select>
+            </div>
             <div class="field">
                 <label for="description">Description</label>
                 <input id="description" type="text" formControlName="description" class="rounded-full"
@@ -242,8 +251,9 @@
         </div>
         <!-- Buttons -->
         <div class="submit-row">
-            <button type="button" class="btn-cancel" aria-label="Cancel" routerLink="/classes">Cancel</button>
-            <button type="button" class="btn-submit" (click)="handleCreateDepartment()" aria-label="Create Class">
+            <button type="button" (click)="handleCloseSubjectModal()" class="btn-cancel" aria-label="Cancel"
+                routerLink="/classes">Cancel</button>
+            <button type="button" class="btn-submit" (click)="handleCreatesubjects()" aria-label="Create Class">
                 <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                     stroke="white">
                     <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -352,14 +362,14 @@
         </button>
     </div>
     <!-- ADD NEW BRANCH -->
-    <div
+    <div​ (click)="handleSubjectModal()"
         class="border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-slate-50/40 flex flex-col items-center justify-center p-12 text-center group cursor-pointer hover:bg-white hover:border-slate-300 transition-colors">
         <div class="bg-white p-5 rounded-2xl shadow-sm mb-4 group-hover:scale-110 transition-transform">
-            <lucide-icon name="plus" class="w-8 h-8 text-slate-400"></lucide-icon>
+            <i class="fa-solid fa-circle-plus w-8 h-8 text-slate-400"></i>
         </div>
-        <h4 class="font-bold text-slate-600">Add New Branch</h4>
-        <p class="text-xs text-slate-400">Expand the curriculum</p>
-    </div>
+        <h4 class="font-bold text-slate-600">Add More subject</h4>
+        <p class="text-xs text-slate-400">Expand the subject</p>
+    </div​>
 </div>
 }
 }
@@ -470,18 +480,14 @@
                         </span>
                     </td>
                     <!-- Instructor -->
-                    <td class="font-bold text-sm">
-                        {{ course.instructorName }}
-                    </td>
+                    <td class="font-bold text-sm">{{ course.instructorName }}</td>
                     <!-- Schedule (Loop) -->
                     <td>
                         <div *ngFor="let s of course.schedules" class="text-xs">
                             {{ s.dayOfWeek }} {{ s.startTime }}-{{ s.endTime }} (Room {{ s.room }})
                         </div>
                     </td> <!-- Duration -->
-                    <td class="text-xs">
-                        {{ course.startAt }} → {{ course.endAt }}
-                    </td>
+                    <td class="text-xs"> {{ course.startAt }} → {{ course.endAt }} </td>
                     <!-- Action -->
                     <td class="text-right pr-8">
                         <button aria-label="Update Course"
@@ -583,12 +589,12 @@
         <table class="table w-full">
             <thead class="sticky top-0 bg-white z-10">
                 <tr>
-                    <th class="pl-2 ">Name</th>
+                    <th class="pl-2 ">Class Name</th>
                     <th>Department</th>
-                    <th>Created At</th>
-                    <th>Updated</th>
                     <th>Academic Year</th>
                     <th>Generation</th>
+                    <th>Created At</th>
+                    <th>Updated</th>
                     <th class="text-right pr-8">Action</th>
                 </tr>
             </thead>
@@ -604,18 +610,12 @@
                         </div>
                     </td>
                     <td class="font-bold text-sm">{{ class.departmentName }}</td>
+                    <td><span class="text-xs font-medium"> {{ class.academicYear }}</span></td>
+                    <td><span class="text-xs font-medium"> {{ class.generation }}</span></td>
                     <td>
                         <div class="badge badge-success badge-outline text-[9px] px-3 py-3">{{ class.creationAt }}</div>
                     </td>
-                    <td>
-                        <span class="text-xs font-medium"> {{ class.updatedAt }}</span>
-                    </td>
-                    <td>
-                        <span class="text-xs font-medium"> {{ class.academicYear }}</span>
-                    </td>
-                    <td>
-                        <span class="text-xs font-medium"> {{ class.generation }}</span>
-                    </td>
+                    <td><span class="text-xs font-medium"> {{ class.updatedAt }}</span></td>
                     <td class="text-right pr-8">
                         <div class="flex justify-end gap-2">
                             <button type="button" aria-label="View"
@@ -657,7 +657,7 @@
         <!-- <form method="dialog" [formGroup]="formCreateClasses"> -->
         <form method="dialog" [formGroup]="formCreateClass">
             <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                aria-label="Close">✕</button>
+                onclick="my_modal_3.hiddenModal()" aria-label="Close">✕</button>
             <!-- Name -->
             <div class="form-control">
                 <label class="label">
@@ -667,16 +667,13 @@
                     class="input input-bordered w-full rounded-full" />
             </div>
             <!-- Department -->
-            <div class="form-control">
+            <div class="form-control w-full">
                 <label class="label">
-                    <span class="label-text">នាយកដ្ឋាន</span>
-                </label>
-                <select id="department_id" formControlName="departmentId" name="department_id"
-                    class="select select-bordered w-full rounded-full" required>
-                    <option value="" disabled selected>Select Department</option>
-                    <option *ngFor="let dept of getAllDepartment" [value]="dept.id">
-                        {{ dept.name }}
-                    </option>
+                    <span class="label-text font-bold uppercase text-xs rounded-full">នាយកដ្ឋាន</span></label>
+                <select class="select select-bordered bg-white rounded-full" formControlName="departmentId">
+                    @for (dept of getAllDepartment; track $index) {
+                    <option [value]="dept.id">{{ dept.name }}</option>
+                    }
                 </select>
             </div>
             <!-- AcademicYear -->
@@ -759,7 +756,8 @@
         </div>
         <!-- Buttons -->
         <div class="submit-row">
-            <button type="button" class="btn-cancel" aria-label="Cancel" routerLink="/classes">Cancel</button>
+            <button type="button" (click)="closeDepartmentModal()" class="btn-cancel" aria-label="Cancel"
+                routerLink="/classes">Cancel</button>
             <button type="button" class="btn-submit" aria-label="Create Department" (click)="handleCreateDepartment()">
                 <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                     stroke="white">

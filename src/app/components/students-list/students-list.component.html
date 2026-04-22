@@ -126,15 +126,12 @@
                                     <button (click)="updateStatus(student, 'Present')"
                                         [ngClass]="student.status === 'Present' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 bg-transparent'"
                                         class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Present</button>
-
                                     <button (click)="updateStatus(student, 'Absent')"
                                         [ngClass]="student.status === 'Absent' ? 'bg-red-400 text-white shadow-md' : 'text-slate-400 bg-transparent'"
                                         class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Absent</button>
-
                                     <button (click)="updateStatus(student, 'Late')"
                                         [ngClass]="student.status === 'Late' ? 'bg-orange-200 text-orange-800 shadow-md' : 'text-slate-400 bg-transparent'"
                                         class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Late</button>
-
                                     <button
                                         class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold text-slate-400">Excused</button>
                                 </div>

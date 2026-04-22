@@ -30,7 +30,7 @@ interface Role
 
 @Component( {
   selector: 'app-permission-admin-page',
-  imports: [ FormsModule, CommonModule ],
+  imports: [ FormsModule, CommonModule, ReactiveFormsModule ],
   templateUrl: './permission-admin-page.component.html',
   styleUrl: './permission-admin-page.component.scss',
 } )

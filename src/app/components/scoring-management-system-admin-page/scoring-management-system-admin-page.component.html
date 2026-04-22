@@ -53,25 +53,25 @@
       [class.-translate-x-full]="!sidebarOpen()" [class.md:translate-x-0]="true"
       [class.overflow-hidden]="!sidebarOpen()">
       <!-- Logo -->
-      <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10">
+      <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10 hover:cursor-pointer"
+        (click)="onClickRouter('/')">
         <div class="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden object-cover">
           <img
             src="https://imgs.search.brave.com/n73MXi5G8HjiafofL-OtcQ9QYxjQzV-vlYzHQP61AwI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMDUv/MTcwLzkyOC9zbWFs/bC9lZHVjYXRpb24t/bG9nby1kZXNpZ24t/Zm9yLXVuaXZlcnNp/dHktYW5kLWNvbGxl/Z2Utc2Nob29sLWZy/ZWUtdmVjdG9yLmpw/Zw"
             alt="university">
         </div>
 
-        <div class="overflow-hidden transition-all duration-300" (click)="onClickRouter('/')"
-          [class.w-0]="!sidebarOpen()">
-          <p class="text-sm truncate font-bold leading-tight hover:cursor-pointer">សកលវិទ្យាល័យសម្តេចសង្ឃរាជ បួរ គ្រី
+        <div class="overflow-hidden transition-all duration-300" [class.w-0]="!sidebarOpen()">
+          <p class="text-sm truncate font-bold leading-tight">សកលវិទ្យាល័យសម្តេចសង្ឃរាជ បួរ គ្រី
           </p>
-          <p class="text-sm font-bold leading-tight hover:cursor-pointer">Bur Kari University</p>
+          <p class="text-sm font-bold leading-tight">Bur Kari University</p>
         </div>
       </div>
       <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
         <div *ngFor="let section of navSections; trackBy: trackByTitle">
           @if(sidebarOpen()){
-          <p class="text-[10px] font-semibold text-blue-300/70 tracking-widest px-2 mb-1">
+          <p class="text-[10px] font-semibold text-gray-300/70 tracking-widest px-2 mb-1">
             {{ section.title }}
           </p>
           }
@@ -176,7 +176,7 @@
                       <i class="fa-solid fa-lock"></i> Forgot Password
                     </button>
                     <!-- Logout -->
-                    <button class="btn btn-error w-full rounded-full" (click)="logoutAdminPage()">
+                    <button class="btn btn-error w-full rounded-full" (click)="handlelogoutAdminPage()">
                       <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout Account
                     </button>
                   </div>
@@ -187,7 +187,7 @@
         </div>
       </header>
       <!-- Page Body -->
-      <main class="flex-1 overflow-y-auto p-4 space-y-4">
+      <main class="flex-1 overflow-y-auto p-3 space-y-4">
         <router-outlet></router-outlet>
       </main>
       <app-footer-admin-page></app-footer-admin-page>

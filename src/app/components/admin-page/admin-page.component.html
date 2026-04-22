@@ -8,22 +8,16 @@
         <div class="card-body flex-row items-center gap-4 p-6">
             <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl flex-shrink-0"
                 [ngClass]="stat.bg">
-                <!-- {{ stat.icon }} -->
                 <i [class]="stat.icon"></i>
             </div>
             <div>
-                <p class="text-xs text-gray-600 font-medium">
-                    {{ stat.label }}
-                </p>
-                <p class="text-2xl font-bold text-gray-800">
-                    {{ stat.value.toLocaleString() }}
-                </p>
+                <p class="text-xs text-gray-600 font-medium">{{ stat.label }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ stat.value.toLocaleString() }}</p>
             </div>
         </div>
     </div>
     }
 </div>
-
 <!-- Dashboard Section + Upcoming Events -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
     <!-- Dashboard Main Panel -->
@@ -40,7 +34,6 @@
                     }
                 </select>
             </div>
-
             <!-- Tab Buttons -->
             <div class="flex flex-wrap gap-1 border-b border-gray-100 pb-3">
                 @for (tab of tabs; track tab) {
@@ -51,16 +44,11 @@
                 </button>
                 }
             </div>
-
             <!-- Bar Chart -->
             @if (activeTab() === "Results") {
             <div>
-                <h3 class="text-base font-semibold text-blue-600 text-center mb-4">
-                    Students Performance
-                </h3>
-
+                <h3 class="text-base font-semibold text-blue-600 text-center mb-4">Students Performance</h3>
                 <div class="relative flex flex-wrap gap-4 px-4">
-                    <!-- Y-axis labels -->
                     <div
                         class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-gray-600 pb-6">
                         <span>100%</span>
@@ -70,7 +58,6 @@
                         <span>15%</span>
                         <span>0%</span>
                     </div>
-
                     <!-- Bars -->
                     <div class="flex flex-1 flex-wrap gap-4 justify-around w-full mt-6">
                         @for (bar of performance; track bar.label) {
@@ -85,7 +72,6 @@
                         }
                     </div>
                 </div>
-
                 <!-- Legend -->
                 <div class="flex flex-wrap items-center gap-6 justify-center mt-4">
                     <div class="flex items-center gap-2 text-sm text-gray-600">
@@ -103,7 +89,6 @@
                 Select "Results" tab to view performance chart.
             </div>
             }
-
             <!-- Top Achievers & Top Players -->
             <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                 <!-- Top Achievers -->
@@ -119,15 +104,12 @@
                                     <span>{{ a.avatar }}</span>
                                 </div>
                             </div>
-                            <span class="text-sm text-gray-700 flex-1">{{
-                                a.name
-                                }}</span>
+                            <span class="text-sm text-gray-700 flex-1">{{ a.name}}</span>
                             <span class="text-base">{{ a.medal }}</span>
                         </div>
                         }
                     </div>
                 </div>
-
                 <!-- Top Players -->
                 <div>
                     <h4 class="font-semibold text-blue-600 mb-3 text-sm">
@@ -141,9 +123,7 @@
                                     <span>{{ p.avatar }}</span>
                                 </div>
                             </div>
-                            <span class="text-sm text-gray-700 flex-1">{{
-                                p.name
-                                }}</span>
+                            <span class="text-sm text-gray-700 flex-1">{{ p.name}}</span>
                             <span class="text-base">{{ p.medal }}</span>
                         </div>
                         }
@@ -152,32 +132,24 @@
             </div>
         </div>
     </div>
-
     <!-- Upcoming Events -->
     <div class="card bg-white shadow-sm border border-gray-100">
         <div class="card-body p-5">
             <h2 class="text-xl font-bold text-gray-800 mb-4">
                 Upcoming Events
             </h2>
-
             <div class="space-y-4">
                 @for (event of upcomingEvents; track event.title) {
                 <div class="rounded-xl bg-gray-50 p-3 border border-gray-100">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-medium text-gray-600">{{
-                            event.day
-                            }}</span>
-                        <span class="badge badge-sm {{ event.badgeClass }}">{{
-                            event.badge
-                            }}</span>
+                        <span class="text-xs font-medium text-gray-600">{{event.day}}</span>
+                        <span class="badge badge-sm {{ event.badgeClass }}">{{event.badge}}</span>
                     </div>
                     <div class="flex gap-3">
                         <div
                             class="flex flex-col items-center justify-center w-12 h-12 bg-yellow-400 rounded-xl flex-shrink-0 text-center">
                             <span class="text-lg font-bold text-gray-800 leading-none">{{ event.date }}</span>
-                            <span class="text-[10px] text-gray-700">{{
-                                event.month
-                                }}</span>
+                            <span class="text-[10px] text-gray-700">{{event.month}}</span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-semibold text-gray-800 leading-snug">
@@ -196,7 +168,6 @@
                 </div>
                 }
             </div>
-
             <button class="btn btn-ghost btn-sm w-full mt-3 text-blue-500 hover:text-blue-700">
                 View More
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"

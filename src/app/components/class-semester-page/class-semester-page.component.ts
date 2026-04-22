@@ -65,8 +65,9 @@ export class ClassSemesterPageComponent implements OnInit
     } )
 
     this.formCreateSubject = this.fb.group( {
-      name: [ '', Validators.required ],
+      departmentId: [ '', Validators.required ],
       image: [],
+      name: [ '', Validators.required ],
       description: [ '', Validators.required ]
     } )
   }
@@ -168,7 +169,6 @@ export class ClassSemesterPageComponent implements OnInit
   // handle create department
   private handleCreateDepartment ()
   {
-    console.log( "formCreateDepartment", this.formCreateDepartment.value );
     if ( this.formCreateDepartment.invalid ) return;
 
     const formData = new FormData();
@@ -183,6 +183,52 @@ export class ClassSemesterPageComponent implements OnInit
     }
 
     this.departmentClassService.createDepartment( formData ).subscribe( {
+      next: ( res ) =>
+      {
+        Swal.fire( {
+          icon: 'success',
+          timer: 2500,
+          iconColor: '#10b981',
+          html: `<p style="font-size:16px;"><span style="font-weight: bold;color: #10b981;">${ res.message }</span></p>`,
+          showConfirmButton: false,
+        } );
+
+        this.handleGetAllDepartment();
+        this.formCreateDepartment.reset();
+        this.closeDepartmentModal();
+      },
+
+      error: ( err ) =>
+      {
+        Swal.fire( {
+          icon: 'warning',
+          timer: 2500,
+          iconColor: '#b91c1c',
+          html: `<p style="font-size:16px;">មិនអាច<span style="font-weight: bold;color: #b91c1c;">បង្កើតថ្នាក់</span>បានទេ!</p>`,
+          showConfirmButton: false,
+        } );
+      }
+    } );
+  }
+
+  // handle create subject
+  private handleCreatesubjects ()
+  {
+    console.log( "formCreateDepartment", this.formCreateSubject.value );
+    if ( this.formCreateSubject.invalid ) return;
+
+    const formData = new FormData();
+
+    formData.append( 'name', this.formCreateSubject.get( 'name' )?.value );
+    formData.append( 'description', this.formCreateSubject.get( 'description' )?.value );
+    formData.append( 'departmentId', this.formCreateSubject.get( 'departmentId' )?.value );
+    const imageFile = this.formCreateSubject.get( 'image' )?.value;
+    if ( imageFile )
+    {
+      formData.append( 'image', imageFile );
+    }
+
+    this.departmentClassService.createSubjects( formData ).subscribe( {
       next: ( res ) =>
       {
         Swal.fire( {
@@ -245,6 +291,7 @@ export class ClassSemesterPageComponent implements OnInit
           showConfirmButton: false,
         } );
         this.handleGetAllClass();
+        this.formCreateClass.reset();
       },
       error: ( err ) =>
       {
@@ -302,6 +349,10 @@ export class ClassSemesterPageComponent implements OnInit
   closeDepartmentModal ()
   {
     this.modalCreateDepartment = false;
+  }
+  handleCloseSubjectModal ()
+  {
+    this.modalCreateSubject = false;
   }
   handleSubjectModal ()
   {

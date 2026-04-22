@@ -60,13 +60,11 @@ export class SigninPageComponent
       this.strengthLabel = 'No password';
       return;
     }
-    if ( password.length >= 6 ) strength++;
+    if ( password.length >= 8 ) strength++;
     if ( password.match( /[A-Z]/ ) ) strength++;
     if ( password.match( /[0-9]/ ) ) strength++;
     if ( password.match( /[^A-Za-z0-9]/ ) ) strength++;
-
     this.passwordStrength = strength;
-
     const labels = [
       'Very Weak',
       'Weak',
@@ -80,12 +78,10 @@ export class SigninPageComponent
   {
     if ( this.passwordStrength >= level )
     {
-
       if ( this.passwordStrength <= 1 ) return 'bg-error';
       if ( this.passwordStrength == 2 ) return 'bg-warning';
       if ( this.passwordStrength == 3 ) return 'bg-info';
       if ( this.passwordStrength >= 4 ) return 'bg-success';
-
     }
     return 'bg-base-300';
   }
@@ -99,7 +95,6 @@ export class SigninPageComponent
     this.signinAdminPage.signinAdminPage( this.signinForm.value ).subscribe( {
       next: ( res ) =>
       {
-        // console.log("res", res);
         if ( res )
         {
           const userData = res.data;

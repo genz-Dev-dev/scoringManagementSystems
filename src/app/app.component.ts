@@ -19,10 +19,8 @@ export class AppComponent implements OnInit
 {
   title = 'Angular Quick Start';
   img!: CloudinaryImage;
-
   ngOnInit ()
   {
-
     // Create a Cloudinary instance and set your cloud name.
     const cld = new Cloudinary( {
       cloud: {
