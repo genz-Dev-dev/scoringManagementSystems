@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
+import Swal from 'sweetalert2';
 interface StatCard
 {
   icon: string;
@@ -42,12 +44,14 @@ interface Achiever
   templateUrl: './admin-page.component.html',
   styleUrl: './admin-page.component.scss'
 } )
-export class AdminPageComponent
+export class AdminPageComponent implements OnInit
 {
   // Filters and tabs
   selectedClass = signal( 'Class 9' );
   activeTab = signal( 'Results' );
-
+  getAllStudent: any[] = [];
+  countStudent: number = 0;
+  errorResponse: any = [];
   // Dropdown options
   classes = [
     'Class 6',
@@ -59,6 +63,35 @@ export class AdminPageComponent
     'Class 12',
   ];
   tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
+
+
+  constructor( private studentService: StudentsServiceService, private router: Router ) { }
+
+  ngOnInit (): void
+  {
+    this.handleGetAllStudent();
+  }
+
+  private handleGetAllStudent ()
+  {
+    this.studentService.getAllStudents().subscribe( {
+      next: ( Response ) =>
+      {
+        this.getAllStudent = Response.content;
+        this.countStudent = Response.content.length;
+        this.stats = [
+          { ...this.stats[ 0 ], value: this.countStudent },
+          { ...this.stats[ 1 ], value: 0 },
+          { ...this.stats[ 2 ], value: 0 },
+          { ...this.stats[ 3 ], value: 0 }
+        ];
+      },
+      error: ( error ) =>
+      {
+        this.errorResponse = error.message;
+      }
+    } )
+  }
 
   // Stat cards
   stats: StatCard[] = [

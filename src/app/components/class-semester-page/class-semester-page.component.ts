@@ -89,6 +89,7 @@ export class ClassSemesterPageComponent implements OnInit
       {
         this.getAllCourse = Response.content;
         this.countCourse = Response.content.length;
+        // console.log( this.getAllCourse )
       },
       error: ( err ) =>
       {
@@ -239,18 +240,19 @@ export class ClassSemesterPageComponent implements OnInit
           showConfirmButton: false,
         } );
 
-        this.handleGetAllDepartment();
-        this.formCreateDepartment.reset();
-        this.closeDepartmentModal();
+        this.handleGellAllSubject();
+        this.formCreateSubject.reset();
+        this.handleCloseSubjectModal();
       },
 
       error: ( err ) =>
       {
+        this.errorResponse = err.message
         Swal.fire( {
           icon: 'warning',
           timer: 2500,
           iconColor: '#b91c1c',
-          html: `<p style="font-size:16px;">មិនអាច<span style="font-weight: bold;color: #b91c1c;">បង្កើតថ្នាក់</span>បានទេ!</p>`,
+          html: `<p style="font-size:16px;">មិនអាច<span style="font-weight: bold;color: #b91c1c;">${ ( this.errorResponse ) }</span></p>`,
           showConfirmButton: false,
         } );
       }
@@ -263,6 +265,22 @@ export class ClassSemesterPageComponent implements OnInit
     if ( file )
     {
       this.formCreateDepartment.get( 'image' )?.setValue( file );
+      const reader = new FileReader();
+      reader.onload = () =>
+      {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL( file );
+    }
+  }
+
+  // handle file for upload  subject
+  private handleOnFileChangeSubject ( event: Event )
+  {
+    const file = ( event.target as HTMLInputElement ).files?.[ 0 ];
+    if ( file )
+    {
+      this.formCreateSubject.get( 'image' )?.setValue( file );
       const reader = new FileReader();
       reader.onload = () =>
       {
@@ -295,7 +313,6 @@ export class ClassSemesterPageComponent implements OnInit
       },
       error: ( err ) =>
       {
-        console.log( "ERROR:", err );
         Swal.fire( {
           icon: 'warning',
           timer: 2500,

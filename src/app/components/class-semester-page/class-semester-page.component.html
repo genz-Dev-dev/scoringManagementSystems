@@ -216,10 +216,10 @@
             <!-- departmentId -->
             <div class="form-control w-full">
                 <label class="label"><span
-                        class="label-text font-bold uppercase text-xs rounded-full">Semester</span></label>
-                <select class="select select-bordered bg-white rounded-full">
+                        class="label-text font-bold uppercase text-xs rounded-full">department</span></label>
+                <select class="select select-bordered bg-white rounded-full" formControlName="departmentId">
                     @for (department of getAllDepartment; track $index) {
-                    <option [value]="department.id">{{ department.name }}</option>
+                    <option value="{{department.id}}">{{ department.name }}</option>
                     }
                 </select>
             </div>
@@ -246,7 +246,7 @@
                 <div class="upload-label">Click to upload</div>
                 <div class="upload-sub">PNG or JPG, up to 5 MB</div>
                 <input type="file" id="fileInput" class="hidden-input" accept=".png,.jpg,.jpeg"
-                    (change)="handleOnFileChange($event)" />
+                    (change)="handleOnFileChangeSubject($event)" />
             </label>
         </div>
         <!-- Buttons -->
@@ -258,7 +258,7 @@
                     stroke="white">
                     <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                Create class
+                Create Subject
             </button>
         </div>
     </form>
@@ -432,8 +432,9 @@
             </div>
             <select class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
                 <option value="All" selected>Department: All</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Mathematics">Mathematics</option>
+                @for (item of getAllDepartment; track $index) {
+                <option value="{{item.id}}">{{item.name}}</option>
+                }
             </select>
         </div>
     </div>
@@ -443,9 +444,10 @@
             <!-- 🔷 TABLE HEADER -->
             <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
                 <tr>
-                    <th class="pl-8 py-4">Course</th>
+                    <th class="pl-8 py-4">Instructor</th>
+                    <th>Course</th>
                     <th>Subject</th>
-                    <th>Instructor</th>
+                    <th>Semester</th>
                     <th>Schedule</th>
                     <th>Duration</th>
                     <th class="text-right pr-8">Action</th>
@@ -455,21 +457,13 @@
             <tbody>
                 <tr *ngFor="let course of getAllCourse"
                     class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
-
+                    <!-- Instructor -->
+                    <td class="font-bold text-sm me-4">{{ course.instructorName }}</td>
                     <!-- Course Info -->
                     <td class="py-5 pl-8">
                         <div class="flex items-center gap-4">
-                            <div
-                                class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[10px]">
-                                {{ course.subjectName }}
-                            </div>
-                            <div>
-                                <div class="font-bold text-sm">
-                                    {{ course.name }}
-                                </div>
-                                <div class="text-[10px] italic text-slate-400">
-                                    {{ course.semesterName }}
-                                </div>
+                            <div class="font-bold text-sm">
+                                {{ course.name }}
                             </div>
                         </div>
                     </td>
@@ -479,15 +473,19 @@
                             {{ course.subjectName }}
                         </span>
                     </td>
-                    <!-- Instructor -->
-                    <td class="font-bold text-sm">{{ course.instructorName }}</td>
+                    <td>
+                        <span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">
+                            {{ course.semesterName }}
+                        </span>
+                    </td>
                     <!-- Schedule (Loop) -->
                     <td>
                         <div *ngFor="let s of course.schedules" class="text-xs">
                             {{ s.dayOfWeek }} {{ s.startTime }}-{{ s.endTime }} (Room {{ s.room }})
                         </div>
-                    </td> <!-- Duration -->
-                    <td class="text-xs"> {{ course.startAt }} → {{ course.endAt }} </td>
+                    </td>
+                    <!-- Duration -->
+                    <td class="text-sm text-blue-600"> {{ course.startAt }} → {{ course.endAt }} </td>
                     <!-- Action -->
                     <td class="text-right pr-8">
                         <button aria-label="Update Course"

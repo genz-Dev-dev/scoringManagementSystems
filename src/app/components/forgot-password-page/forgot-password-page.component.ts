@@ -37,15 +37,11 @@ export class ForgotPasswordPageComponent implements OnInit
       confirmPassword: [ '', [ Validators.required ] ],
     } );
   }
-
   ngOnInit (): void
   {
-
     const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
-
     this.currentUserToekn = user.token;
   }
-
   private handleSendOTP ()
   {
     if ( this.forgotPasswordForm.invalid )
@@ -62,11 +58,9 @@ export class ForgotPasswordPageComponent implements OnInit
       error: ( err ) =>
       {
         console.error( err );
-        alert( err.error?.message || 'Failed to send OTP ' );
       }
     } );
   }
-
   private handleVerifyOTP ()
   {
     if ( this.otpForm.invalid ) return alert( 'Enter OTP' );
@@ -76,21 +70,18 @@ export class ForgotPasswordPageComponent implements OnInit
       error: err => alert( err.error.message || 'Invalid OTP' )
     } );
   }
-
   private changePassword ()
   {
     if ( this.changePasswordForm.invalid )
     {
       return alert( 'Please enter a valid password' );
     }
-
     const { newPassword, confirmPassword } = this.changePasswordForm.value;
 
     if ( newPassword !== confirmPassword )
     {
       return alert( 'Passwords do not match' );
     }
-
     this.signinService.changePassword( this.currentUserToekn, newPassword )
       .subscribe( {
         next: () =>

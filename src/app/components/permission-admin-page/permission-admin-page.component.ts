@@ -43,6 +43,7 @@ export class PermissionAdminPageComponent implements OnInit
   permissionList: any[] = [];
   ModalPermission = signal( false );
   currentUserRole: string = '';
+  permission: any[] = [ "READ", "WRITE", "UPDATE", "DETELE" ]
   constructor( private fb: FormBuilder, private router: Router, private rolePermissionService: RolePermissionServiceService )
   {
     this.permissionForm = this.fb.group( {
