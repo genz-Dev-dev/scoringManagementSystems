@@ -63,7 +63,7 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
         { icon: 'fa-solid fa-user-shield', label: 'Permissions Roles', route: '/permissions' },
         { icon: 'fa-solid fa-user-plus', label: 'Create Accounts', route: '/signup' },
         { icon: 'fa-solid fa-people-roof', label: 'Academic Programs', route: '/class-semester' },
-        { icon: 'fa-solid fa-user', label: 'Student Reports', route: '/student-management' },
+        { icon: 'fa-solid fa-list-check', label: 'Student Reports', route: '/student-management' },
         { icon: 'fa-solid fa-cloud-arrow-up', label: 'Upload Scores', route: '/upload-score' },
         { icon: 'fas fa-chart-bar', label: 'Score Overview', route: '/list-score' },
         { icon: 'fa-solid fa-list-check', label: 'Attendance', route: '/students' },
