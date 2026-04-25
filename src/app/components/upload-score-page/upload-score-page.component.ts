@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Validator } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
 import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 interface StudentScore
@@ -13,7 +15,7 @@ interface StudentScore
 }
 @Component( {
   selector: 'app-upload-score-page',
-  imports: [],
+  imports: [ ReactiveFormsModule ],
   templateUrl: './upload-score-page.component.html',
   styleUrl: './upload-score-page.component.scss',
 } )
@@ -21,12 +23,15 @@ export class UploadScorePageComponent implements OnInit
 {
 
   classes: any[] = [];
-  courses: any[] = [];
+  getAllsubject: any[] = [];
   semesters: any[] = [];
   department: any = [];
-  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService, private studentService: StudentsServiceService )
+  formInputClassId: FormGroup;
+  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService, private studentService: StudentsServiceService, private fb: FormBuilder )
   {
-
+    this.formInputClassId = this.fb.group( {
+      classId: [ '', Validators.required ]
+    } )
   }
 
   ngOnInit (): void
@@ -34,7 +39,7 @@ export class UploadScorePageComponent implements OnInit
 
     this.handleGetClass();
     this.handleGetAllSemester();
-    this.handleGetAllCourse();
+    this.handleGetAllSubject();
     this.handleGellDepartment();
     this.handleGetAllStudent();
   }
@@ -54,6 +59,20 @@ export class UploadScorePageComponent implements OnInit
     { id: 'AA-2024-145', name: 'Beatrice Cho', score: 98, grade: 'A+' },
 
   ];
+
+  public handlefilterStudentbyClassId ()
+  {
+    if ( this.formInputClassId.invalid ) return;
+    this.studentService.filterStudentByClassId( this.formInputClassId.value ).subscribe( {
+      next: ( reponse: any ) =>
+      {
+        this.getAllStudent = reponse.data;
+      }, error: ( erorr ) =>
+      {
+        this.errorResponse = erorr.message;
+      }
+    } )
+  }
   // handleGetAllClass
   private handleGetClass ()
   {
@@ -64,7 +83,7 @@ export class UploadScorePageComponent implements OnInit
       },
       error: ( error ) =>
       {
-        console.log( "errorResponse", error );
+        this.errorResponse = error.message;
       }
     } )
   }
@@ -78,21 +97,21 @@ export class UploadScorePageComponent implements OnInit
       },
       error: ( error ) =>
       {
-        console.log( "errorResponse", error );
+        this.errorResponse = error.message;
       }
     } )
   }
   // handleGetAllCourse
-  private handleGetAllCourse ()
+  private handleGetAllSubject ()
   {
-    this.departmentClassService.getAllCourse().subscribe( {
+    this.departmentClassService.getAllSubject().subscribe( {
       next: ( Response ) =>
       {
-        this.courses = Response.content;
+        this.getAllsubject = Response.data;
       },
       error: ( errorResponse ) =>
       {
-        console.log( "errorResponse", errorResponse );
+        this.errorResponse = errorResponse.message;
       }
     } )
   }
@@ -106,7 +125,7 @@ export class UploadScorePageComponent implements OnInit
       },
       error ( errorResponse )
       {
-        console.log( "errorResponse", errorResponse );
+        this.errorResponse = errorResponse.message;
       }
     } )
   }
@@ -119,11 +138,9 @@ export class UploadScorePageComponent implements OnInit
       next: ( Response ) =>
       {
         this.getAllStudent = Response.content;
-        // console.log( "Response", this.getAllStudent );
       }, error: ( erorr ) =>
       {
         this.errorResponse = erorr.message;
-        console.log( "Error Response", this.errorResponse );
       }
     } )
 

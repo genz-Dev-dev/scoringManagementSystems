@@ -100,5 +100,9 @@ export class StudentsServiceService
   //   return this.fetchWithCache<any>(this.API1, `classesCache_${status}`, params);
   // }
 
+  public filterStudentByClassId ( id: String )
+  {
+    return this.httpClient.post( this.API + '/filter', id, this.getHttpOption( true ) )
+  }
 
 }

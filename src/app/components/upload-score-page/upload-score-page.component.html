@@ -5,46 +5,51 @@
         CSV/Excel or enter grades manually into the ledger below.</p>
 </header>
 
-<div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
-    <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Department</span></label>
-        <select class="select select-bordered bg-white rounded-full">
-            @for (department of department; track $index) {
-            <option [value]="department.id">{{ department.name }}</option>
-            }
-        </select>
+<form [formGroup]="formInputClassId">
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-10">
+
+        <div class="form-control w-full">
+            <label class="label"><span
+                    class="label-text font-bold uppercase text-xs rounded-full">Department</span></label>
+            <select class="select select-bordered bg-white rounded-full">
+                @for (department of department; track $index) {
+                <option [value]="department.id">{{ department.name }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-control w-full">
+            <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Class</span></label>
+            <select class="select select-bordered bg-white rounded-full" formControlName="classId">
+                @for (class of classes; track $index) {
+                <option [value]="class.id">{{ class.name }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-control w-full">
+            <label class="label"><span class="label-text font-bold uppercase text-xs">Subject</span></label>
+            <select class="select select-bordered bg-white rounded-full">
+                @for (subject of getAllsubject; track $index) {
+                <option [value]="subject.id">{{ subject.name }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-control w-full">
+            <label class="label"><span
+                    class="label-text font-bold uppercase text-xs rounded-full">Semester</span></label>
+            <select class="select select-bordered bg-white rounded-full">
+                @for (semester of semesters; track $index) {
+                <option [value]="semester.id">{{ semester.name }}</option>
+                }
+            </select>
+        </div>
+        <div class="form-controll w-full mt-7">
+            <button aria-label="Filter" type="submit" (click)="handlefilterStudentbyClassId()"
+                class="btn btn-outline-primary bg-primary border-primary px-10 text-white rounded-lg"><i
+                    class="fa-solid fa-filter"></i>
+                Filter</button>
+        </div>
     </div>
-    <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Class</span></label>
-        <select class="select select-bordered bg-white rounded-full">
-            @for (class of classes; track $index) {
-            <option [value]="class.id">{{ class.name }}</option>
-            }
-        </select>
-    </div>
-    <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs">Course</span></label>
-        <select class="select select-bordered bg-white rounded-full">
-            @for (course of courses; track $index) {
-            <option [value]="course.id">{{ course.name }}</option>
-            }
-        </select>
-    </div>
-    <div class="form-control w-full">
-        <label class="label"><span class="label-text font-bold uppercase text-xs rounded-full">Semester</span></label>
-        <select class="select select-bordered bg-white rounded-full">
-            @for (semester of semesters; track $index) {
-            <option [value]="semester.id">{{ semester.name }}</option>
-            }
-        </select>
-    </div>
-    <div class="form-controll w-full mt-6">
-        <button aria-label="Filter"
-            class="btn btn-outline-primary bg-primary border-primary px-10 text-white rounded-lg"><i
-                class="fa-solid fa-filter"></i>
-            Filter</button>
-    </div>
-</div>
+</form>
 
 <div class="flex flex-col lg:flex-row gap-8">
 
@@ -104,16 +109,25 @@
                 </thead>
                 <tbody>
                     @for(student of getAllStudent; track $index) {
+                    @if (students) {
 
                     <tr class="hover:bg-slate-50 border-b border-slate-50">
                         <td class="font-semibold text-sm text-slate-700">{{student.khFirstName +' '+
                             student.khLastName}}
                         </td>
                         <td class="font-semibold text-slate-700">{{student.enFirstName +' '+ student.enLastName}}</td>
-                        <td class="font-semibold text-slate-700"> {{student.gender}}
+                        <td class="font-semibold text-slate-700"> {{student.gender == 'M' ? 'Male' : student.gender ==
+                            'F' ? 'Female' : 'Other'}}
                         </td>
                         <td class="font-semibold text-slate-700">
                             {{student.studentCode}}
+                        </td>
+                    </tr>
+                    }
+                    } @empty {
+                    <tr>
+                        <td colspan="4" class="text-center text-gray-400 py-4">
+                            No students found
                         </td>
                     </tr>
                     }

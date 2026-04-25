@@ -1,17 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface LogEntry
-{
-  timestamp: string;
-  module: string;
-  action: string;
-  status: string;
-  statusCode: string;
-  requestId: string;
-  statusClass: string;
-  moduleClass: string;
-}
+import { AuditLogServiceService } from 'src/app/api/audit-log-service/audit-log-service.service';
+import { Router } from '@angular/router';
 
 @Component( {
   selector: 'app-system-log-page',
@@ -20,13 +10,54 @@ interface LogEntry
   templateUrl: './system-log-page.component.html',
   styleUrls: [ './system-log-page.component.scss' ],
 } )
-export class SystemLogPageComponent 
+export class SystemLogPageComponent implements OnInit
 {
 
-  logs: LogEntry[] = [
-    { timestamp: '2023-10-24 16:01:58:02', module: 'SCORE ENGINE', action: 'CALCULATE_GPA_BATCH', status: '200 OK', statusCode: 'success', requestId: 'req_0021b_calc', statusClass: 'text-success', moduleClass: 'badge-ghost' },
-    { timestamp: '2023-10-24 16:00:01:12', module: 'USER MODULE', action: 'PERMISSION_DENIED_EDIT', status: '403 FORBIDDEN', statusCode: 'error', requestId: 'req_1102c_user', statusClass: 'text-error', moduleClass: 'badge-error' },
-    { timestamp: '2023-10-24 15:58:12:01', module: 'CURRICULUM', action: 'SYLLABUS_UPDATE_Pushed', status: '201 CREATED', statusCode: 'success', requestId: 'req_4456d_curr', statusClass: 'text-success', moduleClass: 'badge-primary' },
-    { timestamp: '2023-10-24 15:56:33:45', module: 'AUTHENTICATION', action: 'MFA_VERIFICATION_INIT', status: '102 PENDING', statusCode: 'warning', requestId: 'req_2268e_auth', statusClass: 'text-info', moduleClass: 'badge-info' },
-  ];
+  getAllAuditLog: any[] = [];
+
+
+  constructor( private auditLogService: AuditLogServiceService, private router: Router ) { }
+
+  ngOnInit (): void
+  {
+    this.handleGetAllAuditLog();
+  }
+
+  private handleGetAllAuditLog ()
+  {
+    this.auditLogService.getAllAuditLogs().subscribe( {
+      next: ( Response ) =>
+      {
+        this.getAllAuditLog = Response;
+        console.log( this.getAllAuditLog );
+      }
+    } )
+  }
+
+  formatValue ( value: any ): string
+  {
+    if ( value === null || value === undefined ) return 'NA';
+
+    let str = value.toString();
+
+    // Clean Hibernate proxy garbage
+    if ( str.includes( 'HibernateProxy' ) || str.includes( ':REF' ) )
+    {
+      str = str.replace( 'HibernateProxy', '' ).replace( ':REF', '' );
+    }
+
+    // Hide long tokens (JWT, etc.)
+    if ( str.length > 50 )
+    {
+      return str.substring( 0, 30 ) + '...';
+    }
+
+    return str;
+  }
+
+  handleRefreshAuditLogPage ()
+  {
+    window.location.reload();
+    this.handleGetAllAuditLog();
+  }
 }

@@ -1,124 +1,110 @@
-<header class="mb-8">
-	<h1 class="text-3xl font-bold">System Activity Monitoring</h1>
-	<div class="flex items-center gap-3 mt-2">
-		<span class="badge badge-success gap-2 text-white font-semibold py-3">SYSTEM HEALTHY</span>
-		<span class="text-sm text-slate-400 font-medium">Last updated: 42 seconds ago</span>
-	</div>
-</header>
-
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-
-	<div class="card bg-white shadow-sm border border-slate-100 lg:col-span-2">
-		<div class="card-body">
-			<div class="flex justify-between items-start">
-				<div>
-					<h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest">API Throughput</h2>
-					<div class="flex items-baseline gap-2 mt-2">
-						<span class="text-4xl font-black">12,482</span>
-						<span class="text-success text-sm font-bold">+4.2%</span>
-					</div>
-				</div>
-				<div class="flex gap-2">
-					<span class="badge badge-ghost text-[10px] font-bold">Live View</span>
-					<button class="btn btn-ghost btn-xs">⋮</button>
-				</div>
-			</div>
-
-			<div class="flex items-end justify-between h-32 gap-1 mt-4">
-				<div class="bg-slate-100 w-full h-1/2 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-3/4 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-2/3 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-1/3 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-1/2 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-5/6 rounded-t-sm"></div>
-				<div class="bg-slate-100 w-full h-2/3 rounded-t-sm"></div>
-				<div class="bg-blue-400 w-full h-full rounded-t-sm shadow-lg shadow-blue-100"></div>
-			</div>
-		</div>
-	</div>
-
-	<div class="card bg-slate-900 text-white shadow-xl">
-		<div class="card-body justify-between">
-			<div>
-				<h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Critical Warnings</h2>
-				<span class="text-6xl font-black block mt-2">02</span>
-			</div>
-
-			<div class="space-y-4">
-				<div class="bg-slate-800 p-3 rounded-lg border-l-4 border-success">
-					<p class="text-[10px] font-bold text-slate-400 uppercase">Auth Latency Peak</p>
-					<progress class="progress progress-success w-full h-1 mt-2" value="40" max="100"></progress>
-				</div>
-				<button class="btn btn-info btn-block no-animation text-slate-900 font-bold uppercase tracking-wide">
-					Run Diagnosis
-				</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="card bg-white shadow-sm border border-slate-100 overflow-hidden">
-	<div class="p-6 flex justify-between items-center border-b border-slate-50">
-		<h2 class="font-bold text-lg">Recent Logs</h2>
-		<div class="flex gap-2">
-			<button class="btn btn-sm btn-ghost bg-slate-100 border-none normal-case">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-					stroke="currentColor">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-						d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+<div class="overflow-x-auto bg-white p-2 rounded">
+	<div class="flex gap-5 mb-2 justify-end">
+		<button class="btn btn-success" (click)="handleRefreshAuditLogPage()"><i class="fa-solid fa-arrows-rotate"></i>
+			Refresh
+		</button>
+		<!-- Search -->
+		<div class="relative w-full max-w-sm">
+			<label class="input input-bordered flex items-center gap-1 rounded-full">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2">
+					<circle cx="11" cy="11" r="8" />
+					<path d="m21 21-4.35-4.35" />
 				</svg>
-				Filter
-			</button>
-			<button class="btn btn-sm bg-slate-900 text-white border-none normal-case">Export CSV</button>
+				<input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
+			</label>
 		</div>
 	</div>
+	<table class="table table-zebra w-full text-xs mt-4">
+		<thead class="bg-slate-50 text-slate-400 tracking-widest">
+			<tr>
+				<th>Number</th>
+				<th>Time</th>
+				<th>Table</th>
+				<th>Status</th>
+				<th>New Data</th>
+				<th>Old Data</th>
+				<th>Record ID</th>
+			</tr>
+		</thead>
+		<tbody class="font-medium">
+			<tr *ngFor="let log of getAllAuditLog; let i = index" class="hover">
+				<td>{{i + 1}}</td>
+				<!-- TIME -->
+				<td class="text-slate-400 text-[13px]">
+					{{ log.changeAt | date:'yyyy-MM-dd HH:mm:ss'}}
+				</td>
+				<!-- TABLE NAME -->
+				<td>
+					<div class="text-[14px] bg-slate-50 px-2 py-1 rounded font-mono">
+						{{ log.tableName }}
+					</div>
+				</td>
+				<!-- ACTION -->
+				<td>
+					<span class="px-2 py-1 rounded text-white text-[12px] font-bold" [ngClass]="{
+        'bg-green-500': log.action === 'INSERT',
+        'bg-blue-500': log.action === 'UPDATE',
+        'bg-red-500': log.action === 'DELETE'
+      }">
+						{{ log.action }}
+					</span>
+				</td>
+				<!-- NEW DATA -->
+				<td class="text-[11px]">
+					<div *ngIf="log.newData; else noNew" class="bg-green-50 p-2 rounded space-y-1">
+						<!-- SHOW ONLY CHANGED VALUES FOR UPDATE -->
+						<ng-container *ngIf="log.action === 'UPDATE'; else showAllNew">
+							<div *ngFor="let item of log.newData | keyvalue">
+								<ng-container *ngIf="log.oldData && log.oldData[item.key] !== item.value">
+									<div>
+										<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+										<span class="text-green-600 ml-1 font-medium text-[14px]">
+											{{ formatValue(item.value) }}
+										</span>
+									</div>
+								</ng-container>
+							</div>
+						</ng-container>
+						<!-- SHOW ALL FOR INSERT -->
+						<ng-template #showAllNew>
+							<div *ngFor="let item of log.newData | keyvalue">
+								<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+								<span class="text-green-600 ml-1 font-medium text-[14px]">
+									{{ formatValue(item.value) }}
+								</span>
+							</div>
+						</ng-template>
+					</div>
+					<ng-template #noNew>
+						<span class="text-slate-300 italic">—</span>
+					</ng-template>
+				</td>
+				<!-- OLD DATA -->
+				<td class="text-[11px]">
+					<div *ngIf="log.action === 'UPDATE'; else noOld" class="bg-red-50 p-2 rounded space-y-1">
 
-	<div class="overflow-x-auto">
-		<table class="table table-zebra w-full">
-			<thead class="bg-slate-50 text-slate-400 text-[10px] uppercase tracking-widest">
-				<tr>
-					<th>Timestamp</th>
-					<th>Module</th>
-					<th>Action</th>
-					<th>Status</th>
-					<th>Request ID</th>
-					<th>Details</th>
-				</tr>
-			</thead>
-			<tbody class="text-xs font-medium">
-				<tr *ngFor="let log of logs" class="hover cursor-pointer border-slate-50">
-					<td class="text-slate-400">{{log.timestamp}}</td>
-					<td><span
-							class="badge {{log.moduleClass}} badge-sm p-3 font-bold rounded-sm text-[10px]">{{log.module}}</span>
-					</td>
-					<td class="font-bold text-slate-700">{{log.action}}</td>
-					<td [ngClass]="log.statusClass" class="font-bold flex items-center gap-2">
-						<div class="w-2 h-2 rounded-full bg-current"></div>
-						{{log.status}}
-					</td>
-					<td class="text-slate-400 font-mono">{{log.requestId}}</td>
-					<td>
-						<button class="btn btn-ghost btn-xs text-slate-300">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-								stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-									d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-							</svg>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div class="p-4 flex justify-between items-center text-xs text-slate-400 font-bold border-t border-slate-50">
-		<span>Displaying 1 - 25 of 12,482 logs</span>
-		<div class="join">
-			<button class="join-item btn btn-xs btn-ghost">«</button>
-			<button class="join-item btn btn-xs btn-active bg-slate-900 text-white border-none">1</button>
-			<button class="join-item btn btn-xs btn-ghost">2</button>
-			<button class="join-item btn btn-xs btn-ghost">3</button>
-			<button class="join-item btn btn-xs btn-ghost">»</button>
-		</div>
-	</div>
+						<!-- SHOW ONLY CHANGED VALUES -->
+						<div *ngFor="let item of log.newData | keyvalue">
+							<ng-container *ngIf="log.oldData && log.oldData[item.key] !== item.value">
+								<div>
+									<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+									<span class="line-through text-red-400 ml-1 text-[14px]">
+										{{ formatValue(log.oldData[item.key]) }}
+									</span>
+								</div>
+							</ng-container>
+						</div>
+					</div>
+					<ng-template #noOld>
+						<span class="text-slate-300 italic">—</span>
+					</ng-template>
+				</td>
+				<!-- RECORD ID -->
+				<td class="font-mono text-[14px] text-green-600">
+					{{ log.recordId }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
