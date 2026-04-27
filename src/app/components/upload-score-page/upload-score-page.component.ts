@@ -1,18 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Validator } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
+import { ScoreUploadServiceService } from 'src/app/api/score-upload-service/score-upload-service.service';
 import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
-interface StudentScore
-{
-  id: string;
-  name: string;
-  score: number | null;
-  grade: string | null;
-}
+import { GetAllStudentResponse } from 'src/app/models/Students.models';
+import { ClassResponse, ApiResponse } from 'src/app/models/Department.models';
 @Component( {
   selector: 'app-upload-score-page',
   imports: [ ReactiveFormsModule ],
@@ -21,16 +16,21 @@ interface StudentScore
 } )
 export class UploadScorePageComponent implements OnInit
 {
-
-  classes: any[] = [];
+  classes: ClassResponse[] = [];
   getAllsubject: any[] = [];
+  getAllStudent: GetAllStudentResponse[] = [];
   semesters: any[] = [];
   department: any = [];
   formInputClassId: FormGroup;
-  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService, private studentService: StudentsServiceService, private fb: FormBuilder )
+  errorResponse: any;
+  currentUser: any = [];
+  constructor( private router: Router, private departmentClassService: DepartmentClassServiceService, private studentService: StudentsServiceService, private fb: FormBuilder, private scoreUploadService: ScoreUploadServiceService )
   {
     this.formInputClassId = this.fb.group( {
-      classId: [ '', Validators.required ]
+      classId: [ '', Validators.required ],
+      departmentId: [ '', ],
+      semesterId: [ '', ],
+      subjectId: [ '', ],
     } )
   }
 
@@ -42,23 +42,9 @@ export class UploadScorePageComponent implements OnInit
     this.handleGetAllSubject();
     this.handleGellDepartment();
     this.handleGetAllStudent();
+    const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
+    this.currentUser = user.userId;
   }
-
-  filters = {
-    department: 'Architecture & Design',
-    class: 'Sophomore Studio A',
-    course: 'DSGN-204 Theory',
-    semester: 'Fall 2024',
-  };
-
-  students: StudentScore[] = [
-    { id: 'AA-2024-001', name: 'Julianne Sterling', score: 94, grade: 'A' },
-    { id: 'AA-2024-042', name: 'Marcus Thorne', score: 82, grade: 'B' },
-    { id: 'AA-2024-069', name: 'Elena Vasquez', score: 75, grade: 'C' },
-    { id: 'AA-2024-112', name: 'Simon Croft', score: null, grade: null },
-    { id: 'AA-2024-145', name: 'Beatrice Cho', score: 98, grade: 'A+' },
-
-  ];
 
   public handlefilterStudentbyClassId ()
   {
@@ -67,7 +53,8 @@ export class UploadScorePageComponent implements OnInit
       next: ( reponse: any ) =>
       {
         this.getAllStudent = reponse.data;
-      }, error: ( erorr ) =>
+        console.log( this.getAllStudent )
+      }, error: ( erorr: any ) =>
       {
         this.errorResponse = erorr.message;
       }
@@ -77,9 +64,10 @@ export class UploadScorePageComponent implements OnInit
   private handleGetClass ()
   {
     this.departmentClassService.getAllClass().subscribe( {
-      next: ( reponse ) =>
+      next: ( reponse: ApiResponse<ClassResponse[]> ) =>
       {
-        this.classes = reponse.content;
+        this.classes = reponse.data;
+        // console.log( this.classes, 'classes' )
       },
       error: ( error ) =>
       {
@@ -129,15 +117,13 @@ export class UploadScorePageComponent implements OnInit
       }
     } )
   }
-  // handle get all student 
-  getAllStudent: any[] = [];
-  errorResponse: any[] = [];
   private handleGetAllStudent ()
   {
     this.studentService.getAllStudents().subscribe( {
       next: ( Response ) =>
       {
         this.getAllStudent = Response.content;
+        // console.log( this.getAllStudent )
       }, error: ( erorr ) =>
       {
         this.errorResponse = erorr.message;
@@ -145,14 +131,66 @@ export class UploadScorePageComponent implements OnInit
     } )
 
   }
-  get validatedCount () { return this.students.filter( s => s.grade ).length; }
-  get pendingCount () { return this.students.filter( s => !s.grade ).length; }
+  @ViewChildren( 'cellInput' ) inputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  addEntry ()
+  handleKey ( event: KeyboardEvent, rowIndex: number )
   {
-    this.students.push( { id: '', name: '', score: null, grade: null } );
-  }
+    const inputsArray = this.inputs.toArray();
+    const lastIndex = inputsArray.length - 1;
 
+    switch ( event.key )
+    {
+      case 'ArrowDown':
+      case 'Enter':
+        event.preventDefault();
+        if ( inputsArray[ rowIndex + 1 ] )
+        {
+          inputsArray[ rowIndex + 1 ].nativeElement.focus();
+        }
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault();
+        if ( inputsArray[ rowIndex - 1 ] )
+        {
+          inputsArray[ rowIndex - 1 ].nativeElement.focus();
+        }
+        break;
+
+      case 'PageDown': {
+        event.preventDefault();
+        const nextIndex = Math.min( rowIndex + 10, lastIndex );
+        inputsArray[ nextIndex ].nativeElement.focus();
+        break;
+      }
+      case 'PageUp': {
+        event.preventDefault();
+        const prevIndex = Math.max( rowIndex - 10, 0 );
+        inputsArray[ prevIndex ].nativeElement.focus();
+        break;
+      }
+    }
+  }
+  limitValue ( event: Event ): void
+  {
+    const input = event.target as HTMLInputElement;
+    let value = parseInt( input.value, 10 );
+
+    if ( isNaN( value ) )
+    {
+      value = 0;
+    }
+
+    if ( value < 0 )
+    {
+      value = 0;
+    }
+    if ( value > 100 )
+    {
+      value = 100;
+    }
+    input.value = value.toString();
+  }
   gradeClass ( grade: string | null ): string
   {
     const map: Record<string, string> = {
@@ -161,8 +199,74 @@ export class UploadScorePageComponent implements OnInit
     };
     return grade ? ( map[ grade ] ?? 'badge' ) : '';
   }
+  studentScores: any[] = [];
 
+  // In component
+  onScoreChange ( event: Event, studentId: string ): void
+  {
+    const input = event.target as HTMLInputElement;
+    let value = parseInt( input.value, 10 );
+
+    if ( isNaN( value ) || value < 0 ) value = 0;
+    if ( value > 100 ) value = 100;
+    input.value = value.toString(); // clamp in place
+
+    const existing = this.studentScores.find( s => s.studentId === studentId );
+    if ( existing )
+    {
+      existing.score = value;
+    } else
+    {
+      this.studentScores.push( { studentId, score: value } );
+    }
+  }
+
+  handleSubmit ()
+  {
+    const form = this.formInputClassId.value;
+    const payload = this.studentScores.map( s => ( {
+      semesterId: form.semesterId,
+      subjectId: form.subjectId,
+      studentId: s.studentId,
+      userId: this.currentUser,
+      score: s.score,
+      version: 1,
+      status: true
+    } ) );
+
+    this.scoreUploadService.createScore( payload ).subscribe( {
+      next: ( Response ) =>
+      {
+        Swal.fire( {
+          icon: 'success',
+          title: 'Score uploaded successfully',
+          showConfirmButton: true,
+          confirmButtonText: 'OK',
+        } ).then( ( result ) =>
+        {
+          if ( result.isConfirmed )
+          {
+            this.router.navigate( [ "/list-score" ] );
+          }
+        } )
+      }, error: ( error ) =>
+      {
+        Swal.fire( {
+          icon: 'error',
+          title: 'Score upload failed',
+          showConfirmButton: false,
+          timer: 1500
+        } )
+      }
+    } )
+
+  }
   onFileDropped ( event: DragEvent ) { /* handle CSV/XLSX parsing */ }
   saveDraft () { /* save to API */ }
   submitScores () { /* validate + submit */ }
+
+  handleNavigation ( url: string )
+  {
+    this.router.navigate( [ url ] );
+  }
 }

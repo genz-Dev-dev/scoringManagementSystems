@@ -17,6 +17,13 @@
 			<i class="fa-solid fa-filter"></i>
 			Filter
 		</button>
+		<!-- Dowload -->
+		<button class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm 
+                   border border-slate-200 bg-white rounded-lg 
+                   font-medium hover:bg-slate-50 transition w-full sm:w-auto justify-center">
+			<i class="fa-solid fa-filter"></i>
+			Download Score
+		</button>
 		<!-- VALIDATION -->
 		<button class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm 
                    bg-slate-900 text-white rounded-lg 
@@ -66,47 +73,61 @@
 			<thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase">
 				<tr>
 					<th>Student Name</th>
+					<th>Gender</th>
 					<th>Subject</th>
 					<th>Semester</th>
 					<th>Score</th>
 					<th>Grade</th>
 					<th>Status</th>
+					<th>created Date</th>
+					<th>updated Date</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let record of records" class="hover:bg-slate-50 transition-colors">
+				@for (student of studentsList; track $index) {
+				<tr class="hover:bg-slate-50 transition-colors">
 					<td>
 						<div class="flex items-center gap-3">
 							<div class="avatar placeholder">
 								<div class="bg-slate-100 text-slate-500 rounded-full w-8 h-8">
-									<span class="text-xs font-bold">{{ record.name.split(' ')[0][0] }}{{
-										record.name.split(' ')[1][0] }}</span>
+									<span class="text-xs font-bold">{{ student.enFirstName
+										+''+student.enLastName}}
+									</span>
 								</div>
 							</div>
 							<div>
-								<div class="font-bold text-sm">{{ record.name }}</div>
-								<div class="text-[10px] text-slate-400">ID: {{ record.id }}</div>
+								<div class="font-bold text-sm">{{ student.khFirstName + ' ' + student.khLastName }}
+								</div>
+								<div class="text-[10px] text-slate-400">ID: {{ student.studentCode }}</div>
 							</div>
 						</div>
 					</td>
-					<td class="text-sm font-medium text-slate-600">{{ record.subject }}</td>
-					<td class="text-sm text-slate-400">{{ record.semester }}</td>
-					<td class="text-sm font-black"
-						[ngClass]="record.score === '--' ? 'text-blue-500' : 'text-slate-700'">{{ record.score }}
+					<td class="text-sm font-medium text-slate-600">{{ student.gender ==='F' ?'Female':student.gender
+						==='M' ? 'Male':student.gender==='Other' ? 'Other': 'Unknown' }}</td>
+					<td class="text-sm font-medium text-slate-600">{{ student.subjectName }}</td>
+					<td class="text-sm text-slate-400">{{ student.semesterName }}</td>
+					<td class="text-sm font-black" [ngClass]="student.Score === 0 ? 'text-blue-500' : 'text-slate-700'">
+						{{ student.Score }}
 					</td>
 					<td>
-						<span class="badge badge-sm rounded bg-green-100 text-green-700 border-none font-bold px-3 py-3"
-							*ngIf="record.grade !== 'N/A'">{{ record.grade }}</span>
-						<span class="text-xs text-slate-300 font-bold" *ngIf="record.grade === 'N/A'">N/A</span>
+						<span
+							class="badge badge-sm rounded bg-green-100 text-green-700 border-none font-bold px-3 py-3">
+							{{
+							student.Score < 50 ? 'F' : student.Score<=55? 'E' : student.Score <=60 ? 'E+' :
+								student.Score <=65 ? 'D' :student.Score <=70?'D+':student.Score <=75?'C':student.Score
+								<=80 ? 'C+' :student.Score <=85 ? 'B' : student.Score <=90 ? 'B+' : student.Score <=100
+								? 'A' : 'A+' }} </span>
 					</td>
 					<td>
-						<div class="badge border-none py-3 px-4 font-bold tracking-tight"
-							[ngClass]="getStatusClass(record.status)">
-							<span class="w-1.5 h-1.5 rounded-full bg-current"></span>
-							{{ record.status }}
+						<div class="badge border-none py-3 px-4 font-bold tracking-tight text-white text-[10px] gap-1"
+							[ngClass]="{'bg-green-500': student.status ==true , 'bg-red-500': student.status ==false}">
+							<span class="w-1.5 h-1.5 rounded-ful"></span>
+							{{ student.status ==true ? 'Active' : 'Inactive'}}
 						</div>
 					</td>
+					<td class="text-sm font-medium text-slate-600">{{ student.creationAt | date: 'dd-MM-yyyy' }}</td>
+					<td class="text-sm font-medium text-slate-600">{{ student.updatedAt | date: 'dd-MM-yyyy' }}</td>
 					<td>
 						<button
 							class="btn btn-ghost btn-xs text-white bg-blue-500 cursor-pointer hover:text-white me-2"><i
@@ -118,6 +139,7 @@
 								class="fa-solid fa-trash"></i></button>
 					</td>
 				</tr>
+				}
 			</tbody>
 		</table>
 	</div>

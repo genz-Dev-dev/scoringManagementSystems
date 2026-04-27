@@ -101,6 +101,7 @@ export class SigninPageComponent
           // console.log("res", userData);
           const token = userData.token || userData.accessToken || userData.verificationToken;
           this.authService.setToken( token, {
+            userId: userData.id,
             fullName: userData.fullName,
             email: userData.email,
             role: userData.role || '',

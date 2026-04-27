@@ -9,6 +9,9 @@ import { CourseFormComponent } from '../course-form/course-form.component';
 import { SignupAdminPageService } from 'src/app/api/signup-admin-page/signup-admin-page.service';
 import { name } from '@cloudinary/url-gen/actions/namedTransformation';
 import { environments } from 'src/environments/environments.dev';
+import { SystemLogPageComponent } from '../system-log-page/system-log-page.component';
+import { ApiResponse, Department, ClassResponse } from 'src/app/models/Department.models';
+import { PageResponse } from 'src/app/models/PageResponse.model';
 @Component( {
   selector: 'app-class-semester-page',
   imports: [ CommonModule, ReactiveFormsModule, FormsModule, CourseFormComponent ],
@@ -18,7 +21,7 @@ import { environments } from 'src/environments/environments.dev';
 
 export class ClassSemesterPageComponent implements OnInit
 {
-  activeTab = signal( 'DEPARTMENT' );
+  activeTab = signal( 'DEPARTMENTS' );
   tabs = [ 'DEPARTMENTS', 'CLASSES', 'SEMESTERS', 'SUBJECTS', 'COURSES' ];
   modalCreateClass = signal( false );
   modalCreateCourse: Boolean = false;
@@ -30,9 +33,10 @@ export class ClassSemesterPageComponent implements OnInit
   modalCreateSubject: Boolean = false;
   imagePreview: String | ArrayBuffer | null = null;
   selectedFile!: File;
-  getAllDepartment: any[] = [];
+  getAllDepartment: Department[] = [];
   getAllUser: any[] = [];
-  getAllClass: any[] = [];
+  getAllClass: ClassResponse[] = [];
+  pageResponse !: PageResponse<ClassResponse[]>;
   getAllCourse: any[] = [];
   getAllSubject: any = [];
   getAllSemester: any[] = [];
@@ -102,10 +106,11 @@ export class ClassSemesterPageComponent implements OnInit
   private handleGetAllDepartment ()
   {
     this.departmentClassService.getAllDepartment().subscribe( {
-      next: ( res ) =>
+      next: ( res: ApiResponse<Department[]> ) =>
       {
         this.getAllDepartment = res.data;
         this.countDepartment = res.data.length;
+        // console.log( "department", this.getAllDepartment );
       },
       error: ( err ) =>
       {
@@ -115,14 +120,16 @@ export class ClassSemesterPageComponent implements OnInit
     } );
   }
   // handle get all class
+  currentPage: number = 0;
+  pageSize: number = 10;
   private handleGetAllClass (): void
   {
-    this.departmentClassService.getAllClass().subscribe( {
-      next: ( res ) =>
+    this.departmentClassService.getAllClassPagegination( this.currentPage, this.pageSize ).subscribe( {
+      next: ( res: PageResponse<ClassResponse[]> ) =>
       {
+        this.pageResponse = res;
         this.getAllClass = res.content;
-        this.countClass = res.content.length;
-        // console.log( "count", this.countClass )
+        // console.log( "count", this.pageResponse )
         // console.log( "Class", this.getAllClass );
       },
       error: ( err ) =>
@@ -358,6 +365,59 @@ export class ClassSemesterPageComponent implements OnInit
       }
     } )
   }
+  changePage ( page: number ): void
+  {
+    if ( page < 0 || page >= ( this.pageResponse?.totalPage ?? 0 ) )
+    {
+      return;
+    }
+
+    this.currentPage = page;
+    this.handleGetAllClass();
+  }
+  get totalPagesArray (): number[]
+  {
+    if ( !this.pageResponse ) return [];
+    return Array.from(
+      { length: this.pageResponse.totalPage },
+      ( _, i ) => i + 1
+    );
+  }
+
+  get visiblePages (): ( number | '...' )[]
+  {
+    const total = this.pageResponse?.totalPage ?? 0;
+    const current = this.pageResponse?.number ?? 0; // 0-based
+    const pages: ( number | '...' )[] = [];
+
+    if ( total <= 5 )
+    {
+      // Show all pages if 5 or fewer
+      return Array.from( { length: total }, ( _, i ) => i + 1 );
+    }
+    pages.push( 1 ); // Always show first page
+
+    if ( current > 2 )
+    {
+      pages.push( '...' );
+    }
+    // Show current and neighbors
+    for ( let i = current - 1; i <= current + 1; i++ )
+    {
+      if ( i > 1 && i < total )
+      {
+        pages.push( i + 1 ); // convert 0-based to display
+      }
+    }
+
+    if ( current < total - 3 )
+    {
+      pages.push( '...' );
+    }
+    pages.push( total ); // Always show last page
+    return pages;
+  }
+
   //department creation handler
   openDepartmentModal ()
   {
