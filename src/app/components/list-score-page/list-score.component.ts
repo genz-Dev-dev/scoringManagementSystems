@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
+import { Router } from '@angular/router';
+import { ListScoreServiceService } from 'src/app/api/list-score-service/list-score-service.service';
+import { StudentScoreResponse } from 'src/app/models/StudentScoreReport.model';
+import { ApiResponse } from 'src/app/models/Department.models';
 interface StudentRecord
 {
   name: string;
@@ -19,11 +23,12 @@ interface StudentRecord
 } )
 export class ListScoreComponent implements OnInit
 {
-  student: any | null = null;
-  constructor( private studentService: StudentsServiceService ) { }
+  studentsList: StudentScoreResponse[] = [];
+
+  constructor( private studentService: StudentsServiceService, private router: Router, private listScoreService: ListScoreServiceService ) { }
   ngOnInit (): void
   {
-    this.handleGetAllStudent()
+    this.handleStudentScoreReport();
   }
   records: StudentRecord[] = [
     { name: 'Julianne Holloway', id: '457-86219', subject: 'Advanced Calculus', semester: 'Fall 2024', score: 94, grade: 'A', status: 'PUBLISHED' },
@@ -41,14 +46,24 @@ export class ListScoreComponent implements OnInit
       default: return 'badge-ghost bg-gray-200 text-[10px] gap-1';
     }
   }
-  private handleGetAllStudent ()
+  // private handleGetAllStudent ()
+  // {
+  //   this.studentService.getAllStudents().subscribe( {
+  //     next: ( Response ) =>
+  //     {
+  //       this.student = Response.content;
+  //     }
+  //   } )
+  // }
+
+  private handleStudentScoreReport ()
   {
-    this.studentService.getAllStudents().subscribe( {
-      next: ( Response ) =>
+    this.listScoreService.getAllScoreReport().subscribe( {
+      next: ( Response: ApiResponse<StudentScoreResponse[]> ) =>
       {
-        this.student = Response.content;
-        console.log( this.student )
+        this.studentsList = Response.data
       }
     } )
   }
+
 }

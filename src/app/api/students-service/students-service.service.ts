@@ -4,7 +4,7 @@ import { environments } from 'src/environments/environments.dev';
 import { AuthServiceService } from '../auth/auth.service.service';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
+import { GetAllStudentResponse } from 'src/app/models/Students.models';
 const url_extension = '/students';
 const url_extension1 = '/classes';
 
@@ -100,9 +100,9 @@ export class StudentsServiceService
   //   return this.fetchWithCache<any>(this.API1, `classesCache_${status}`, params);
   // }
 
-  public filterStudentByClassId ( id: String )
+  public filterStudentByClassId ( id: String ): Observable<GetAllStudentResponse[]>
   {
-    return this.httpClient.post( this.API + '/filter', id, this.getHttpOption( true ) )
+    return this.httpClient.post<GetAllStudentResponse[]>( this.API + '/filter', id, this.getHttpOption( true ) )
   }
 
 }

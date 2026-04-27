@@ -22,14 +22,17 @@ export class SystemLogPageComponent implements OnInit
   {
     this.handleGetAllAuditLog();
   }
-
+  errorResponse: any;
   private handleGetAllAuditLog ()
   {
     this.auditLogService.getAllAuditLogs().subscribe( {
       next: ( Response ) =>
       {
         this.getAllAuditLog = Response;
-        console.log( this.getAllAuditLog );
+      },
+      error: ( error ) =>
+      {
+        this.errorResponse = error;
       }
     } )
   }
