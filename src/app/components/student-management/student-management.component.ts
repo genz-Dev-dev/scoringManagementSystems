@@ -58,6 +58,7 @@ export interface ApiResponse
 } )
 export class StudentManagementComponent implements OnInit
 {
+  currentPage: number = 0;
   students: any[] = [];
   classess: any[] = [];
   maleCount: number = 0;
@@ -84,6 +85,7 @@ export class StudentManagementComponent implements OnInit
     { icon: 'fa-solid fa-mars', label: 'Students Male', value: 0, bg: 'bg-orange-50' },
     { icon: 'fa-solid fa-users', label: 'Students Active', value: 0, bg: 'bg-green-50' },
   ];
+  provinces: string[] = [ 'Kampong Thom', 'Kampong Cham', 'Kampot', 'Phnom Penh', 'Banteay Meanchey', 'Battambang', 'Kratie', ' Mondulkiri', 'Preah Sihanouk', 'Siem Reap', 'Tboung Khmum', 'Prey Veng', 'Svay Rieng', 'Takeo', 'Ratanak Kiri', 'Stung Treng', 'Preah Vihear', 'Kandal', 'Kompong Speu', 'Kep', 'Koh Kong', 'Kampong Chhnang', 'Oddar Meanchey', 'Pailin', 'Sihanoukville', 'Mondulkiri' ];
 
   constructor( private fb: FormBuilder, private router: Router, private studentsService: StudentsServiceService, private authService: AuthServiceService, private meta: Meta, private title: Title )
   {
@@ -118,9 +120,10 @@ export class StudentManagementComponent implements OnInit
     this.currentUserRole = user.role;
     this.handleGetAllClassess();
   }
+  pages: number[] = [];
   private getAllStudents ()
   {
-    this.studentsService.getAllStudents().subscribe( {
+    this.studentsService.getAllStudents( this.currentPage, this.size ).subscribe( {
       next: ( res: ApiResponse ) =>
       {
         this.students = res.content || [];
@@ -133,7 +136,11 @@ export class StudentManagementComponent implements OnInit
         this.hastNext = res.hastNext;
         this.maleCount = 0;
         this.feamleCount = 0;
+
+        this.pages = Array.from( { length: this.totalPage }, ( _, i ) => i );
+
         this.countStudentActive = this.students.filter( student => student.status === true ).length;
+
         this.students.forEach( student =>
         {
           if ( student.gender === 'M' ) this.maleCount++;
@@ -226,17 +233,18 @@ export class StudentManagementComponent implements OnInit
   }
   handlePreviousPage ()
   {
-    if ( this.number > 1 )
+    if ( this.currentPage > 0 )
     {
-      this.number--;
+      this.currentPage--;
       this.getAllStudents();
     }
   }
+
   handleNextPage ()
   {
-    if ( this.number < this.totalPage )
+    if ( this.currentPage < this.totalPage - 1 )
     {
-      this.number++;
+      this.currentPage++;
       this.getAllStudents();
     }
   }
@@ -253,5 +261,10 @@ export class StudentManagementComponent implements OnInit
   {
     if ( this.currentStep > 1 )
       this.currentStep--;
+  }
+  setPage ( page: number )
+  {
+    this.currentPage = page;
+    this.getAllStudents();
   }
 }

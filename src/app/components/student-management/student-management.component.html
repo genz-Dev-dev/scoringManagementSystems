@@ -92,21 +92,28 @@
                 placeholder="Phone" pattern="[0-9]*" minlength="10" maxlength="10" title="Must be 10 digits" />
         </label>
         <p class="absolute right-80 top-125 validator-hint">Must be 10 digits</p>
-        <label class="input validator rounded-full"> enrollmentDate
+        <label class="input validator rounded-full">
+            enrollmentDate
             <input type="date" class="tabular-nums w-full rounded-full" formControlName="enrollmentDate" required
                 placeholder="Enrollment Date" />
         </label>
     </div>
     }@else {
     <div [formGroupName]="'address'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <input type="text" placeholder="Street" formControlName="street"
-            class="input input-bordered w-full rounded-full" />
+        <select class="select select-bordered w-full rounded-full" id="classId" formControlName="country">
+            <option value="" disabled>Select Country</option>
+            <option value="Cambodia">Cambodia</option>
+        </select>
+        <select class="select select-bordered w-full rounded-full" id="province" formControlName="province">
+            <option value="" disabled>Select Province</option>
+            <option *ngFor="let province of provinces" [value]="province">
+                {{ province }}
+            </option>
+        </select>
+        <input type="text" placeholder="Khan" formControlName="khan" class="input input-bordered w-full rounded-full" />
         <input type="text" placeholder="Sangkat" formControlName="sangkat"
             class="input input-bordered w-full rounded-full" />
-        <input type="text" placeholder="Khan" formControlName="khan" class="input input-bordered w-full rounded-full" />
-        <input type="text" placeholder="Province" formControlName="province"
-            class="input input-bordered w-full rounded-full" />
-        <input type="text" placeholder="Country" formControlName="country"
+        <input type="text" placeholder="Street" formControlName="street"
             class="input input-bordered w-full rounded-full" />
     </div>
     }
@@ -202,9 +209,10 @@
             <div class="join">
                 <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastPrevious"
                     (click)="handlePreviousPage()"><i class="fa-solid fa-angle-left"></i></button>
-                <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
-                <button class="join-item btn btn-xs btn-ghost">2</button>
-                <button class="join-item btn btn-xs btn-ghost">3</button>
+                <button class="join-item btn btn-xs btn-ghost" *ngFor="let page of pages" (click)="setPage(page)"
+                    [ngClass]="{'active-page': page === currentPage}">
+                    {{ page + 1 }}
+                </button>
                 <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastNext" (click)="handleNextPage()">
                     <i class="fa-solid fa-angle-right"></i>
                 </button>

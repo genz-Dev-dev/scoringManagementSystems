@@ -4,17 +4,7 @@ import { StudentsServiceService } from 'src/app/api/students-service/students-se
 import { Router } from '@angular/router';
 import { ListScoreServiceService } from 'src/app/api/list-score-service/list-score-service.service';
 import { StudentScoreResponse } from 'src/app/models/StudentScoreReport.model';
-import { ApiResponse } from 'src/app/models/Department.models';
-interface StudentRecord
-{
-  name: string;
-  id: string;
-  subject: string;
-  semester: string;
-  score: number | string;
-  grade: string;
-  status: 'PUBLISHED' | 'VALIDATED' | 'PENDING';
-}
+import { ApiResponse, ErrorRespone } from 'src/app/models/Department.models';
 @Component( {
   selector: 'app-list-score',
   imports: [ CommonModule ],
@@ -24,44 +14,59 @@ interface StudentRecord
 export class ListScoreComponent implements OnInit
 {
   studentsList: StudentScoreResponse[] = [];
+  errorResponse: ErrorRespone | null = null;
 
   constructor( private studentService: StudentsServiceService, private router: Router, private listScoreService: ListScoreServiceService ) { }
   ngOnInit (): void
   {
     this.handleStudentScoreReport();
   }
-  records: StudentRecord[] = [
-    { name: 'Julianne Holloway', id: '457-86219', subject: 'Advanced Calculus', semester: 'Fall 2024', score: 94, grade: 'A', status: 'PUBLISHED' },
-    { name: 'Arthur Morgan', id: '457-86220', subject: 'Quantum Physics', semester: 'Fall 2024', score: 72, grade: 'C+', status: 'VALIDATED' },
-    { name: 'Sarah Winston', id: '457-86221', subject: 'Data Structures', semester: 'Fall 2024', score: '--', grade: 'N/A', status: 'PENDING' },
-    { name: 'Kevin Lehmann', id: '457-86222', subject: 'Organic Chemistry', semester: 'Fall 2024', score: 88, grade: 'B+', status: 'PUBLISHED' },
-  ];
-
-  getStatusClass ( status: string )
-  {
-    switch ( status )
-    {
-      case 'PUBLISHED': return 'badge-success text-white text-[10px] gap-1';
-      case 'VALIDATED': return 'badge-info text-white text-[10px] gap-1';
-      default: return 'badge-ghost bg-gray-200 text-[10px] gap-1';
-    }
-  }
-  // private handleGetAllStudent ()
-  // {
-  //   this.studentService.getAllStudents().subscribe( {
-  //     next: ( Response ) =>
-  //     {
-  //       this.student = Response.content;
-  //     }
-  //   } )
-  // }
+  meanScore: number = 0;
+  meanScoreFail: number = 0;
+  meanScorePass: number = 0;
 
   private handleStudentScoreReport ()
   {
     this.listScoreService.getAllScoreReport().subscribe( {
       next: ( Response: ApiResponse<StudentScoreResponse[]> ) =>
       {
-        this.studentsList = Response.data
+        this.studentsList = Response.data;
+
+        if ( this.studentsList.length > 0 )
+        {
+
+          const total = this.studentsList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+          this.meanScore = total / this.studentsList.length;
+
+          const failList = this.studentsList.filter( s => s.Score < 50 );
+          const failTotal = failList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+
+          this.meanScoreFail = failList.length ? failTotal / failList.length : 0;
+
+          const passList = this.studentsList.filter( s => s.Score >= 50 );
+          const passTotal = passList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+
+          this.meanScorePass = passList.length ? passTotal / passList.length : 0;
+        }
+
+
+        // if ( this.studentsList.length > 0 )
+        // {
+        //   const total = this.studentsList.reduce( ( sum, student ) =>
+        //   {
+        //     return sum + ( student.Score || 0 );
+        //   }, 0 );
+
+        //   const meanScoreFailTotal = this.studentsList.filter( ( studentsList ) => studentsList.Score < 50 ).length;
+        //   this.meanScoreFail = meanScoreFailTotal / this.studentsList.length;
+        //   this.meanScore = total / this.studentsList.length;
+        //   console.log( "mean", this.meanScoreFail )
+
+        // }
+      },
+      error: ( error: ErrorRespone ) =>
+      {
+        this.errorResponse = error;
       }
     } )
   }

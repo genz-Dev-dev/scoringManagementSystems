@@ -1,9 +1,14 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { StudentsServiceService } from 'src/app/api/students-service/students-service.service';
+import { ListScoreServiceService } from 'src/app/api/list-score-service/list-score-service.service';
+import { DepartmentClassServiceService } from 'src/app/api/department-class-service/department-class-service.service';
 import Swal from 'sweetalert2';
+import { ApiResponse, ErrorRespone, PerformanceBar, ClassResponse } from 'src/app/models/Department.models';
+import { StudentScoreResponse } from 'src/app/models/StudentScoreReport.model';
+
 interface StatCard
 {
   icon: string;
@@ -11,14 +16,6 @@ interface StatCard
   value: number;
   bg: string;
 }
-
-interface PerformanceBar
-{
-  label: string;
-  passed: number;
-  failed: number;
-}
-
 interface Event
 {
   day: string;
@@ -52,24 +49,21 @@ export class AdminPageComponent implements OnInit
   getAllStudent: any[] = [];
   countStudent: number = 0;
   errorResponse: any = [];
-  // Dropdown options
-  classes = [
-    'Class 6',
-    'Class 7',
-    'Class 8',
-    'Class 9',
-    'Class 10',
-    'Class 11',
-    'Class 12',
-  ];
+  meanScore: number = 0;
+  meanScoreFail: number = 0;
+  meanScorePass: number = 0;
+  performance: PerformanceBar[] = [];
+  studentsList: StudentScoreResponse[] = [];
+  class: ClassResponse[] = [];
   tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
 
-
-  constructor( private studentService: StudentsServiceService, private router: Router ) { }
+  constructor( private studentService: StudentsServiceService, private router: Router, private listScoreService: ListScoreServiceService, private departmentClassService: DepartmentClassServiceService ) { }
 
   ngOnInit (): void
   {
     this.handleGetAllStudent();
+    this.handleStudentScoreReport();
+    this.handleGetAllClass();
   }
 
   private handleGetAllStudent ()
@@ -80,10 +74,10 @@ export class AdminPageComponent implements OnInit
         this.getAllStudent = Response.content;
         this.countStudent = Response.content.length;
         this.stats = [
-          { ...this.stats[ 0 ], value: this.countStudent },
-          { ...this.stats[ 1 ], value: 0 },
-          { ...this.stats[ 2 ], value: 0 },
-          { ...this.stats[ 3 ], value: 0 }
+          { ...this.stats[ 2 ], value: this.countStudent },
+          { ...this.stats[ 3 ], value: this.countClass },
+          { ...this.stats[ 0 ], value: 0 },
+          { ...this.stats[ 1 ], value: 0 }
         ];
       },
       error: ( error ) =>
@@ -95,27 +89,11 @@ export class AdminPageComponent implements OnInit
 
   // Stat cards
   stats: StatCard[] = [
-    { icon: 'fa-solid fa-person-dress', label: 'Students', value: 2000, bg: 'bg-blue-50' },
-    { icon: 'fa-solid fa-person-pregnant', label: 'Teachers', value: 120, bg: 'bg-pink-50' },
-    { icon: 'fa-solid fa-users', label: 'Parents', value: 2115, bg: 'bg-orange-50' },
-    { icon: 'fa-solid fa-users', label: 'Staff', value: 82, bg: 'bg-teal-50' },
+    { icon: 'fa-solid fa-users', label: 'Staff', value: 0, bg: 'bg-teal-50' },
+    { icon: 'fa-solid fa-users', label: 'Parents', value: 0, bg: 'bg-orange-50' },
+    { icon: 'fa-solid fa-person-dress', label: 'Students', value: 0, bg: 'bg-blue-50' },
+    { icon: 'fa-solid fa-school', label: 'Classes', value: 0, bg: 'bg-purple-50' },
   ];
-
-  // Performance chart data
-  performance: PerformanceBar[] = [
-    { label: 'Class A', passed: 80, failed: 20 },
-    { label: 'Class B', passed: 88, failed: 12 },
-    { label: 'Class C', passed: 70, failed: 30 },
-    { label: 'Class D', passed: 82, failed: 18 },
-    { label: 'Class E', passed: 90, failed: 10 },
-    { label: 'Class F', passed: 98, failed: 2 },
-    { label: 'Class G', passed: 98, failed: 2 },
-    { label: 'Class H', passed: 98, failed: 2 },
-    { label: 'Class I', passed: 98, failed: 2 },
-    { label: 'Class J', passed: 98, failed: 2 },
-
-  ];
-
   // Upcoming events
   upcomingEvents: Event[] = [
     {
@@ -160,4 +138,66 @@ export class AdminPageComponent implements OnInit
     { name: 'Priya Singh', avatar: 'PS', medal: '🥉' },
   ];
 
+  private handleStudentScoreReport ()
+  {
+    this.listScoreService.getAllScoreReport().subscribe( {
+      next: ( Response: ApiResponse<StudentScoreResponse[]> ) =>
+      {
+        this.studentsList = Response.data;
+        const grouped: { [ key: string ]: StudentScoreResponse[] } = {};
+
+        this.studentsList.forEach( student =>
+        {
+          const className = student.className || 'Unknown';
+
+          if ( !grouped[ className ] )
+          {
+            grouped[ className ] = [];
+          }
+
+          grouped[ className ].push( student );
+        } );
+
+        this.performance = Object.keys( grouped ).map( className =>
+        {
+          const students = grouped[ className ];
+          const total = students.length;
+
+          const passed = students.filter( s => s.Score >= 50 ).length;
+          const failed = students.filter( s => s.Score < 50 ).length;
+
+          return {
+            label: className,
+            passed: total ? Math.round( ( passed / total ) * 100 ) : 0,
+            failed: total ? Math.round( ( failed / total ) * 100 ) : 0
+          };
+        } );
+
+      },
+      error: ( error: ErrorRespone ) =>
+      {
+        this.errorResponse = error;
+      }
+    } );
+  }
+  countClass: number = 0;
+  private handleGetAllClass ()
+  {
+    this.departmentClassService.getAllClass().subscribe( {
+      next: ( Response: ApiResponse<ClassResponse[]> ) =>
+      {
+        this.class = Response.data;
+        this.countClass = Response.data.length;
+
+      },
+      error: ( error ) =>
+      {
+        this.errorResponse = error.message;
+      }
+    } )
+  }
+  setActiveTab ( tab: string )
+  {
+    this.activeTab.set( tab );
+  }
 }

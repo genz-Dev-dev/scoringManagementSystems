@@ -29,3 +29,18 @@ export interface ClassResponse
     creationAt: string;
     updatedAt: string;
 }
+
+export interface ErrorRespone
+{
+    success: boolean;
+    status: number;
+    message: string;
+    timestamp: string;
+    error: string;
+}
+export interface PerformanceBar
+{
+    label: string;
+    passed: number;
+    failed: number;
+}
