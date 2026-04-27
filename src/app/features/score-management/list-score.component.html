@@ -1,0 +1,164 @@
+<header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+	<!-- LEFT -->
+	<div>
+		<p class="text-[10px] uppercase font-bold tracking-widest text-slate-400">
+			Academic Assessment Core
+		</p>
+		<h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+			Score & Grade Management
+		</h1>
+	</div>
+	<!-- RIGHT -->
+	<div class="flex flex-wrap gap-2 sm:gap-3">
+		<!-- FILTER -->
+		<button class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm
+                   border border-slate-200 bg-white rounded-lg
+                   font-medium hover:bg-slate-50 transition w-full sm:w-auto justify-center">
+			<i class="fa-solid fa-filter"></i>
+			Filter
+		</button>
+		<!-- VALIDATION -->
+		<button class="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm
+                   bg-slate-900 text-white rounded-lg
+                   font-medium hover:bg-slate-800 transition w-full sm:w-auto justify-center">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+				<path fill-rule="evenodd"
+					d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+					clip-rule="evenodd" />
+			</svg>
+			Batch Validate
+		</button>
+	</div>
+</header>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+	<div class="card bg-white shadow-sm border-l-4 border-blue-400 p-6">
+		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score</p>
+		<h2 class="text-3xl font-bold mt-1">84.2%</h2>
+		<p class="text-green-500 text-xs font-semibold mt-2">↗ 2.4% from last sem</p>
+	</div>
+	<div class="card bg-white shadow-sm border-l-4 border-green-400 p-6">
+		<p class="text-xs font-bold text-slate-400 uppercase">Validated Records</p>
+		<h2 class="text-3xl font-bold mt-1">1,248</h2>
+		<p class="text-slate-400 text-xs mt-2">94% completion rate</p>
+	</div>
+	<div class="card bg-white shadow-sm border-l-4 border-sky-400 p-6">
+		<p class="text-xs font-bold text-slate-400 uppercase">Pending Review</p>
+		<h2 class="text-3xl font-bold mt-1">42</h2>
+		<p class="text-blue-600 text-xs font-semibold mt-2">● Requires attention</p>
+	</div>
+	<div class="card bg-white shadow-sm border-l-4 border-emerald-400 p-6">
+		<p class="text-xs font-bold text-slate-400 uppercase">System Status</p>
+		<h2 class="text-3xl font-bold mt-1">Active</h2>
+		<p class="text-emerald-500 text-xs font-semibold mt-2">● API syncing live</p>
+	</div>
+</div>
+
+<div class="card bg-white shadow-sm mb-10 overflow-hidden">
+	<div class="flex justify-between items-center p-6 border-b border-slate-50">
+		<h3 class="font-bold text-slate-800">Semester Records</h3>
+		<div class="flex gap-4 text-[10px] font-bold text-slate-400 uppercase">
+			<span>Fall 2024</span>
+			<span>All Subjects</span>
+		</div>
+	</div>
+	<div class="overflow-x-auto">
+		<table class="table w-full">
+			<thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase">
+				<tr>
+					<th>Student Name</th>
+					<th>Subject</th>
+					<th>Semester</th>
+					<th>Score</th>
+					<th>Grade</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let record of records" class="hover:bg-slate-50 transition-colors">
+					<td>
+						<div class="flex items-center gap-3">
+							<div class="avatar placeholder">
+								<div class="bg-slate-100 text-slate-500 rounded-full w-8 h-8 flex justify-center items-center">
+									<span class="text-xs font-bold">{{ record.name.split(' ')[0][0] }}{{
+										record.name.split(' ')[1][0] }}</span>
+								</div>
+							</div>
+							<div>
+								<div class="font-bold text-sm">{{ record.name }}</div>
+								<div class="text-[10px] text-slate-400">ID: {{ record.id }}</div>
+							</div>
+						</div>
+					</td>
+					<td class="text-sm font-medium text-slate-600">{{ record.subject }}</td>
+					<td class="text-sm text-slate-400">{{ record.semester }}</td>
+					<td class="text-sm font-black"
+						[ngClass]="record.score === '--' ? 'text-blue-500' : 'text-slate-700'">{{ record.score }}
+					</td>
+					<td>
+						<span class="badge badge-sm rounded bg-green-100 text-green-700 border-none font-bold px-3 py-3"
+							*ngIf="record.grade !== 'N/A'">{{ record.grade }}</span>
+						<span class="text-xs text-slate-300 font-bold" *ngIf="record.grade === 'N/A'">N/A</span>
+					</td>
+					<td>
+						<div class="badge border-none py-3 px-4 font-bold tracking-tight"
+							[ngClass]="getStatusClass(record.status)">
+							<span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+							{{ record.status }}
+						</div>
+					</td>
+					<td>
+						<button
+							class="btn btn-ghost btn-xs text-white bg-blue-500 cursor-pointer hover:text-white me-2"><i
+								class="fa-solid fa-eye"></i></button>
+						<button
+							class="btn btn-ghost btn-xs text-white bg-yellow-500 cursor-pointer hover:text-white me-2"><i
+								class="fa-solid fa-pen"></i></button>
+						<button class="btn btn-ghost btn-xs text-white bg-red-500 cursor-pointer hover:text-white"><i
+								class="fa-solid fa-trash"></i></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+	<div class="md:col-span-2 card bg-white p-8 shadow-sm">
+		<div class="flex items-center justify-between mb-6">
+			<h3 class="font-bold text-lg">Administrative Guidelines</h3>
+			<span class="text-slate-400">📖</span>
+		</div>
+		<div class="space-y-4">
+			<div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100">
+				<div class="bg-blue-100 p-2 rounded text-blue-600">⚖️</div>
+				<div>
+					<h4 class="font-bold text-sm">Validation Deadline</h4>
+					<p class="text-xs text-slate-500 mt-1">All pending scores must be validated by the end of the
+						week for final API transmission.</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-4 bg-slate-50 p-4 rounded-lg border border-slate-100">
+				<div class="bg-blue-100 p-2 rounded text-blue-600">⇄</div>
+				<div>
+					<h4 class="font-bold text-sm">Grade Normalization</h4>
+					<p class="text-xs text-slate-500 mt-1">Automatic scaling applied to physics and chemistry
+						subjects based on department standard deviations.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card bg-slate-900 text-white p-8 flex flex-col justify-between shadow-xl">
+		<div>
+			<p class="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-4">● System Notification
+			</p>
+			<h2 class="text-2xl font-bold leading-tight">Score Publishing is live for Science Faculty.</h2>
+			<p class="text-slate-400 text-sm mt-4">Administrators are now authorized to publish final grades to the
+				public student portal.</p>
+		</div>
+		<button class="btn btn-block bg-white text-slate-900 hover:bg-slate-100 border-none capitalize font-bold mt-8">
+			Access Portal Controls
+		</button>
+	</div>
+</div> -->

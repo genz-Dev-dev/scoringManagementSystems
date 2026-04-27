@@ -1,0 +1,177 @@
+<!-- Header -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 md:gap-0">
+    <!-- Left side: title and description -->
+    <div class="max-w-2xl">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#001529]">
+            Class
+        </h1>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">
+            Curate and manage the intellectual foundation of our institution. Oversee departmental alignment and credit
+            distribution.
+        </p>
+    </div>
+    <!-- Right side: Add button -->
+    <button aria-label="addNewClass" type="button"
+        class="btn btn-neutral bg-[#001529] border-none rounded-lg normal-case px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base w-full md:w-auto"
+        onclick="my_modal_3.showModal()">
+        <span class="mr-2 text-lg"><i class="fa-solid fa-plus"></i></span> Add New Class
+    </button>
+</header>
+<!-- Top Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Total Class</p>
+        <div class="text-3xl font-bold">{{countClass}}</div>
+        <p class="text-xs text-success font-medium mt-2">↑ +12 this year</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Total DepartmentModel</p>
+        <div class="text-3xl font-bold">{{getAllDepartment.length}}</div>
+        <div class="w-full bg-slate-100 h-1 mt-4 rounded-full">
+            <div class="bg-success h-1 rounded-full" style="width: 100%"></div>
+        </div>
+    </div>
+    <div class="bg-[#1E293B] p-6 rounded-2xl text-white relative overflow-hidden">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Upcoming Registration</p>
+        <h3 class="text-xl font-bold">Fall 2026 Enrollment</h3>
+        <p class="text-xs text-slate-400 mt-2">Review and approve 42 pending course proposals before the July 15th
+            deadline.</p>
+        <div class="absolute right-4 bottom-4 opacity-10 text-6xl">📅</div>
+    </div>
+</div>
+<!-- Filters & Table Section -->
+<div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <!-- Toolbar -->
+    <div class="p-6 flex flex-wrap justify-between items-center border-b border-slate-50 gap-4">
+        <div class=""></div>
+        <div class="flex items-center gap-6">
+            <div class="form-control">
+                <label class="label cursor-pointer gap-3">
+                    <input type="checkbox" class="toggle toggle-success toggle-sm" />
+                    <span class="label-text font-bold text-slate-600 text-xs">Show Active Classes Only</span>
+                </label>
+            </div>
+            <select class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
+                <option value="All" selected>DepartmentModel: All</option>
+                <option *ngFor="let department of getAllDepartment" [value]="department.id">{{ department.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="max-h-[310px] overflow-y-auto hidden sm:block">
+        <table class="table w-full">
+            <thead class="sticky top-0 bg-white z-10">
+                <tr>
+                    <th class="pl-2 ">Class Name</th>
+                    <th>DepartmentModel</th>
+                    <th>Academic Year</th>
+                    <th>Generation</th>
+                    <th>Created At</th>
+                    <th>Updated</th>
+                    <th class="text-right pr-8">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (classItem of getAllClass; track $index) {
+                <tr class="hover:bg-slate-50/50 border-b border-slate-50">
+                    <!-- Column 1 -->
+                    <td class="py-2 pl-2">
+                        <div class="flex items-center gap-4">
+                            <div class="text-blue-600 font-bold text-[14px]">
+                                {{ classItem.name }}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="font-bold text-sm">{{ classItem.departmentName }}</td>
+                    <td><span class="text-xs font-medium"> {{ classItem.academicYear }}</span></td>
+                    <td><span class="text-xs font-medium"> {{ classItem.generation }}</span></td>
+                    <td>
+                        <div class="badge badge-success badge-outline text-[9px] px-3 py-3">{{ classItem.creationAt }}</div>
+                    </td>
+                    <td><span class="text-xs font-medium"> {{ classItem.updatedAt }}</span></td>
+                    <td class="text-right pr-8">
+                        <div class="flex justify-end gap-2">
+                            <button type="button" aria-label="View"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            @if(currentUserRole === "ROLE_ADMIN"){
+                            <button type="button" aria-label="Edit"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" aria-label="Delete"
+                                class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="p-4 flex justify-between text-xs text-slate-400">
+        <span>
+            Showing <b>1-20</b> of <b>{{ getAllClass.length }}</b> classes
+        </span>
+        <div class="join">
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Previous">«</button>
+            <button class="join-item btn btn-xs bg-[#001529] text-white" aria-label="Page 1">1</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Page 2">2</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Page 3">3</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Next">»</button>
+        </div>
+    </div>
+</div>
+<dialog id="my_modal_3" class="modal">
+    <div class="modal-box">
+        <form method="dialog" [formGroup]="formCreateClass">
+            <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                onclick="my_modal_3.close()" aria-label="Close">✕</button>
+            <!-- Name -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">ឈ្មោះ​ ថ្នាក់</span>
+                </label>
+                <input type="text" name="name" formControlName="name" required placeholder="Enter course name"
+                    class="input input-bordered w-full rounded-full" />
+            </div>
+            <!-- DepartmentModel -->
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text font-bold uppercase text-xs rounded-full">នាយកដ្ឋាន</span></label>
+                <select class="select select-bordered bg-white rounded-full" formControlName="departmentId">
+                    @for (dept of getAllDepartment; track $index) {
+                    <option [value]="dept.id">{{ dept.name }}</option>
+                    }
+                </select>
+            </div>
+            <!-- AcademicYear -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">ឆ្នាំសិក្សា</span>
+                </label>
+                <input type="text" name="academic_year" formControlName="academicYear" required
+                    placeholder="e.g. 2025-2026" class="input input-bordered w-full rounded-full" />
+            </div>
+            <!-- Generation -->
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">ជំនាន់</span>
+                </label>
+                <input type="number" name="generation" formControlName="generation" required
+                    placeholder="Enter generation" class="input input-bordered w-full rounded-full" />
+            </div>
+            <!-- Submit -->
+            <div class="form-control mt-6">
+                <button type="submit" class="btn btn-primary w-full" (click)="handleCreateClasses()"
+                    aria-label="create class">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Create Class
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>

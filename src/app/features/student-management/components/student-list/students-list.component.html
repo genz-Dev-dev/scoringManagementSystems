@@ -1,0 +1,190 @@
+<div class="bg-brand-bg p-2 sm:p-2 text-slate-700">
+    <!-- TOP STATS ROW -->
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <!-- Main Class Card -->
+        <div class="col-span-1 sm:col-span-6 card bg-white shadow-sm border-l-4 border-brand-navy p-6 sm:p-8">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Selected Class</p>
+            <h1 class="text-2xl sm:text-4xl font-extrabold text-brand-navy mt-1">Advanced Macroeconomics</h1>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-4 mt-2 sm:mt-3 text-slate-500 text-sm italic">
+                <span>🕒 Mon & Wed</span>
+                <span>• 10:00 AM - 11:30 AM</span>
+                <span>• Room 402-B</span>
+            </div>
+            <div class="mt-4 sm:mt-8 flex items-baseline gap-2">
+                <span class="text-3xl sm:text-5xl font-black text-brand-navy">92%</span>
+                <span class="text-slate-400 font-medium text-xs sm:text-sm">Average Daily Attendance</span>
+            </div>
+        </div>
+        <!-- Stat Card: Present -->
+        <div
+            class="col-span-1 sm:col-span-3 card bg-white shadow-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+            <div
+                class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-2 sm:mb-4">
+                <i class="fa-solid fa-user-check"></i>
+            </div>
+            <p class="text-slate-400 text-xs sm:text-sm font-semibold">Present Today</p>
+            <h2 class="text-2xl sm:text-4xl font-bold text-brand-navy">28<span
+                    class="text-slate-200 text-sm sm:text-2xl">/32</span></h2>
+        </div>
+        <!-- Stat Card: Late -->
+        <div
+            class="col-span-1 sm:col-span-3 card bg-white shadow-sm flex flex-col items-center justify-center p-4 sm:p-6 text-center text-brand-navy">
+            <div
+                class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-50 text-orange-400 rounded-full flex items-center justify-center mb-2 sm:mb-4">
+                <i class="fa-solid fa-user-clock"></i>
+            </div>
+            <p class="text-slate-400 text-xs sm:text-sm font-semibold">Late/Excused</p>
+            <h2 class="text-2xl sm:text-4xl font-bold">4</h2>
+        </div>
+    </div>
+    <!-- MAIN CONTENT GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+
+        <!-- LEFT SIDEBAR -->
+        <div class="col-span-1 lg:col-span-3 space-y-6">
+            <!-- Calendar Mockup -->
+            <div class="card bg-white p-4 sm:p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-2 sm:mb-4">
+                    <span class="font-bold text-sm sm:text-base">Select Date</span>
+                    <div class="flex gap-2 text-xs sm:text-sm"><span>‹</span><span>›</span></div>
+                </div>
+                <div
+                    class="grid grid-cols-7 text-center text-[8px] sm:text-[10px] font-bold text-slate-400 mb-1 sm:mb-2">
+                    <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-[8px] sm:text-sm">
+                    <span class="p-1 sm:p-2 text-slate-300">28</span><span class="p-1 sm:p-2 text-slate-300">29</span>
+                    <span class="p-1 sm:p-2 text-slate-300">30</span><span class="p-1 sm:p-2 text-slate-300">31</span>
+                    <span class="p-1 sm:p-2 bg-brand-navy text-white rounded-md font-bold">4</span>
+                    <span class="p-1 sm:p-2">5</span><span class="p-1 sm:p-2">6</span>
+                </div>
+                <button class="btn btn-outline border-slate-200 mt-4 sm:mt-6 w-full normal-case text-slate-600">Download
+                    Attendance PDF</button>
+            </div>
+            <!-- Class Performance -->
+            <div class="card bg-slate-100 p-4 sm:p-6 border border-slate-200">
+                <h3 class="text-xs sm:text-sm font-bold uppercase text-slate-500 mb-2 sm:mb-4 tracking-widest">Class
+                    Performance</h3>
+                <div class="space-y-3 sm:space-y-4">
+                    <div>
+                        <div class="flex justify-between text-[8px] sm:text-xs font-bold mb-1"><span>Punctuality
+                                Rate</span><span>88%</span></div>
+                        <progress class="progress progress-primary w-full h-1" value="88" max="100"></progress>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[8px] sm:text-xs font-bold mb-1"><span>Student
+                                Engagement</span><span>74%</span></div>
+                        <progress class="progress progress-primary w-full h-1" value="74" max="100"></progress>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- STUDENT ROSTER TABLE -->
+        <div class="col-span-1 lg:col-span-9 card bg-white shadow-sm overflow-x-auto">
+            <div
+                class="p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-50">
+                <h2 class="text-sm sm:text-lg font-bold mb-2 sm:mb-0">Student Roster <span
+                        class="text-slate-300 font-normal ml-2">32 Enrolled</span></h2>
+                <div class="flex gap-2">
+                    <button class="btn btn-sm bg-blue-50 border-none text-blue-600 normal-case w-full sm:w-auto">Filter
+                        ▿</button>
+                    <button
+                        class="btn btn-sm bg-slate-100 border-none text-slate-500 normal-case w-full sm:w-auto">Sort:
+                        A-Z</button>
+                </div>
+            </div>
+            <div class="hidden sm:block mt-0">
+                <table class="table w-full min-w-[500px]">
+                    <thead>
+                        <tr class="text-[8px] sm:text-[10px] uppercase text-slate-400 tracking-widest">
+                            <th class="bg-white">Student</th>
+                            <th class="bg-white text-center">Attendance Action</th>
+                            <th class="bg-white text-right">History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of students" class="hover:bg-slate-50 transition-colors">
+                            <td>
+                                <div class="flex items-center gap-2 sm:gap-3">
+                                    <div class="avatar">
+                                        <div class="w-8 sm:w-10 rounded-full border border-slate-100">
+                                            <img [src]="student.avatar" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm sm:text-base text-brand-navy">{{student.name}}
+                                        </div>
+                                        <div class="text-[8px] sm:text-[10px] text-slate-400 font-mono">ID:
+                                            #{{student.id}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div
+                                    class="inline-flex bg-slate-50 p-1 sm:p-1.5 rounded-full border border-slate-100 flex-wrap justify-center gap-1">
+                                    <button (click)="updateStatus(student, 'Present')"
+                                        [ngClass]="student.status === 'Present' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-400 bg-transparent'"
+                                        class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Present</button>
+                                    <button (click)="updateStatus(student, 'Absent')"
+                                        [ngClass]="student.status === 'Absent' ? 'bg-red-400 text-white shadow-md' : 'text-slate-400 bg-transparent'"
+                                        class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Absent</button>
+                                    <button (click)="updateStatus(student, 'Late')"
+                                        [ngClass]="student.status === 'Late' ? 'bg-orange-200 text-orange-800 shadow-md' : 'text-slate-400 bg-transparent'"
+                                        class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold transition-all">Late</button>
+                                    <button
+                                        class="px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[8px] sm:text-xs font-bold text-slate-400">Excused</button>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <div class="flex gap-1 justify-end">
+                                    <span *ngFor="let color of student.history" class="w-2 h-2 rounded-full"
+                                        [style.backgroundColor]="color"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- moblie responsive -->
+            <div class="block sm:hidden">
+                <div *ngFor="let student of students" class="bg-white p-3 rounded-xl shadow mb-3">
+                    <!-- Top -->
+                    <div class="flex items-center gap-3">
+                        <img [src]="student.avatar" class="w-10 h-10 rounded-full border" />
+                        <div>
+                            <div class="font-bold text-sm">{{student.name}}</div>
+                            <div class="text-xs text-gray-400">ID: #{{student.id}}</div>
+                        </div>
+                    </div>
+                    <!-- Actions -->
+                    <div class="flex flex-wrap gap-1 mt-2">
+                        <button (click)="updateStatus(student, 'Present')" class="btn btn-xs">P</button>
+                        <button (click)="updateStatus(student, 'Absent')" class="btn btn-xs">A</button>
+                        <button (click)="updateStatus(student, 'Late')" class="btn btn-xs">L</button>
+                    </div>
+                    <!-- History -->
+                    <div class="flex gap-1 mt-2">
+                        <span *ngFor="let color of student.history" class="w-2 h-2 rounded-full"
+                            [style.backgroundColor]="color"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Actions -->
+            <div
+                class="p-4 sm:p-6 bg-white border-t flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 sm:mt-0 gap-2 sm:gap-0">
+                <p class="text-xs italic text-slate-400">Changes are saved automatically to the central database.</p>
+                <div class="flex gap-2 sm:gap-3 flex-wrap sm:flex-nowrap">
+                    <button class="btn btn-ghost bg-slate-100 text-slate-600 normal-case px-4 sm:px-6">Revert
+                        Changes</button>
+                    <button
+                        class="btn bg-brand-navy text-white hover:bg-black border-none normal-case px-6 sm:px-8 relative">
+                        Complete Session
+                        <span
+                            class="absolute -right-2 -top-2 w-5 h-5 sm:w-6 sm:h-6 bg-brand-navy border-2 border-white rounded-full flex items-center justify-center text-xs">+</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

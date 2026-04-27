@@ -1,0 +1,525 @@
+<!-- Tab Buttons -->
+<div class="flex flex-wrap justify-end gap-1 border-b border-gray-100 pb-3">
+    @for (tab of tabs; track tab) {
+    <button class="btn btn-sm px-4 transition-all" [class.btn-primary]="activeTab() === tab" aria-label="Tab"
+        [class.btn-ghost]="activeTab() !== tab" [class.text-gray-600]="activeTab() !== tab" (click)="setActiveTab(tab)">
+        {{ tab }}
+    </button>
+    }
+</div>
+@switch (activeTab()) {
+@case ('SEMESTERS') {
+<app-semester-tab [currentUserRole]="currentUserRole"></app-semester-tab>
+}
+
+
+@case ('SUBJECTS') {
+@if(modalCreateSubject){
+<div class="card">
+    <!-- File Preview Strip -->
+    <div class="preview-strip" *ngIf="imagePreview">
+        <div class="preview-img">
+            <img [src]="imagePreview" alt="preview"
+                style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+        </div>
+        <div class="preview-info">
+            <div class="preview-name">{{ selectedFile?.name }}</div>
+            <div class="preview-size">{{ (selectedFile?.size / 1048576).toFixed(1) }} MB</div>
+        </div>
+        <button type="button" class="remove-btn" aria-label="Remove File"
+            (click)="imagePreview = null; selectedFile = null">✕</button>
+    </div>
+    <form [formGroup]="formCreateSubject">
+        <!-- Name + Code row -->
+        <div class="field-row">
+            <div class="field">
+                <label for="name">Subject Name</label>
+                <input id="name" type="text" formControlName="name" class="rounded-full" autocapitalize=""
+                    placeholder="e.g. Computer Science" />
+            </div>
+            <!-- departmentId -->
+            <div class="form-control w-full">
+                <label class="label"><span
+                        class="label-text font-bold uppercase text-xs rounded-full">department</span></label>
+                <select class="select select-bordered bg-white rounded-full" formControlName="departmentId">
+                    @for (department of getAllDepartment; track $index) {
+                    <option value="{{department.id}}">{{ department.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="field">
+                <label for="description">Description</label>
+                <input id="description" type="text" formControlName="description" class="rounded-full"
+                    placeholder="e.g. CS-101" />
+            </div>
+        </div>
+        <div class="divider"></div>
+
+        <!-- Upload -->
+        <div class="field">
+            <label>Class image</label>
+            <label class="upload-zone" for="fileInput">
+                <div class="upload-icon">
+                    <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        stroke="currentColor">
+                        <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="upload-label">Click to upload</div>
+                <div class="upload-sub">PNG or JPG, up to 5 MB</div>
+                <input type="file" id="fileInput" class="hidden-input" accept=".png,.jpg,.jpeg"
+                    (change)="handleOnFileChangeSubject($event)" />
+            </label>
+        </div>
+        <!-- Buttons -->
+        <div class="submit-row">
+            <button type="button" (click)="handleCloseSubjectModal()" class="btn-cancel" aria-label="Cancel"
+                routerLink="/classes">Cancel</button>
+            <button type="button" class="btn-submit" (click)="handleCreatesubjects()" aria-label="Create Class">
+                <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                    stroke="white">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Create Subject
+            </button>
+        </div>
+    </form>
+</div>
+}@else {
+<!-- TOP NAV / TITLE -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+    <div class="space-y-1">
+        <h1 class="text-4xl font-extrabold tracking-tight">
+            Subject<span class="text-slate-400 font-medium">For Learning</span>
+        </h1>
+        <p class="text-slate-500 max-w-md leading-relaxed">
+            Manage and oversee the structural pillars of the university's academic excellence.
+        </p>
+    </div>
+    <button class="btn btn-neutral bg-[#0F172A] border-none px-8 rounded-xl normal-case hover:scale-105 transition-all"
+        (click)="handleSubjectModal()" aria-label="Create New Subject">
+        <i class="fa-solid fa-plus"></i>
+        Create New Subject </button>
+</div>
+<!-- STATS SECTION -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+    <div
+        class="col-span-12 lg:col-span-8 bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8 flex flex-wrap md:flex-nowrap justify-between items-center">
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Total Faculty Load</p>
+            <div class="flex items-center gap-3">
+                <span class="text-4xl font-black">{{countSubect}}</span>
+                <span class="badge badge-success badge-soft text-[10px] font-bold py-3">+12% increase</span>
+            </div>
+        </div>
+        <div class="hidden md:block w-[1px] h-12 bg-slate-100"></div>
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Subject Count</p>
+            <span class="text-4xl font-black">{{countSubect}}</span>
+            <span class="text-xs text-slate-400 ml-2">Active Units</span>
+        </div>
+        <div class="hidden md:block w-[1px] h-12 bg-slate-100"></div>
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-400 mb-2">Student Sat.</p>
+            <span class="text-4xl font-black">4.9</span>
+            <span class="text-xs text-slate-400 ml-2">/ 5.0</span>
+        </div>
+    </div>
+    <div
+        class="col-span-12 lg:col-span-4 bg-[#0F172A] rounded-[2rem] p-8 text-white flex flex-col justify-between group cursor-pointer overflow-hidden relative">
+        <p class="text-slate-400 italic text-sm leading-relaxed relative z-10">
+            "Excellence is not an act, but a habit of the institution."
+        </p>
+        <div class="flex justify-between items-center mt-6 relative z-10">
+            <span class="text-[10px] font-bold tracking-[0.2em] opacity-80 uppercase">Q3 Performance</span>
+            <div class="p-2 bg-white/10 rounded-lg group-hover:rotate-12 transition-transform">
+                <lucide-icon name="sparkles" class="w-5 h-5 text-blue-300"></lucide-icon>
+            </div>
+        </div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/20 blur-3xl"></div>
+    </div>
+</div>
+<!-- DEPARTMENT GRID -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div *ngFor="let dept of getAllSubject"
+        class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="flex justify-between items-start mb-8">
+            <!-- <div [class]="'p-4 rounded-2xl'">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div> -->
+            <div class=""></div>
+            <div class="flex gap-1">
+                <button class="btn btn-warning btn-sm btn-circle text-slate-300" aria-label="Update Subject">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-primary btn-sm btn-circle text-slate-300" aria-label="More Options">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+            </div>
+        </div>
+        <!-- <h3 class="text-2xl font-bold text-slate-800">{{dept.title}}</h3>
+        <p class="text-xs font-semibold text-slate-400 mb-8">{{dept.school}}</p> -->
+        <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-6">
+            <div class="flex items-center gap-3">
+                <div class="avatar shadow-md">
+                    <div class="w-10 rounded-full ring ring-white ring-offset-base-100 ring-offset-2">
+                        <img [src]="dept.thumbnail" alt="image" />
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[11px] font-black">{{dept.departmentName}}</p>
+                    <p class="text-[9px] text-slate-400 uppercase tracking-tighter">{{dept.code}}</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-xl font-black">{{dept.name}}</p>
+                <p class="text-[9px] text-slate-400 uppercase tracking-tighter">Courses</p>
+            </div>
+        </div>
+        <button aria-label="View Details"
+            class="btn btn-block bg-slate-50 hover:bg-slate-100 border-none text-slate-500 font-bold rounded-2xl group">
+            View Details
+            <lucide-icon name="arrow-right"
+                class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></lucide-icon>
+        </button>
+    </div>
+    <!-- ADD NEW BRANCH -->
+    <div (click)="handleSubjectModal()"
+        class="border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-slate-50/40 flex flex-col items-center justify-center p-12 text-center group cursor-pointer hover:bg-white hover:border-slate-300 transition-colors">
+        <div class="bg-white p-5 rounded-2xl shadow-sm mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-circle-plus w-8 h-8 text-slate-400"></i>
+        </div>
+        <h4 class="font-bold text-slate-600">Add More subject</h4>
+        <p class="text-xs text-slate-400">Expand the subject</p>
+    </div>
+</div>
+}
+}
+@case ('COURSES') {
+<!-- Header -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 md:gap-0">
+    <!-- Left side: title and description -->
+    <div class="max-w-2xl">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#001529]">
+            Courses & Curriculum
+        </h1>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">
+            Curate and manage the intellectual foundation of our institution. Oversee departmental alignment and credit
+            distribution.
+        </p>
+    </div>
+    <!-- Right side: Add button -->
+    <button aria-label="Add New Course"
+        class="btn btn-neutral bg-[#001529] border-none rounded-lg normal-case px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base w-full md:w-auto"
+        (click)="handleCreateCourseModal()">
+        <span class="mr-2 text-lg">+</span> Add New Course
+    </button>
+</header>
+<!-- Top Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Total Courses</p>
+        <div class="text-4xl font-bold">{{ getAllCourse.length }}</div>
+        <p class="text-xs text-success font-medium mt-2">↑ +12 this semester</p>
+    </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Active Classes</p>
+        <div class="text-4xl font-bold">{{countCourse}}</div>
+        <div class="w-full bg-slate-100 h-1 mt-4 rounded-full">
+            <div class="bg-success h-1 rounded-full" style="width: 70%"></div>
+        </div>
+    </div>
+    <div class="bg-[#1E293B] p-6 rounded-2xl text-white relative overflow-hidden">
+        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-2">Upcoming Registration</p>
+        <h3 class="text-xl font-bold">Fall 2024 Enrollment</h3>
+        <p class="text-xs text-slate-400 mt-2">Review and approve 42 pending course proposals before the July 15th
+            deadline.</p>
+        <div class="absolute right-4 bottom-4 opacity-10 text-6xl">📅</div>
+    </div>
+</div>
+<!-- Filters & Table Section -->
+<div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    @if(modalCreateCourse){
+    <app-course-form></app-course-form>
+    }@else{
+    <!-- Toolbar -->
+    <div class="p-6 flex flex-wrap justify-between items-center border-b border-slate-50 gap-4">
+        <div class=""></div>
+        <div class="flex items-center gap-6">
+            <div class="form-control">
+                <label class="label cursor-pointer gap-3">
+                    <input type="checkbox" class="toggle toggle-success toggle-sm" />
+                    <span class="label-text font-bold text-slate-600 text-xs">Show Active Classes Only</span>
+                </label>
+            </div>
+            <select class="select select-bordered select-sm rounded-lg text-xs bg-slate-50">
+                <option value="All" selected>DepartmentModel: All</option>
+                @for (item of getAllDepartment; track $index) {
+                <option value="{{item.id}}">{{item.name}}</option>
+                }
+            </select>
+        </div>
+    </div>
+    <!-- Table -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-sm">
+        <table class="table w-full">
+            <!-- 🔷 TABLE HEADER -->
+            <thead class="bg-slate-100 text-slate-600 uppercase text-xs">
+                <tr>
+                    <th class="pl-8 py-4">Instructor</th>
+                    <th>Course</th>
+                    <th>Subject</th>
+                    <th>Semester</th>
+                    <th>Schedule</th>
+                    <th>Duration</th>
+                    <th class="text-right pr-8">Action</th>
+                </tr>
+            </thead>
+            <!-- 🔷 TABLE BODY -->
+            <tbody>
+                <tr *ngFor="let course of getAllCourse"
+                    class="hover:bg-slate-50/50 transition-colors border-b border-slate-50">
+                    <!-- Instructor -->
+                    <td class="font-bold text-sm me-4">{{ course.instructorName }}</td>
+                    <!-- Course Info -->
+                    <td class="py-5 pl-8">
+                        <div class="flex items-center gap-4">
+                            <div class="font-bold text-sm">
+                                {{ course.name }}
+                            </div>
+                        </div>
+                    </td>
+                    <!-- Subject -->
+                    <td>
+                        <span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">
+                            {{ course.subjectName }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-ghost text-[9px] font-bold uppercase rounded-md py-3 px-3">
+                            {{ course.semesterName }}
+                        </span>
+                    </td>
+                    <!-- Schedule (Loop) -->
+                    <td>
+                        <div *ngFor="let s of course.schedules" class="text-xs">
+                            {{ s.dayOfWeek }} {{ s.startTime }}-{{ s.endTime }} (Room {{ s.room }})
+                        </div>
+                    </td>
+                    <!-- Duration -->
+                    <td class="text-sm text-blue-600"> {{ course.startAt }} → {{ course.endAt }} </td>
+                    <!-- Action -->
+                    <td class="text-right pr-8">
+                        <button aria-label="Update Course"
+                            class="btn btn-warning btn-xs text-white font-bold hover:text-warning me-1">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button aria-label="Delete Course"
+                            class="btn btn-error btn-xs text-white font-bold hover:text-error">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
+        <span>Showing <b>1-20</b> of <b>{{ getAllCourse.length }}</b> courses</span>
+        <div class="join">
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Previous Page">«</button>
+            <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3"
+                aria-label="Page 1">1</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Page 2">2</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Page 3">3</button>
+            <button class="join-item btn btn-xs btn-ghost" aria-label="Next Page">»</button>
+        </div>
+    </div>
+    }
+</div>
+}
+@case ('CLASSES') {
+<app-class-tab [currentUserRole]="currentUserRole" [getAllDepartment]="getAllDepartment"></app-class-tab>
+}
+@default {
+@if(modalCreateDepartment){
+<div class="card">
+    <!-- File Preview Strip -->
+    <div class="preview-strip" *ngIf="imagePreview">
+        <div class="preview-img">
+            <img [src]="imagePreview" alt="preview"
+                style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+        </div>
+        <div class="preview-info">
+            <div class="preview-name">{{ selectedFile?.name }}</div>
+            <div class="preview-size">{{ (selectedFile?.size / 1048576).toFixed(1) }} MB</div>
+        </div>
+        <button type="button" class="remove-btn" aria-label="remove"
+            (click)="imagePreview = null; selectedFile = null">✕</button>
+    </div>
+    <form [formGroup]="formCreateDepartment">
+        <!-- Name + Code row -->
+        <div class="field-row">
+            <div class="field">
+                <label for="name">DepartmentModel name</label>
+                <input id="name" type="text" formControlName="name" class="rounded-full"
+                    placeholder="e.g. Computer Science" />
+            </div>
+            <!-- description -->
+            <div class="field">
+                <label for="description">Description</label>
+                <input id="description" type="text" formControlName="description" class="rounded-full"
+                    placeholder="e.g. CS-101" />
+            </div>
+        </div>
+        <div class="divider"></div>
+        <!-- Upload -->
+        <div class="field">
+            <label>Class image</label>
+            <label class="upload-zone" for="fileInput">
+                <div class="upload-icon">
+                    <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                        stroke="currentColor">
+                        <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="upload-label">Click to upload</div>
+                <div class="upload-sub">PNG or JPG, up to 5 MB</div>
+                <input type="file" id="fileInput" class="hidden-input" accept=".png,.jpg,.jpeg"
+                    (change)="handleOnFileChange($event)" />
+            </label>
+        </div>
+        <!-- Buttons -->
+        <div class="submit-row">
+            <button type="button" (click)="closeDepartmentModal()" class="btn-cancel" aria-label="Cancel"
+                routerLink="/classes">Cancel</button>
+            <button type="button" class="btn-submit" aria-label="Create DepartmentModel"
+                (click)="handleCreateDepartment()">
+                <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                    stroke="white">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Create DepartmentModel
+            </button>
+        </div>
+    </form>
+</div>
+}@else {
+<!-- TOP NAV / TITLE -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+    <div class="space-y-1">
+        <h1 class="text-4xl font-extrabold tracking-tight">
+            DepartmentModel <span class="text-slate-600 font-medium">Nexus</span>
+        </h1>
+        <p class="text-slate-600 max-w-md leading-relaxed">
+            Manage and oversee the structural pillars of the university's academic excellence.
+        </p>
+    </div>
+    <button class="btn btn-neutral bg-[#0F172A] border-none px-8 rounded-xl normal-case hover:scale-105 transition-all"
+        aria-label="Create New DepartmentModel" (click)="openDepartmentModal()">
+        <i class="fa-solid fa-plus"></i>
+        Create New DepartmentModel
+    </button>
+</div>
+<!-- STATS SECTION -->
+<div class="grid grid-cols-12 gap-6 mb-12">
+    <div
+        class="col-span-12 lg:col-span-8 bg-white rounded-4xl border border-slate-100 shadow-sm p-8 flex flex-wrap md:flex-nowrap justify-between items-center">
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-600 mb-2">Total Faculty Load</p>
+            <div class="flex items-center gap-3">
+                <span class="text-4xl font-black">{{countDepartment}}</span>
+                <span class="badge badge-success badge-soft text-[10px] font-bold py-3">+12% increase</span>
+            </div>
+        </div>
+        <div class="hidden md:block w-px h-12 bg-slate-100"></div>
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-600 mb-2">DepartmentModel Count</p>
+            <span class="text-4xl font-black">{{countDepartment}}</span>
+            <span class="text-xs text-slate-600 ml-2">Active Units</span>
+        </div>
+        <div class="hidden md:block w-px h-12 bg-slate-100"></div>
+        <div class="flex-1 px-4">
+            <p class="text-[10px] uppercase tracking-[0.15em] font-bold text-slate-600 mb-2">Student Sat.</p>
+            <span class="text-4xl font-black">4.9</span>
+            <span class="text-xs text-slate-600 ml-2">/ 5.0</span>
+        </div>
+    </div>
+    <div
+        class="col-span-12 lg:col-span-4 bg-[#0F172A] rounded-[2rem] p-8 text-white flex flex-col justify-between group cursor-pointer overflow-hidden relative">
+        <p class="text-slate-600 italic text-sm leading-relaxed relative z-10">
+            "Excellence is not an act, but a habit of the institution."
+        </p>
+        <div class="flex justify-between items-center mt-6 relative z-10">
+            <span class="text-[10px] font-bold tracking-[0.2em] opacity-80 uppercase">Q3 Performance</span>
+            <div class="p-2 bg-white/10 rounded-lg group-hover:rotate-12 transition-transform">
+                <lucide-icon name="sparkles" class="w-5 h-5 text-blue-300"></lucide-icon>
+            </div>
+        </div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/20 blur-3xl"></div>
+    </div>
+</div>
+<!-- DEPARTMENT GRID -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <div *ngFor="let dept of getAllDepartment"
+        class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <div class="flex justify-between items-start mb-8">
+            <!-- <div [class]="'p-4 rounded-2xl ' + dept.color">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div> -->
+            <div class=""></div>
+            <div class="flex gap-1">
+                <button class="btn btn-warning btn-sm btn-circle text-slate-300" aria-label="Edit">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-primary btn-sm btn-circle text-slate-300" aria-label="More">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+            </div>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-800">{{dept.name}}</h3>
+        <p class="text-xs font-semibold text-slate-400 mb-8">{{dept.description}}</p>
+        <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-6">
+            <div class="flex items-center gap-3">
+                <div class="avatar shadow-md">
+                    <div class="w-10 rounded-full ring ring-white ring-offset-base-100 ring-offset-2">
+                        <img [src]="environments.api_url + '/upload/department/' + dept.thumbnail" alt="image" />
+                    </div>
+                </div>
+                <div>
+                    <p class="text-[11px] font-black">{{dept.code}}</p>
+                    <p class="text-[9px] text-slate-400 uppercase tracking-tighter">Dept. Head</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-xl font-black">{{dept.courses}}</p>
+                <p class="text-[9px] text-slate-400 uppercase tracking-tighter">Courses</p>
+            </div>
+        </div>
+        <button
+            class="btn btn-block bg-slate-50 hover:bg-slate-100 border-none text-slate-500 font-bold rounded-2xl group"
+            aria-label="View Details">
+            View Details
+            <lucide-icon name="arrow-right"
+                class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></lucide-icon>
+        </button>
+    </div>
+    <!-- ADD NEW BRANCH -->
+    <div (click)="openDepartmentModal()"
+        class="border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-slate-50/40 flex flex-col items-center justify-center p-12 text-center group cursor-pointer hover:bg-white hover:border-slate-300 transition-colors">
+        <div class="bg-white p-5 rounded-2xl shadow-sm mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-circle-plus w-8 h-8 text-slate-400"></i>
+        </div>
+        <h4 class="font-bold text-slate-600">Add More</h4>
+        <p class="text-xs text-slate-400">Expand the department</p>
+    </div>
+</div>
+}
+}
+}

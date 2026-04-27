@@ -1,0 +1,110 @@
+<div class="overflow-x-auto bg-white p-2 rounded">
+	<div class="flex gap-5 mb-2 justify-end">
+		<button class="btn btn-success" (click)="handleRefreshAuditLogPage()"><i class="fa-solid fa-arrows-rotate"></i>
+			Refresh
+		</button>
+		<!-- Search -->
+		<div class="relative w-full max-w-sm">
+			<label class="input input-bordered flex items-center gap-1 rounded-full">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2">
+					<circle cx="11" cy="11" r="8" />
+					<path d="m21 21-4.35-4.35" />
+				</svg>
+				<input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
+			</label>
+		</div>
+	</div>
+	<table class="table table-zebra w-full text-xs mt-4">
+		<thead class="bg-slate-50 text-slate-400 tracking-widest">
+			<tr>
+				<th>Number</th>
+				<th>Time</th>
+				<th>Table</th>
+				<th>Status</th>
+				<th>New Data</th>
+				<th>Old Data</th>
+				<th>Record ID</th>
+			</tr>
+		</thead>
+		<tbody class="font-medium">
+			<tr *ngFor="let log of getAllAuditLog; let i = index" class="hover">
+				<td>{{i + 1}}</td>
+				<!-- TIME -->
+				<td class="text-slate-400 text-[13px]">
+					{{ log.changeAt | date:'yyyy-MM-dd HH:mm:ss'}}
+				</td>
+				<!-- TABLE NAME -->
+				<td>
+					<div class="text-[14px] bg-slate-50 px-2 py-1 rounded font-mono">
+						{{ log.tableName }}
+					</div>
+				</td>
+				<!-- ACTION -->
+				<td>
+					<span class="px-2 py-1 rounded text-white text-[12px] font-bold" [ngClass]="{
+        'bg-green-500': log.action === 'INSERT',
+        'bg-blue-500': log.action === 'UPDATE',
+        'bg-red-500': log.action === 'DELETE'
+      }">
+						{{ log.action }}
+					</span>
+				</td>
+				<!-- NEW DATA -->
+				<td class="text-[11px]">
+					<div *ngIf="log.newData; else noNew" class="bg-green-50 p-2 rounded space-y-1">
+						<!-- SHOW ONLY CHANGED VALUES FOR UPDATE -->
+						<ng-container *ngIf="log.action === 'UPDATE'; else showAllNew">
+							<div *ngFor="let item of log.newData | keyvalue">
+								<ng-container *ngIf="log.oldData && log.oldData[item.key] !== item.value">
+									<div>
+										<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+										<span class="text-green-600 ml-1 font-medium text-[14px]">
+											{{ formatValue(item.value) }}
+										</span>
+									</div>
+								</ng-container>
+							</div>
+						</ng-container>
+						<!-- SHOW ALL FOR INSERT -->
+						<ng-template #showAllNew>
+							<div *ngFor="let item of log.newData | keyvalue">
+								<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+								<span class="text-green-600 ml-1 font-medium text-[14px]">
+									{{ formatValue(item.value) }}
+								</span>
+							</div>
+						</ng-template>
+					</div>
+					<ng-template #noNew>
+						<span class="text-slate-300 italic">—</span>
+					</ng-template>
+				</td>
+				<!-- OLD DATA -->
+				<td class="text-[11px]">
+					<div *ngIf="log.action === 'UPDATE'; else noOld" class="bg-red-50 p-2 rounded space-y-1">
+
+						<!-- SHOW ONLY CHANGED VALUES -->
+						<div *ngFor="let item of log.newData | keyvalue">
+							<ng-container *ngIf="log.oldData && log.oldData[item.key] !== item.value">
+								<div>
+									<span class="font-semibold capitalize text-[14px]">{{ item.key }}:</span>
+									<span class="line-through text-red-400 ml-1 text-[14px]">
+										{{ formatValue(log.oldData[item.key]) }}
+									</span>
+								</div>
+							</ng-container>
+						</div>
+					</div>
+					<ng-template #noOld>
+						<span class="text-slate-300 italic">—</span>
+					</ng-template>
+				</td>
+				<!-- RECORD ID -->
+				<td class="font-mono text-[14px] text-green-600">
+					{{ log.recordId }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

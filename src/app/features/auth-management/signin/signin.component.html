@@ -1,0 +1,75 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-semibold text-center mb-6">Welcome back</h2>
+        <form [formGroup]="signinForm" (ngSubmit)="handleSigninAdminPage()" class="space-y-5">
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Email</span>
+                </label>
+                <input type="email" formControlName="email" placeholder="you@example.com"
+                    class="input input-bordered w-full rounded-full"
+                    [class.input-error]="emailControl?.invalid && emailControl?.touched"
+                    [class.input-success]="emailControl?.valid && emailControl?.touched" />
+                @if(emailControl?.invalid && emailControl?.touched){
+                <div class="text-error text-sm mt-1"> Invalid Email </div>
+                }
+            </div>
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text font-medium">Password</span>
+                </label>
+                <div class="relative">
+                    <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+                        placeholder="Enter password" class="input input-bordered w-full rounded-full pr-12"
+                        [class.input-error]="passwordControl?.invalid && passwordControl?.touched"
+                        [class.input-success]="passwordControl?.valid && passwordControl?.touched" />
+                    <button type="button" (click)="togglePassword()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 hover:text-primary transition">
+                        <!-- Eye Icon -->
+                        @if(passwordVisible){
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+
+                        </svg>
+                        }
+                        <!-- Eye Slash -->
+                        @if(!passwordVisible){
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 3l18 18M10.58 10.58a3 3 0 004.24 4.24M9.88 5.09A9.77 9.77 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-2.293 3.774M6.228 6.228A10.45 10.4 0 003.935 12.002C5.227 16.338 9.24419.5 14 19.5" />
+                        </svg>
+                        }
+                    </button>
+                </div>
+                @if(passwordControl?.invalid && passwordControl?.touched){
+                <div class="text-error text-sm mt-1"> Invalid Password </div>
+                }
+            </div>
+
+            <div class="flex gap-1 mt-2 h-1">
+                @for (bar of strengthBars; track $index; let i = $index) {
+                <div class="flex-1 rounded" [class]="getBarColor(i+1)">
+                </div>
+                }
+            </div>
+            <div class="text-xs mt-1">
+                {{strengthLabel}}
+            </div>
+            <button type="submit" aria-label="Sign in" class="btn btn-primary w-full">
+                Sign in</button>
+        </form>
+        <div class="text-end mt-2">
+            <a (click)="goToSignin('forgot-password')"
+                class="text-blue-500 hover:underline text-sm p-2 hover:cursor-pointer">
+                Forgot Password
+            </a>
+        </div>
+    </div>
+</div>

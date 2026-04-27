@@ -1,0 +1,251 @@
+<!-- Desktop Table -->
+<div class="flex justify-end items-end gap-2 mb-4">
+    <!-- Search -->
+    <div class="relative w-full max-w-sm">
+        <label class="input input-bordered flex items-center gap-1 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="search" class="grow border-0 bg-transparent outline-none" [(ngModel)]="searchQuery"
+                (input)="filterStudents()" placeholder="Search" />
+        </label>
+    </div>
+    <button
+        (click)="isImportModalOpen = !isImportModalOpen"
+        class="flex items-center justify-center font-semibold gap-2 px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-emerald-500 hover:text-white transition w-full sm:w-auto">
+        <i class="fa-solid fa-cloud-arrow-up"></i> Import
+    </button>
+    <button
+        (click)="handleExportStudent()"
+        class="flex items-center justify-center font-semibold gap-2 px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-emerald-500 hover:text-white transition w-full sm:w-auto">
+        <i class="fa-solid fa-arrow-up-from-bracket"></i> Export
+    </button>
+    <!-- Button -->
+    <button type="button" aria-label="Add Student" (click)="handleToggleStep()" class="btn btn-primary rounded-full">
+        <i class="fa-solid fa-user-plus"></i> Add Student
+    </button>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+    @for (stats of stats; track stats.id) {
+      <app-stats-card [icon]="stats.icon" [title]="stats.title" [total]="stats.total" [primary]="stats.primary" [secondary]="stats.secondary" />
+    }
+</div>
+@if(showStep){
+<ul class="steps w-full mb-6 mt-5">
+    <li class="step" [class.step-primary]="currentStep >= 1">Student Information</li>
+    <li class="step" [class.step-primary]="currentStep >= 2">Address Information</li>
+    <!-- <li class="step" [class.step-primary]="currentStep >= 3">Review</li> -->
+</ul>
+<form [formGroup]="studentForm">
+    @if(currentStep === 1){
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <input type="text" placeholder="Khmer First Name" formControlName="khFirstName"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="Khmer Last Name" formControlName="khLastName"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="English First Name" formControlName="enFirstName"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="English Last Name" formControlName="enLastName"
+            class="input input-bordered w-full rounded-full" />
+        <input type="email" placeholder="Email" formControlName="email"
+            class="input input-bordered w-full rounded-full" />
+        <input type="date" formControlName="dateOfBirth" class="input input-bordered w-full rounded-full" />
+        <select class="select select-bordered w-full rounded-full" id="classId" formControlName="classId">
+            <option value="" disabled>Select Class</option>
+            <option *ngFor="let c of classes" [value]="c.id">
+                {{ c.name }}
+            </option>
+        </select>
+        <select id="gender" formControlName="gender" class="select select-bordered w-full rounded-full">
+            <option value="" disabled>Select Gender</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+        </select>
+        <label class="input validator rounded-full">
+            <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <g fill="none">
+                    <path
+                        d="M7.25 11.5C6.83579 11.5 6.5 11.8358 6.5 12.25C6.5 12.6642 6.83579 13 7.25 13H8.75C9.16421 13 9.5 12.6642 9.5 12.25C9.5 11.8358 9.16421 11.5 8.75 11.5H7.25Z"
+                        fill="currentColor"></path>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M6 1C4.61929 1 3.5 2.11929 3.5 3.5V12.5C3.5 13.8807 4.61929 15 6 15H10C11.3807 15 12.5 13.8807 12.5 12.5V3.5C12.5 2.11929 11.3807 1 10 1H6ZM10 2.5H9.5V3C9.5 3.27614 9.27614 3.5 9 3.5H7C6.72386 3.5 6.5 3.27614 6.5 3V2.5H6C5.44771 2.5 5 2.94772 5 3.5V12.5C5 13.0523 5.44772 13.5 6 13.5H10C10.5523 13.5 11 13.0523 11 12.5V3.5C11 2.94772 10.5523 2.5 10 2.5Z"
+                        fill="currentColor"></path>
+                </g>
+            </svg>
+            <input type="tel" class="tabular-nums w-full rounded-full" formControlName="phoneNumber" required
+                placeholder="Phone" pattern="[0-9]*" minlength="10" maxlength="10" title="Must be 10 digits" />
+        </label>
+        <p class="absolute right-80 top-125 validator-hint">Must be 10 digits</p>
+        <label class="input validator rounded-full"> enrollmentDate
+            <input type="date" class="tabular-nums w-full rounded-full" formControlName="enrollmentDate" required
+                placeholder="Enrollment Date" />
+        </label>
+    </div>
+    }@else {
+    <div [formGroupName]="'address'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <input type="text" placeholder="Street" formControlName="street"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="Sangkat" formControlName="sangkat"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="Khan" formControlName="khan" class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="Province" formControlName="province"
+            class="input input-bordered w-full rounded-full" />
+        <input type="text" placeholder="Country" formControlName="country"
+            class="input input-bordered w-full rounded-full" />
+    </div>
+    }
+    <div class="flex justify-between mt-6">
+        <button type="button" class="btn btn-soft btn-warning" aria-label="Back" (click)="prevStep()"
+            [disabled]="currentStep === 1">
+            <i class="fa-solid fa-circle-chevron-left font"></i> Back
+        </button>
+        <ng-container *ngIf="currentStep < 2">
+            <button type="button" class="btn btn-soft btn-primary" aria-label="Next" (click)="nextStep()">
+                <i class="fa-solid fa-circle-chevron-right"></i> Next
+            </button>
+        </ng-container>
+        <ng-container *ngIf="currentStep === 2">
+            <button type="submit" class="btn btn-primary rounded-full" aria-label="Submit"
+                (click)="handleCreateStudent()">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Submit
+            </button>
+        </ng-container>
+    </div>
+</form>
+}@else {
+<div class="hidden sm:block mt-5">
+    <div class="max-h-162.5 overflow-y-auto  rounded-lg">
+        <table class="table w-full">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>នាមត្រកូល</th>
+                    <th>នាមខ្លួន</th>
+                    <th class="first-letter:uppercase">នាមត្រកូល</th>
+                    <th class="first-letter:uppercase">នាមខ្លួន</th>
+                    <th class="first-letter:uppercase">លេខកូដសិស្ស</th>
+                    <th>ថ្ងៃចូលរៀន</th>
+                    <th>ថ្នាក់</th>
+                    <th>ភេទ</th>
+                    <th>លេខទូរស័ព្ទ</th>
+                    <th>ថ្ងៃខែឆ្នាំកំណើត</th>
+                    <th>ខេត្ត</th>
+                    <th>ប្រទេស</th>
+                    <th>ស្ថានភាព</th>
+                    <th>សកម្មភាព</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @for (student of filtterStudents; track $index) {
+                <tr class="hover:bg-gray-50 odd:bg-white even:bg-gray-50">
+                    <td>{{ $index + 1 }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.khFirstName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.khLastName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enFirstName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enLastName || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.studentCode || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.enrollmentDate || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.className || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase"> {{ student?.gender === 'M' ? 'MALE' : 'FEMALE'
+                        }}
+                    </td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.phoneNumber || 'NA' }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.dateOfBirth || 'NA'}}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.province ||'NA' }}</td>
+                    <td class="px-4 py-3 first-letter:uppercase">{{ student?.address?.country ||'NA' }}</td>
+                    <td class="px-4 py-3">
+                        <span class="px-2 py-1 rounded text-white"
+                            [ngClass]="student?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
+                            {{ student?.status === 'INACTIVE' ? 'Inactive' : 'Active' }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex justify-start gap-2">
+                            <!-- View button: show for everyone except ROLE_ADMIN -->
+                            <button type="button" aria-label="View"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <!-- Edit button: show only for ROLE_ADMIN -->
+                            <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Delete"
+                                class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <div class="p-6 border-t border-slate-50 flex justify-between items-center text-xs text-slate-400 font-medium">
+            <span>Showing <b>1-10</b> of <b>{{ totalElement }}</b> students</span>
+            <div class="join">
+                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastPrevious"
+                    (click)="handlePreviousPage()"><i class="fa-solid fa-angle-left"></i></button>
+                <button class="join-item btn btn-xs bg-[#001529] text-white border-none rounded-md px-3">1</button>
+                <button class="join-item btn btn-xs btn-ghost">2</button>
+                <button class="join-item btn btn-xs btn-ghost">3</button>
+                <button class="join-item btn btn-xs btn-ghost" [disabled]="!hastNext" (click)="handleHasNexPage()">
+                    <i class="fa-solid fa-angle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Mobile Cards -->
+<div class="sm:hidden p-1 mt-5">
+    <div class="grid grid-cols-2 gap-2">
+        <div *ngFor="let student of student; let i = index"
+            class="bg-white rounded shadow p-2 border border-gray-200 text-xs">
+            <div class="flex flex-col h-full">
+                <div class="space-y-0.5 grow">
+                    <div class="truncate font-medium first-letter:uppercase">{{ student?.khFirstName }}
+                        {{student?.khLastName}}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ student?.enFirstName }}
+                        {{student?.enLastName}}</div>
+                    <div class="text-gray-500">{{student?.phoneNumber}}</div>
+                    <div class="text-gray-500">{{ student?.gender === 'M' ? 'MALE' : 'FEMALE' }}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ student?.className}}</div>
+                    <div class="text-gray-500 first-letter:uppercase">{{ student?.address.province}}</div>
+                    <div class="text-gray-500">{{ student?.address.country}}</div>
+                    <div class="truncate text-gray-500" title="{{ student?.status }}">
+                        <span class="px-2 py-1 rounded text-white"
+                            [ngClass]="student?.status === 'INACTIVE' ? 'bg-red-500' : 'bg-green-500'">
+                            {{ student?.status === 'INACTIVE' ? 'Inactive' : 'Active' }}
+                        </span>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-1 space-x-1">
+                    <button type="button" class="bg-blue-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="View">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    @if (currentUserRole =="ROLE_ADMIN") {
+                    <button type="button" class="bg-yellow-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" class="bg-red-500 text-white px-1 py-0.5 rounded text-[10px] w-full"
+                        aria-label="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (isImportModalOpen) {
+<!-- black overlay -->
+  <div class="w-full h-full absolute top-0 left-0 flex items-center justify-center bg-black/10 backdrop-blur-sm">
+    <app-import-student-modal (cancel)="handleCloseModal($event)" (importStudent)="handleImportStudentFromExcel($event)" )/>
+  </div>
+}
