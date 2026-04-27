@@ -1,4 +1,4 @@
-import { TokenStoragesService } from '../app/api/tokens/token-storages.service';
+import { TokenStoragesService } from "src/app/core/services/token-storage/token-storages.service";
 const tokenStorage = new TokenStoragesService();
 export const environments = {
   api_url: 'http://localhost:8080/api/v1',

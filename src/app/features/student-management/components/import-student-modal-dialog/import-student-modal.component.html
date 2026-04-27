@@ -1,0 +1,36 @@
+<div class="relative max-w-lg p-12 border border-slate-300 rounded-lg bg-zinc-50">
+  <div
+    class="absolute right-6 top-6 p-1.5 rounded-full bg-gray-100 hover:bg-gray-300 transition transition-colors duration-300">
+    <button (click)="handleCloseMadalDialog()">
+      <i class="fa-solid fa-x text-slate-600 hover:text-slate-800"></i>
+    </button>
+  </div>
+  <div class="">
+    <form (ngSubmit)="handleSendData()" [formGroup]="form">
+      <h2 class="font-semibold text-2xl text-primary mb-6">
+        <i class="fa-solid fa-file"></i>
+        នាំចូលសិស្ស
+      </h2>
+      <div class="mb-4">
+        <label for="classId" class="text-slate-600 font-medium">លេខសម្គាល់ថ្នាក់</label>
+        <select formControlName="classId" class="select focus:select-primary w-full rounded-full">
+          <option disabled selected>ជ្រើសរើសថ្នាក់</option>
+          @for (c of classList; track c.id) {
+          <option [ngValue]="c.id">{{c.name}}</option>
+          }
+        </select>
+      </div>
+      <div class="mb-6">
+        <label for="classId" class="text-slate-600 font-medium">ទិន្នន័យសិស្ស</label>
+        <input (change)="onFileChange($event)" type="file" accept=".xlsx"
+          class="w-full rounded-full file-input focus:file-input-primary" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-full font-medium text-lg">
+        <span>
+          <i class="fa-solid fa-table"></i>
+        </span>
+        នាំចូល
+      </button>
+    </form>
+  </div>
+</div>
