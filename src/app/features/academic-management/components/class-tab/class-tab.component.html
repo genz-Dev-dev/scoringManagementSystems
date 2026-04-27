@@ -59,13 +59,15 @@
         </div>
     </div>
     <!-- Table -->
-    <div class="max-h-[310px] overflow-y-auto hidden sm:block">
+    <div class="max-h-77.5 overflow-y-auto hidden sm:block">
         <table class="table w-full">
             <thead class="sticky top-0 bg-white z-10">
                 <tr>
-                    <th class="pl-2 ">Class Name</th>
-                    <th>DepartmentModel</th>
+                    <th>Index</th>
+                    <th>Department</th>
+                    <th class="pl-2 ">Class</th>
                     <th>Academic Year</th>
+                    <th>Generation</th>
                     <th>Generation</th>
                     <th>Created At</th>
                     <th>Updated</th>
@@ -75,21 +77,23 @@
             <tbody>
                 @for (classItem of getAllClass; track $index) {
                 <tr class="hover:bg-slate-50/50 border-b border-slate-50">
+                  <td>{{$index+1}}</td>
                     <!-- Column 1 -->
                     <td class="py-2 pl-2">
                         <div class="flex items-center gap-4">
                             <div class="text-blue-600 font-bold text-[14px]">
-                                {{ classItem.name }}
+                                {{ classItem.departmentName }}
                             </div>
                         </div>
                     </td>
-                    <td class="font-bold text-sm">{{ classItem.departmentName }}</td>
+                    <td class="font-bold text-sm">{{ classItem.name }}</td>
                     <td><span class="text-xs font-medium"> {{ classItem.academicYear }}</span></td>
                     <td><span class="text-xs font-medium"> {{ classItem.generation }}</span></td>
                     <td>
                         <div class="badge badge-success badge-outline text-[9px] px-3 py-3">{{ classItem.creationAt }}</div>
                     </td>
                     <td><span class="text-xs font-medium"> {{ classItem.updatedAt }}</span></td>
+                    <td>{{classItem.updatedAt}}</td>
                     <td class="text-right pr-8">
                         <div class="flex justify-end gap-2">
                             <button type="button" aria-label="View"
@@ -134,7 +138,7 @@
             <!-- Name -->
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">ឈ្មោះ​ ថ្នាក់</span>
+                    <span class="label-text">ឈ្មោះថ្នាក់</span>
                 </label>
                 <input type="text" name="name" formControlName="name" required placeholder="Enter course name"
                     class="input input-bordered w-full rounded-full" />

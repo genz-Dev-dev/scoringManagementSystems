@@ -6,6 +6,8 @@ import { TokenServiceService } from '../token/token.service.service';
 import { Auth } from '@angular/fire/auth';
 import {Class} from '../../../models/class.model';
 import {Pagination} from '../../../models/pagination.model';
+import {ApiResponse} from '../../../models/api-response.model';
+import {Department} from '../../../models/department.model';
 
 
 const api_extension = '/classes';
@@ -73,9 +75,9 @@ export class DepartmentService
       this.getHttpOption( true )
     );
   }
-  public getAllDepartment ()
+  public getAllDepartment (): Observable<ApiResponse<Department[]>>
   {
-    return this.httpClient.get<any>(
+    return this.httpClient.get<ApiResponse<Department[]>>(
       this.API1,
       this.getHttpOption( true )
     );

@@ -27,7 +27,7 @@
         <i class="fa-solid fa-user-plus"></i> Add Student
     </button>
 </div>
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
     @for (stats of stats; track stats.id) {
       <app-stats-card [icon]="stats.icon" [title]="stats.title" [total]="stats.total" [primary]="stats.primary" [secondary]="stats.secondary" />
     }
@@ -58,6 +58,11 @@
                 {{ c.name }}
             </option>
         </select>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            @for (stats of stats; track stats.id) {
+              <app-stats-card [icon]="stats.icon" [title]="stats.title" [total]="stats.total" [primary]="stats.primary" [secondary]="stats.secondary" />
+            }
+        </div>
         <select id="gender" formControlName="gender" class="select select-bordered w-full rounded-full">
             <option value="" disabled>Select Gender</option>
             <option value="M">Male</option>
@@ -102,7 +107,7 @@
             <i class="fa-solid fa-circle-chevron-left font"></i> Back
         </button>
         <ng-container *ngIf="currentStep < 2">
-            <button type="button" class="btn btn-soft btn-primary" aria-label="Next" (click)="nextStep()">
+            <button type="buttdataon" class="btn btn-soft btn-primary" aria-label="Next" (click)="nextStep()">
                 <i class="fa-solid fa-circle-chevron-right"></i> Next
             </button>
         </ng-container>
@@ -115,6 +120,26 @@
     </div>
 </form>
 }@else {
+
+<!-- filter option -->
+<div class="flex mb-4 gap-2 max-w-sm">
+  <select [(ngModel)]="selectedDepartment" (change)="handleFilterClassByDepartmentId(selectedDepartment)" class="select select-sm focus:select-primary">
+    <option disabled selected>ជ្រើសរើស department</option>
+    @for (department of departments; track department.id) {
+      <option [ngValue]="department.id">{{department.name}}</option>
+    }
+  </select>
+  <select class="select select-sm focus:select-primary">
+    @if (!selectedDepartment) {
+      <option class="truncate" disabled selected>សូមធ្វើការជ្រើសរើស departmentជាមុនសិន</option>
+    } @else {
+      <option disabled selected>ជ្រើសរើសថ្នាក់</option>
+      @for (clazz of classFilter; track clazz.id) {
+        <option [ngValue]="clazz.id">{{clazz.name}}</option>
+      }
+    }
+  </select>
+</div>
 <div class="hidden sm:block mt-5">
     <div class="max-h-162.5 overflow-y-auto  rounded-lg">
         <table class="table w-full">

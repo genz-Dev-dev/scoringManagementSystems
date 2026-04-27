@@ -12,6 +12,9 @@ import {StatsCardComponent} from '../../shared/components/stats-card/stats-card.
 import {ImportStudentModalComponent} from './components/import-student-modal-dialog/import-student-modal.component';
 import {ClassService} from '../../core/services/class/class.service';
 import {Pagination} from '../../models/pagination.model';
+import {DepartmentService} from '../../core/services/department/department.service';
+import {Department} from '../../models/department.model';
+import {Class} from '../../models/class.model';
 
 @Component( {
   selector: 'app-student-management',
@@ -40,6 +43,10 @@ export class StudentManagementComponent implements OnInit {
   errorResponse: any[] = [];
   countStudentActive: number = 0;
   isImportModalOpen: boolean = false;
+  departments!: Department[];
+  selectedDepartment: string;
+  selectedClass: string;
+  classFilter: Class[];
 
   stats: StatsCard[] = [
     { id: 1, icon: 'fa-solid fa-users', title: 'Students Total', total: 0, secondary: 'bg-blue-50', primary: "text-blue-500" },
@@ -54,7 +61,9 @@ export class StudentManagementComponent implements OnInit {
               private authService: TokenServiceService,
               private classService: ClassService,
               private meta: Meta,
-              private title: Title ) {
+              private title: Title,
+              private departmentService: DepartmentService
+  ) {
     this.getAllStudents();
     this.studentForm = this.fb.group( {
       khFirstName: [ '' ],
@@ -85,6 +94,7 @@ export class StudentManagementComponent implements OnInit {
     const user = JSON.parse( localStorage.getItem( 'currentUser' ) || '{}' );
     this.currentUserRole = user.role;
     this.handleGetAllClasses();
+    this.handleGetAllDepartments();
   }
 
   private getAllStudents () {
@@ -166,6 +176,11 @@ export class StudentManagementComponent implements OnInit {
     });
   }
 
+  handleGetAllDepartments() {
+    return this.departmentService
+      .getAllDepartment().subscribe(res => res.success ? this.departments = res.data : []);
+  }
+
   handleImportStudentFromExcel(event: any) {
     const form = new FormData();
     form.append("file" , event.file);
@@ -229,6 +244,16 @@ export class StudentManagementComponent implements OnInit {
     this.studentsService.getAllClass( true, true ).subscribe( res => {
       this.classes = res.content;
     } );
+  }
+
+  handleFilterStudentByClassId(classId: string) {
+
+  }
+
+  handleFilterClassByDepartmentId(departmentId: string) {
+    this.classFilter =  this.classes
+      .filter((clazz) => clazz.departmentId === departmentId);
+    return this.classFilter;
   }
 
   filterStudents () {
