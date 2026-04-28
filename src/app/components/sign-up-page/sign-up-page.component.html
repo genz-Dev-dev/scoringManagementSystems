@@ -1,7 +1,6 @@
 @if(showForm){
 <div class="flex justify-center items-center mt-10">
     <div class="max-w-xxl w-full bg-base-100 p-8 rounded-lg shadow-sm border border-base-300 relative">
-        <!-- Close -->
         <button type="button" class="btn btn-sm btn-circle absolute right-4 top-4" (click)="closeForm()">
             ✕
         </button>
@@ -9,7 +8,6 @@
             Create User
         </h2>
         <form [formGroup]="signupForm" class="grid grid-cols-2 gap-4">
-            <!-- Username -->
             <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text">Username</span>
@@ -25,7 +23,6 @@
                 </div>
                 }
             </div>
-            <!-- Email -->
             <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text">Email</span>
@@ -49,7 +46,6 @@
                     }
                 </select>
             </div>
-            <!-- Password -->
             <div class="form-control col-span-1">
                 <label class="label">
                     <span class="label-text font-medium">Password</span>
@@ -71,25 +67,20 @@
                 </div>
                 }
             </div>
-            <!-- Strength -->
             <div class="flex gap-1 mt-2 h-1">
                 @for (bar of strengthBars; track $index; let i = $index) {
                 <div class="flex-1 rounded" [class]="getBarColor(i+1)"></div>
                 }
             </div>
-            <!-- <div class="col-span-2"> -->
             <div class="text-xs mt-1">
                 {{ strengthLabel }}
             </div>
-            <!-- </div> -->
-            <!-- Remember -->
             <div class="col-span-2">
                 <label class="flex items-center gap-2">
                     <input type="checkbox" formControlName="rememberMe" class="checkbox checkbox-primary" />
                     Remember me
                 </label>
             </div>
-            <!-- Submit -->
             <div class="col-span-2">
                 <button type="submit" aria-label="Sign up" aria-disabled="signupForm.invalid"
                     (click)="handleSignupAdminPage()" class="btn btn-primary w-full" [disabled]="signupForm.invalid">
@@ -100,12 +91,8 @@
     </div>
 </div>
 }
-<!-- TABLE -->
 @else {
-
-<!-- HEADER -->
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-0">
-    <!-- Left Content -->
     <div>
         <h1 class="text-xl sm:text-2xl font-bold text-indigo-950 mb-1">
             User & Role Management
@@ -115,16 +102,12 @@
             chancellor-level precision.
         </p>
     </div>
-
-    <!-- Right Buttons -->
     <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
-
         <button
             class="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-700 hover:bg-green-600 transition w-full sm:w-auto"
             (click)="showToast('Export started…')">
             <i class="fa-solid fa-arrow-up-from-bracket"></i> Export Directory
         </button>
-
         <button
             class="flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition w-full sm:w-auto"
             (click)="toggleView()">
@@ -134,12 +117,9 @@
             </svg>
             Create New User
         </button>
-
     </div>
 </div>
-<!-- STAT CARDS -->
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
-    <!-- Card 1 -->
     <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
         <div class="p-2 rounded-lg bg-indigo-100">
             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -155,8 +135,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Card 2 -->
     <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
         <div class="p-2 rounded-lg bg-purple-100">
             <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -170,8 +148,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Card 3 -->
     <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
         <div class="p-2 rounded-lg bg-yellow-100">
             <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -186,8 +162,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Card 4 -->
     <div class="flex items-center gap-2 p-5 bg-white rounded-xl shadow-sm">
         <div class="p-2 rounded-lg bg-red-100">
             <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -204,26 +178,21 @@
     </div>
 
 </div>
-<!-- Table Header -->
 <div
     class="px-4 sm:px-6 py-2 border-b border-gray-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-    <!-- Left -->
     <div class="flex flex-wrap items-center gap-2">
         <h2 class="text-sm sm:text-base font-bold text-indigo-950">
             User Directory
         </h2>
-
         <span class="bg-indigo-100 text-indigo-600 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full">
             43 NEW THIS WEEK
         </span>
     </div>
-    <!-- Right -->
     <div class="flex flex-wrap items-center gap-2 overflow-x-auto">
         <button class="filter-btn active" (click)="setFilter('all')">All Roles</button>
         <button class="filter-btn" (click)="setFilter('professor')">Professor</button>
         <button class="filter-btn" (click)="RouterToDashboard('student-management')">Student</button>
         <button class="filter-btn" (click)="setFilter('admin')">Admin</button>
-        <!-- Filter -->
         <button
             class="flex items-center gap-1 px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-md hover:bg-gray-100 transition">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -233,7 +202,6 @@
         </button>
     </div>
 </div>
-<!-- Table -->
 <div class="hidden sm:block mt-0">
     <table class="table w-full">
         <thead>
@@ -268,12 +236,10 @@
                 </td>
                 <td class="px-4 py-3">
                     <div class="flex justify-start gap-2">
-                        <!-- View button: show for everyone except ROLE_ADMIN -->
                         <button type="button" aria-label="View"
                             class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-eye"></i>
                         </button>
-                        <!-- Edit button: show only for ROLE_ADMIN -->
                         @if(currentUserRole === "ROLE_ADMIN"){
                         <button type="button" aria-label="Edit"
                             class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
@@ -283,12 +249,9 @@
                             class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs">
                             <i class="fa-solid fa-trash"></i>
                         </button>
-                        <!-- <input type="checkbox" [checked]="userList?.status == true" class="toggle toggle-primary" />-->
                         <input type="checkbox" [checked]="userList?.status === false"
                             (change)="handleUpdateStatusUser(userList.id, $event.target.checked)"
                             class="toggle toggle-primary" />
-                        <!-- <input type="checkbox" [checked]="userList?.status === true"
-                            (change)="handleUpdateStatusUser(userList.id,$event)" class="toggle toggle-primary" /> -->
                         }
                     </div>
                 </td>
@@ -347,7 +310,6 @@
                 class="fa-solid fa-angle-left"></i></button>
         <button *ngIf="currentPage > 1" (click)="setPage(1)" class="page-btn">1</button>
         <span *ngIf="currentPage > 2" style="padding:0 4px;">...</span>
-        <!-- Dynamic pages -->
         <button *ngFor="let page of pages" (click)="setPage(page)" [ngClass]="{'active-page': page === currentPage}"
             class="page-btn" style="width:32px;height:32px;border-radius:8px;border:1px solid #e2e4ea;">
             {{ page }}
@@ -356,7 +318,6 @@
         <button *ngIf="currentPage < totalPages - 1" (click)="setPage(totalPages)" class="page-btn">
             {{ totalPages }}
         </button>
-        <!-- Next -->
         <button (click)="changePage(1)" type="button"
             style="width:32px;height:32px;border-radius:8px;border:none;background:#4f46e5;color:white;font-size:13px;font-weight:600;cursor:pointer;"
             [disabled]="currentPage === totalPages" class="page-btn"><i class="fa-solid fa-angle-right"></i></button>

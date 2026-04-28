@@ -43,29 +43,25 @@ interface Achiever
 } )
 export class AdminPageComponent implements OnInit
 {
-  // Filters and tabs
-  selectedClass = signal( 'Class 9' );
-  activeTab = signal( 'Results' );
+  activeTab = signal( 'Results View Bar Chart' );
   getAllStudent: any[] = [];
   countStudent: number = 0;
   errorResponse: any = [];
   meanScore: number = 0;
   meanScoreFail: number = 0;
   meanScorePass: number = 0;
+  selectedClassId: string = '';
   performance: PerformanceBar[] = [];
   studentsList: StudentScoreResponse[] = [];
   class: ClassResponse[] = [];
-  tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results', 'Transport', 'Finance' ];
-
+  tabs = [ 'Admissions', 'Fees', 'Syllabus', 'Results View Bar Chart', 'Transport', 'Finance' ];
   constructor( private studentService: StudentsServiceService, private router: Router, private listScoreService: ListScoreServiceService, private departmentClassService: DepartmentClassServiceService ) { }
-
   ngOnInit (): void
   {
     this.handleGetAllStudent();
     this.handleStudentScoreReport();
     this.handleGetAllClass();
   }
-
   private handleGetAllStudent ()
   {
     this.studentService.getAllStudents().subscribe( {
@@ -87,14 +83,12 @@ export class AdminPageComponent implements OnInit
     } )
   }
 
-  // Stat cards
   stats: StatCard[] = [
     { icon: 'fa-solid fa-users', label: 'Staff', value: 0, bg: 'bg-teal-50' },
     { icon: 'fa-solid fa-users', label: 'Parents', value: 0, bg: 'bg-orange-50' },
     { icon: 'fa-solid fa-person-dress', label: 'Students', value: 0, bg: 'bg-blue-50' },
     { icon: 'fa-solid fa-school', label: 'Classes', value: 0, bg: 'bg-purple-50' },
   ];
-  // Upcoming events
   upcomingEvents: Event[] = [
     {
       day: 'Tuesday',
@@ -124,8 +118,6 @@ export class AdminPageComponent implements OnInit
       time: '01:00 Am – 02:30 Pm',
     },
   ];
-
-  // Top achievers and players
   topAchievers: Achiever[] = [
     { name: 'Madhiha Sharma', avatar: 'MS', medal: '🥇' },
     { name: 'Rahul Gupta', avatar: 'RG', medal: '🥈' },
@@ -144,17 +136,14 @@ export class AdminPageComponent implements OnInit
       next: ( Response: ApiResponse<StudentScoreResponse[]> ) =>
       {
         this.studentsList = Response.data;
-        const grouped: { [ key: string ]: StudentScoreResponse[] } = {};
-
+        const grouped: { [ className: string ]: StudentScoreResponse[] } = {};
         this.studentsList.forEach( student =>
         {
           const className = student.className || 'Unknown';
-
           if ( !grouped[ className ] )
           {
             grouped[ className ] = [];
           }
-
           grouped[ className ].push( student );
         } );
 
@@ -188,7 +177,6 @@ export class AdminPageComponent implements OnInit
       {
         this.class = Response.data;
         this.countClass = Response.data.length;
-
       },
       error: ( error ) =>
       {

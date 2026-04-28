@@ -18,22 +18,9 @@
     </div>
     }
 </div>
-<!-- Dashboard Section + Upcoming Events -->
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mt-4">
-    <!-- Dashboard Main Panel -->
     <div class="xl:col-span-2 card bg-white shadow-sm border border-gray-100">
         <div class="card-body p-5 space-y-4">
-            <!-- Tabs Header -->
-            <div class="flex items-center justify-between flex-wrap gap-3">
-                <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
-                <label for="classSelect" class="sr-only">Select Class</label>
-                <select id="classSelect" class="select select-bordered select-sm w-36" [ngModel]="selectedClass()"
-                    (ngModelChange)="selectedClass.set($event)">
-                    @for (cls of class; track cls) {
-                    <option [value]="cls">{{ cls.name }}</option>
-                    }
-                </select>
-            </div>
             <!-- Tab Buttons -->
             <div class="flex flex-wrap gap-1 border-b border-gray-100 pb-3">
                 @for (tab of tabs; track tab) {
@@ -45,7 +32,7 @@
                 }
             </div>
             <!-- Bar Chart -->
-            @if (activeTab() === "Results") {
+            @if (activeTab() === "Results View Bar Chart") {
             <div>
                 <h3 class="text-base font-semibold text-blue-600 text-center mb-4">Static Class</h3>
                 <div class="relative px-4">
@@ -78,7 +65,6 @@
                                 <div class="absolute w-full border-t border-gray-300"
                                     style="bottom: 0%; left: 0; right: 0;"></div>
                             </div>
-                            <!-- Spacer for bottom labels -->
                             <div class="h-[20px]"></div>
                         </div>
                         <!-- Bars -->
@@ -95,7 +81,6 @@
                                         [style.height.%]="bar.passed">
                                     </div>
                                 </div>
-                                <!-- label -->
                                 <span
                                     class="text-[11px] text-gray-600 text-center break-words h-[20px] flex items-center">
                                     {{ bar.label }}
@@ -122,9 +107,7 @@
                 Select "Results" tab to view performance chart.
             </div>
             }
-            <!-- Top Achievers & Top Players -->
             <div class="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
-                <!-- Top Achievers -->
                 <div>
                     <h4 class="font-semibold text-blue-600 mb-3 text-sm">
                         Top Achievers
@@ -143,7 +126,6 @@
                         }
                     </div>
                 </div>
-                <!-- Top Players -->
                 <div>
                     <h4 class="font-semibold text-blue-600 mb-3 text-sm">
                         Top Student
@@ -165,7 +147,6 @@
             </div>
         </div>
     </div>
-    <!-- Upcoming Events -->
     <div class="card bg-white shadow-sm border border-gray-100">
         <div class="card-body p-5">
             <h2 class="text-xl font-bold text-gray-800 mb-4">

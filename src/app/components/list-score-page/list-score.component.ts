@@ -21,54 +21,51 @@ export class ListScoreComponent implements OnInit
   {
     this.handleStudentScoreReport();
   }
-  meanScore: number = 0;
-  meanScoreFail: number = 0;
-  meanScorePass: number = 0;
 
-  private handleStudentScoreReport ()
+  meanScore: number;
+  meanScoreFailPercent: number;
+  meanScorePassPercent: number;
+  meanScoreFail: number;
+  meanScorePass: number;
+  failPercent: number;
+  passPercent: number;
+
+  private handleStudentScoreReport (): void
   {
     this.listScoreService.getAllScoreReport().subscribe( {
-      next: ( Response: ApiResponse<StudentScoreResponse[]> ) =>
+      next: ( response: ApiResponse<StudentScoreResponse[]> ) =>
       {
-        this.studentsList = Response.data;
+        this.studentsList = response.data || [];
+        if ( this.studentsList.length === 0 ) return;
 
-        if ( this.studentsList.length > 0 )
-        {
+        const totalScore = this.studentsList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+        this.meanScore = totalScore / this.studentsList.length;
+        this.meanScoreFail = 100 - this.meanScore;
 
-          const total = this.studentsList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
-          this.meanScore = total / this.studentsList.length;
+        const failList = this.studentsList.filter( s => s.Score < 50 );
+        const passList = this.studentsList.filter( s => s.Score >= 50 );
 
-          const failList = this.studentsList.filter( s => s.Score < 50 );
-          const failTotal = failList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+        const failTotal = failList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+        const passTotal = passList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
 
-          this.meanScoreFail = failList.length ? failTotal / failList.length : 0;
+        this.meanScoreFail = failList.length ? failTotal / failList.length : 0;
+        this.meanScorePass = passList.length ? passTotal / passList.length : 0;
 
-          const passList = this.studentsList.filter( s => s.Score >= 50 );
-          const passTotal = passList.reduce( ( sum, s ) => sum + ( s.Score || 0 ), 0 );
+        this.failPercent = ( failList.length / this.studentsList.length ) * 100;
+        this.passPercent = ( passList.length / this.studentsList.length ) * 100;
+        this.meanScorePassPercent = ( passTotal / totalScore ) * 100;
+        this.meanScoreFailPercent = ( failTotal / totalScore ) * 100;
 
-          this.meanScorePass = passList.length ? passTotal / passList.length : 0;
-        }
-
-
-        // if ( this.studentsList.length > 0 )
-        // {
-        //   const total = this.studentsList.reduce( ( sum, student ) =>
-        //   {
-        //     return sum + ( student.Score || 0 );
-        //   }, 0 );
-
-        //   const meanScoreFailTotal = this.studentsList.filter( ( studentsList ) => studentsList.Score < 50 ).length;
-        //   this.meanScoreFail = meanScoreFailTotal / this.studentsList.length;
-        //   this.meanScore = total / this.studentsList.length;
-        //   console.log( "mean", this.meanScoreFail )
-
-        // }
       },
       error: ( error: ErrorRespone ) =>
       {
         this.errorResponse = error;
       }
-    } )
+    } );
   }
 
+  navigateRouter ( url: String )
+  {
+    this.router.navigate( [ url ] );
+  }
 }

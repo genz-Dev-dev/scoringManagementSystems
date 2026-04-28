@@ -141,7 +141,7 @@
         <table class="table w-full">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>No.</th>
                     <th>នាមត្រកូលខ្មែរ</th>
                     <th>នាមខ្លួនខ្មែរ</th>
                     <th class="first-letter:uppercase">នាមត្រកូលអង់គ្លេស</th>
@@ -184,12 +184,10 @@
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex justify-start gap-2">
-                            <!-- View button: show for everyone except ROLE_ADMIN -->
                             <button type="button" aria-label="View"
                                 class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs">
                                 <i class="fa-solid fa-eye"></i>
                             </button>
-                            <!-- Edit button: show only for ROLE_ADMIN -->
                             <button type="button" *ngIf="currentUserRole === 'ROLE_ADMIN'" aria-label="Edit"
                                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
                                 <i class="fa-solid fa-pen-to-square"></i>

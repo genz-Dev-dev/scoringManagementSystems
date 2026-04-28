@@ -147,7 +147,7 @@ export class StudentManagementComponent implements OnInit
           else if ( student.gender === 'F' ) this.feamleCount++;
         } );
         this.stats = [
-          { ...this.stats[ 0 ], value: this.students.length },
+          { ...this.stats[ 0 ], value: this.totalElement },
           { ...this.stats[ 1 ], value: this.feamleCount },
           { ...this.stats[ 2 ], value: this.maleCount },
           { ...this.stats[ 3 ], value: this.countStudentActive }

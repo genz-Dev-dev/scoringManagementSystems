@@ -38,25 +38,27 @@
 	</div>
 </header>
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+	<div class="card bg-white shadow-sm border-l-4 border-emerald-400 p-6">
+		<p class="text-xs font-bold text-emerald-400 uppercase">Mean Score Pass Total</p>
+		<h2 class="text-3xl font-bold mt-1">{{ meanScore?.toFixed(2) }}</h2>
+		<p class="text-green-500 text-xs font-semibold mt-2">↗ {{meanScorePassPercent?.toFixed(2)}}% from last sem</p>
+	</div>
 	<div class="card bg-white shadow-sm border-l-4 border-blue-400 p-6">
-		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score</p>
-		<h2 class="text-3xl font-bold mt-1">{{ meanScore.toFixed(2) }}</h2>
-		<p class="text-green-500 text-xs font-semibold mt-2">↗ 2.4% from last sem</p>
+		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score Fail Total</p>
+		<h2 class="text-3xl font-bold mt-1">{{ meanScoreFail?.toFixed(2) }}</h2>
+		<p class="text-slate-500 text-xs font-semibold mt-2">●<i class="fa-solid fa-arrow-down"></i>{{
+			meanScoreFailPercent?.toFixed(2)}}%</p>
 	</div>
 	<div class="card bg-white shadow-sm border-l-4 border-green-400 p-6">
-		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score Pass</p>
-		<h2 class="text-3xl font-bold mt-1">{{ meanScorePass.toFixed(2) }}</h2>
-		<p class="text-slate-400 text-xs mt-2">● {{ (meanScorePass / meanScore * 100).toFixed(2) }}%</p>
+		<p class="text-xs font-bold text-green-400 uppercase">Mean Score Pass</p>
+		<h2 class="text-3xl font-bold mt-1">{{ meanScorePass?.toFixed(2)}}</h2>
+		<p class="text-green-400 text-xs mt-2">● ↗ {{ passPercent?.toFixed(2)}}%</p>
 	</div>
 	<div class="card bg-white shadow-sm border-l-4 border-sky-400 p-6">
 		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score Fail</p>
-		<h2 class="text-3xl font-bold mt-1">{{ meanScoreFail.toFixed(2) }}</h2>
-		<p class="text-blue-600 text-xs font-semibold mt-2">● {{ (meanScoreFail / meanScore * 100).toFixed(2) }}%</p>
-	</div>
-	<div class="card bg-white shadow-sm border-l-4 border-emerald-400 p-6">
-		<p class="text-xs font-bold text-slate-400 uppercase">Mean Score Total</p>
-		<h2 class="text-3xl font-bold mt-1">{{ meanScore.toFixed(2) }}</h2>
-		<p class="text-emerald-500 text-xs font-semibold mt-2">● {{ (meanScore / meanScore * 100).toFixed(2) }}%</p>
+		<h2 class="text-3xl font-bold mt-1">{{ meanScoreFail?.toFixed(2)}}</h2>
+		<p class="text-blue-600 text-xs font-semibold mt-2">●<i
+				class="fa-solid fa-arrow-down"></i>{{failPercent?.toFixed(2)}}%</p>
 	</div>
 </div>
 
@@ -64,7 +66,9 @@
 	<div class="flex justify-between items-center p-6 border-b border-slate-50">
 		<h3 class="font-bold text-slate-800">Semester Records</h3>
 		<div class="flex gap-4 text-[10px] font-bold text-slate-400 uppercase">
-			<span>Fall 2024</span>
+			<span class="hover:cursor-pointer bg-green-400 rounded-lg p-1 hover:bg-green-600 text-white"
+				(click)="navigateRouter('/upload-score')"><i class="fa-solid fa-cloud-arrow-up me-1"></i>Go
+				to upload Score Page</span>
 			<span>All Subjects</span>
 		</div>
 	</div>
@@ -75,11 +79,12 @@
 					<th>Student Name</th>
 					<th>Gender</th>
 					<th>Subject</th>
+					<th>Class Name</th>
 					<th>Semester</th>
 					<th>Score</th>
 					<th>Grade</th>
 					<th>Status</th>
-					<th>created Date</th>
+					<th>Created Date</th>
 					<th>updated Date</th>
 					<th>Actions</th>
 				</tr>
@@ -106,6 +111,7 @@
 					<td class="text-sm font-medium text-slate-600">{{ student.gender ==='F' ?'Female':student.gender
 						==='M' ? 'Male':student.gender==='Other' ? 'Other': 'Unknown' }}</td>
 					<td class="text-sm font-medium text-slate-600">{{ student.subjectName }}</td>
+					<td class="text-sm font-medium text-slate-600">{{ student.className }}</td>
 					<td class="text-sm text-slate-400">{{ student.semesterName }}</td>
 					<td class="text-sm font-black" [ngClass]="student.Score === 0 ? 'text-blue-500' : 'text-slate-700'">
 						{{ student.Score }}

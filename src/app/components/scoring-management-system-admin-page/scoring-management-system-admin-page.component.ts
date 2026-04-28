@@ -51,7 +51,6 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
       }, 100 );
     } );
   }
-  // Navigation sections
   navSections: NavSection[] = [
     {
       title: 'MAIN DASHBOARD',
@@ -71,11 +70,6 @@ export class ScoringManagementSystemAdminPageComponent implements OnInit
       ],
     }
   ];
-  // Actions
-  setActiveTab ( tab: string ): void
-  {
-    this.activeTab.set( tab );
-  }
   toggleSidebar (): void
   {
     this.sidebarOpen.update( ( v ) => !v );

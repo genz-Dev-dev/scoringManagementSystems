@@ -4,14 +4,16 @@ import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments.dev';
 import { AuthServiceService } from '../auth/auth.service.service';
 const url_extension = 'roles';
-@Injectable({
+@Injectable( {
   providedIn: 'root',
-})
-export class ClassSemesterService {
+} )
+export class ClassSemesterService
+{
   private API = environments.api_url + url_extension;
-  constructor(private httpClient: HttpClient, private authService: AuthServiceService) { }
+  constructor( private httpClient: HttpClient, private authService: AuthServiceService ) { }
 
-  private getHttpOption() {
+  private getHttpOption ()
+  {
     return {
       headers: {
         'Content-Type': 'application/json'
@@ -19,11 +21,13 @@ export class ClassSemesterService {
     }
   }
 
-  public createClassSemester(data: any): Observable<any> {
+  public createClassSemester ( data: any ): Observable<any>
+  {
     return this.httpClient.post<any>(
-      `${this.API}`,
+      `${ this.API }`,
       data,
       this.getHttpOption()
     );
   }
+
 }

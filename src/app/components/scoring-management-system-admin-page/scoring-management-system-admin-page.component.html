@@ -24,25 +24,20 @@
         </ng-container>
       </div>
     </aside>
-    <!-- ===================== MAIN CONTENT SKELETON ===================== -->
     <div class="flex-1 flex flex-col p-6 space-y-6">
-      <!-- Top Loading Text -->
       <span class="text-center text-lg font-semibold text-gray-600 animate-pulse">
         Your dashboard is loading...!!
       </span>
-      <!-- Top Cards -->
       <div class="grid grid-cols-4 gap-4">
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
         <div class="h-24 w-full bg-gray-300 rounded animate-pulse"></div>
       </div>
-      <!-- Main Content -->
       <div class="flex-1 bg-gray-300 rounded animate-pulse"></div>
     </div>
   </div>
   <ng-template #dashboardContent>
-    <!-- ===================== SIDEBAR ===================== -->
     <button (click)="toggleSidebar()" type="button" aria-label="Toggle Sidebar"
       class="fixed top-4 left-4 z-50 md:hidden text-white p-2 rounded-full shadow-lg hover:bg-white/20 transition-colors duration-200">
       <i class="fas fa-bars text-lg"></i>
@@ -52,7 +47,6 @@
       [class.w-64]="sidebarOpen()" [class.w-0]="!sidebarOpen()" [class.md:w-16]="!sidebarOpen()"
       [class.-translate-x-full]="!sidebarOpen()" [class.md:translate-x-0]="true"
       [class.overflow-hidden]="!sidebarOpen()">
-      <!-- Logo -->
       <div class="flex items-center gap-3 px-4 py-5 border-b border-white/10 hover:cursor-pointer"
         (click)="onClickRouter('/')">
         <div class="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden object-cover">
@@ -67,7 +61,6 @@
           <p class="text-sm font-bold leading-tight">Bur Kari University</p>
         </div>
       </div>
-      <!-- Navigation -->
       <nav class="flex-1 overflow-y-auto py-4 px-2 space-y-4">
         <div *ngFor="let section of navSections; trackBy: trackByTitle">
           @if(sidebarOpen()){
@@ -89,10 +82,8 @@
         </div>
       </nav>
     </aside>
-    <!-- ===================== MAIN CONTENT ===================== -->
     <div class="flex-1 flex flex-col overflow-hidden p-2">
       <header class="bg-gray-50 border-b border-gray-200 flex items-center justify-between px-6 py-3 gap-4">
-        <!-- Toggle + Search -->
         <div class="flex items-center gap-4 flex-1">
           <button type="button" aria-label="Toggle Sidebar" (click)="toggleSidebar()"
             class="btn btn-ghost btn-sm btn-circle text-gray-600">
@@ -101,14 +92,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <!-- <div class="relative w-full max-w-sm">
-            <label class="input input-bordered flex items-center gap-1 rounded-full">
-              <i class="fa-solid fa-magnifying-glass me-1"></i>
-              <input type="search" class="grow border-0 bg-transparent outline-none" placeholder="Search" />
-            </label>
-          </div> -->
         </div>
-        <!-- Right actions -->
         <div class="flex items-center gap-3">
           <button type="button" aria-label="Message" class="relative btn btn-ghost btn-sm btn-circle">
             <span
@@ -123,13 +107,11 @@
           <div class="flex items-center gap-2 pl-2 border-l border-gray-200">
             <div class="dropdown dropdown-end">
               <div class="flex items-center gap-2 cursor-pointer" (click)="openModal()">
-                <!-- Avatar -->
                 <div class="avatar">
                   <div class="rounded-full w-10 h-10 flex items-center justify-center">
                     <i class="fa-solid fa-circle-user text-gray-600 text-3xl"></i>
                   </div>
                 </div>
-                <!-- User Info -->
                 <div class="hidden sm:block text-left">
                   @if(User){
                   <p class="text-sm font-semibold text-gray-800 leading-none">
@@ -139,24 +121,18 @@
                   <p class="text-xs text-gray-600">{{ User?.email }}</p>
                 </div>
               </div>
-              <!-- Dropdown Menu -->
               <dialog #myModal class="modal">
                 <div class="modal-box relative w-96">
-                  <!-- Close Button -->
                   <button type="button"
                     class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 is-size-5 icon-close"
                     aria-label="Close" (click)="closeModal()">
                     ✕
                   </button>
-                  <!-- User Profile -->
                   <div class="flex flex-col items-center text-center space-y-1">
-                    <!-- User Icon -->
                     <div class="flex flex-col items-center text-center">
-                      <!-- Profile Icon -->
                       <div class="w-24 h-24 rounded-full flex items-center justify-center mb-3">
                         <i class="fa-solid fa-circle-user text-blue-500 text-6xl"></i>
                       </div>
-                      <!-- User Info -->
                       <h3 class="text-xl font-bold">
                         {{ User?.fullName }}
                       </h3>
@@ -165,18 +141,14 @@
                       </p>
                     </div>
                   </div>
-                  <!-- Actions -->
                   <div class="mt-6 space-y-2">
-                    <!-- Change Password -->
                     <button class="btn btn-outline w-full rounded-full" (click)="onClickRouter('forgot-password')">
                       <i class="fa-solid fa-key"></i> Change Password
                     </button>
-                    <!-- Forgot Password -->
                     <button class="btn btn-outline w-full rounded-full" (click)="onClickRouter('forgot-password')">
                       <i class="fa-solid fa-lock"></i> Forgot Password
                     </button>
-                    <!-- Logout -->
-                    <button class="btn btn-error w-full rounded-full" (click)="handlelogoutAdminPage()">
+                    <button class="btn btn-error w-full rounded-full text-white" (click)="handlelogoutAdminPage()">
                       <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout Account
                     </button>
                   </div>
@@ -186,7 +158,6 @@
           </div>
         </div>
       </header>
-      <!-- Page Body -->
       <main class="flex-1 overflow-y-auto p-3 space-y-4">
         <router-outlet></router-outlet>
       </main>

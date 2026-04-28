@@ -51,7 +51,6 @@ export class CourseFormComponent implements OnInit
       error: ( err ) =>
       {
         console.error( err.message );
-
       }
     } )
   }
@@ -89,7 +88,11 @@ export class CourseFormComponent implements OnInit
   errorResponse: any = [];
   handleCreateCourse ()
   {
-    if ( this.formCreateCourse.invalid ) return;
+    if ( this.formCreateCourse.get( 'startAt' )?.value > this.formCreateCourse.get( 'endAt' )?.value || this.formCreateCourse.invalid ) return Swal.fire( {
+      icon: 'warning',
+      title: 'Error',
+      text: 'Start time must be less than end time'
+    } );
     this.courseService.createCourse( this.formCreateCourse.value ).subscribe( {
       next: ( Response ) =>
       {

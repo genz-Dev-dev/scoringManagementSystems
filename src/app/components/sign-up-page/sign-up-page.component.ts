@@ -80,7 +80,6 @@ export class SignUpPageComponent implements OnInit
       }
     } );
   }
-
   private handleUpdateStatusUser ( id: string, checked: boolean )
   {
     const status = !checked; // 🔥 reverse
